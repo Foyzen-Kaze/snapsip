@@ -6,7 +6,7 @@
 - Diego Marengo
  
 ## Proyecto
-Proyecto: Snapsip
+### Proyecto: Snapsip
 Descripcion: Aplicacion Web para administrador de Proyectos y Torres para Constructoras
  
 ## Índice de documentos
