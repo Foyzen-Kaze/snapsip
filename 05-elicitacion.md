@@ -3,7 +3,7 @@
 ## Técnica 1: revisión documental
 - Participante(s): Plano de Techo del Equipo de Arquitectos
 - Fecha y modalidad: en linea
-- Evidencia: [Plano de Techo](/.prueba1.jpg)
+- Evidencia: ![Plano de Techo](/.prueba1.jpg)
 - Hallazgos principales: [lista de lo levantado]
  
 ## Técnica 2: [técnica]
