@@ -14,8 +14,8 @@
   [3]Se confirma que es complicado hacer una Procesamiento Automatizado que lea estos planos ya que es un contenido delicado del cual se tiene que asumir una gran responsabilidad y tampoco es tarea     sencilla por el presupuesto y el tiempo por lo que delegara la responsabilidad a los Trabajadores de la Empresa
   
  
-## Técnica 2: [técnica]
-- Participante(s): [nombre o rol]
+## Técnica 2: entrevista
+- Participante(s): Claudio Jefe de Operaciones de Paneles SIP
 - Evidencia: [enlace o archivo]
 - Hallazgos principales: [lista]
  
