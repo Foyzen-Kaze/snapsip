@@ -6,9 +6,12 @@
 - Evidencia: ![Plano de Techo](/prueba1.jpg)
 - Hallazgos principales:
   [1]Se confirma que cada plano se conforma de piezas y estos dan estructuras a diversas partes de la casa como en este caso es techo.
-  [2]Se confirma que es clave contar con todas las piezas para el envio al cliente y que faltar una sola pieza en el envio puede ser un error critico tanto como para el cliente
+  
+  [2]Se confirma que es clave contar con todas las piezas para el envio al cliente
+   y que faltar una sola pieza en el envio puede ser un error critico tanto como para el cliente
   en tiempo y para la empresa en dinero y tiempo.
-  [3]Se confirma que es complicado hacer una Inteligencia Artificial que lea estos planos ya que es un contenido delicado del cual se tiene que asumir una gran responsabilidad y tampoco es tarea sencilla    por el presupuesto y el tiempo por lo que delegara la responsabilidad al Trabajador de la la Planta.
+  
+  [3]Se confirma que es complicado hacer una Procesamiento Automatizado que lea estos planos ya que es un contenido delicado del cual se tiene que asumir una gran responsabilidad y tampoco es tarea     sencilla por el presupuesto y el tiempo por lo que delegara la responsabilidad al Trabajador de la la Planta.
   
  
 ## Técnica 2: [técnica]
