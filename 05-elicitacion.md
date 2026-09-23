@@ -16,7 +16,7 @@
  
 ## Técnica 2: entrevista
 - Participante(s): Claudio Jefe de Operaciones de Paneles SIP
-- Evidencia: [enlace o archivo]
+- Evidencia: [Entrevista con Jefe de Operaciones]
 - Hallazgos principales: [lista]
  
 ## Acta de acuerdo
