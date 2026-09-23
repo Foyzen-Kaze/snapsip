@@ -1,8 +1,8 @@
 # Elicitación de requisitos
  
-## Técnica 1: [entrevista / grupo focal / revisión documental]
-- Participante(s): [nombre o rol de quién fue elicitado]
-- Fecha y modalidad: [presencial / en línea]
+## Técnica 1: revisión documental
+- Participante(s): Plano de Techo del Equipo de Arquitectos
+- Fecha y modalidad: en linea
 - Evidencia: [enlace o archivo de foto/video/captura de la sesión]
 - Hallazgos principales: [lista de lo levantado]
  
