@@ -17,4 +17,5 @@ Verificacion y armado de torres en terreno.
 - CA1: El checklist debe tener dos estados:listo o no listo
 - CA2: El checklist debe tener marca de fecha y hora 
 - CA3: EL checklist debe pintar o dar indicios visuales de que la pieza esta lista o su estado.
+  
  -CA4: El sistema debe permitir adjuntar fotografías por torre.
