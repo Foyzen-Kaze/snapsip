@@ -27,44 +27,44 @@
     <bpmn:startEvent id="StartEvent_1" name="Recibir plano de piezas">
       <bpmn:outgoing>Flow_1</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:task id="Task_Cortar" name="Cortar piezas en planchas (H1, H2, etc.)">
+    <bpmn:manualTask id="Task_Cortar" name="Cortar piezas en planchas (H1, H2, etc.)">
       <bpmn:incoming>Flow_1</bpmn:incoming>
       <bpmn:outgoing>Flow_2</bpmn:outgoing>
-    </bpmn:task>
-    <bpmn:task id="Task_Torres" name="Almacenar piezas en torres contenedoras">
+    </bpmn:manualTask>
+    <bpmn:manualTask id="Task_Torres" name="Almacenar piezas en torres contenedoras">
       <bpmn:incoming>Flow_2</bpmn:incoming>
       <bpmn:outgoing>Flow_3</bpmn:outgoing>
-    </bpmn:task>
+    </bpmn:manualTask>
 
     <!-- Elementos de Bodega -->
-    <bpmn:task id="Task_Almacenar" name="Apilar torres juntas en bodega">
+    <bpmn:manualTask id="Task_Almacenar" name="Apilar torres juntas en bodega">
       <bpmn:incoming>Flow_3</bpmn:incoming>
       <bpmn:outgoing>Flow_4</bpmn:outgoing>
-    </bpmn:task>
-    <bpmn:task id="Task_Buscar" name="Buscar pieza requerida con montacargas">
+    </bpmn:manualTask>
+    <bpmn:manualTask id="Task_Buscar" name="Buscar pieza requerida con montacargas">
       <bpmn:incoming>Flow_5</bpmn:incoming>
       <bpmn:incoming>Flow_Loop</bpmn:incoming>
       <bpmn:outgoing>Flow_6</bpmn:outgoing>
-    </bpmn:task>
+    </bpmn:manualTask>
     <bpmn:exclusiveGateway id="Gateway_Encontrada" name="¿Se encuentra la pieza fácilmente?">
       <bpmn:incoming>Flow_6</bpmn:incoming>
       <bpmn:outgoing>Flow_No</bpmn:outgoing>
       <bpmn:outgoing>Flow_Si</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:task id="Task_BusquedaExhaustiva" name="Búsqueda exhaustiva torre por torre (Pérdida de tiempo y logística)">
+    <bpmn:manualTask id="Task_BusquedaExhaustiva" name="Búsqueda exhaustiva torre por torre (Pérdida de tiempo y logística)">
       <bpmn:incoming>Flow_No</bpmn:incoming>
       <bpmn:outgoing>Flow_Loop</bpmn:outgoing>
-    </bpmn:task>
+    </bpmn:manualTask>
 
     <!-- Elementos de Despacho -->
-    <bpmn:task id="Task_PrepararEnvio" name="Requerir piezas para envío por camión">
+    <bpmn:manualTask id="Task_PrepararEnvio" name="Requerir piezas para envío por camión">
       <bpmn:incoming>Flow_4</bpmn:incoming>
       <bpmn:outgoing>Flow_5</bpmn:outgoing>
-    </bpmn:task>
-    <bpmn:task id="Task_CargarCamion" name="Cargar piezas en camión y despachar">
+    </bpmn:manualTask>
+    <bpmn:manualTask id="Task_CargarCamion" name="Cargar piezas en camión y despachar">
       <bpmn:incoming>Flow_Si</bpmn:incoming>
       <bpmn:outgoing>Flow_7</bpmn:outgoing>
-    </bpmn:task>
+    </bpmn:manualTask>
     <bpmn:endEvent id="EndEvent_1" name="Envío completado">
       <bpmn:incoming>Flow_7</bpmn:incoming>
     </bpmn:endEvent>
