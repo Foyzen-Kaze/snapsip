@@ -15,7 +15,7 @@
 ## Diagrama AS-IS
 ![Proceso AS-IS](diagramas/As_is.png)
  
-Archivo fuente: [`./diagramas/as-is.bpmn`](./diagramas/as-is.bpmn)
+Archivo fuente: [`./diagramas/as-is.bpmn`](diagramas/As_is.xml)
 
 Nota: distingan tareas de usuario, de servicio y manuales con el marcador correspondiente.
  
