@@ -16,7 +16,7 @@ Producir, organizar en bodega y cargar correctamente las piezas solicitadas en l
 ## Diagrama AS-IS
 ![Proceso AS-IS](diagramas/As_is.png)
  
-Archivo fuente: [`./diagramas/as-is.bpmn`](diagramas/As_is.xml)
+Archivo fuente: [`./diagramas/as-is.bpmn`](diagramas/As_is_1.xml)
 
 Nota: distingan tareas de usuario, de servicio y manuales con el marcador correspondiente.
  
