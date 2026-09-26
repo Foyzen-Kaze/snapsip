@@ -13,7 +13,7 @@
 - Efecto esperado (tiempo/costo/calidad/flexibilidad): [descripción]
  
 ## Diagrama TO-BE
-![Proceso TO-BE](./diagramas/to-be.png)
+![Proceso TO-BE](diagramas/To_be.png)
  
 Archivo fuente: [`./diagramas/to-be.bpmn`](./diagramas/to-be.bpmn)
  
