@@ -14,7 +14,7 @@ Producir, organizar en bodega y cargar correctamente las piezas solicitadas en l
 | Despacho | Solicitar las piezas necesarias y cargar el camión para completar el envío. |
  
 ## Diagrama AS-IS
-![Proceso AS-IS](diagramas/As_is.png)
+![Proceso AS-IS](diagramas/As_is_1.png)
  
 Archivo fuente: [`./diagramas/as-is.bpmn`](diagramas/As_is_1.xml)
 
