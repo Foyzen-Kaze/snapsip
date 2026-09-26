@@ -16,12 +16,12 @@
 
 ### Usabilidad
 - **Métrica:** Tiempo promedio en completar una tarea.
-- **Cómo se mide:** Se cronometra cuánto se demora un operario desde que busca la torre hasta que marca el último panel del checklist. El objetivo es que la interfaz sea tan intuitiva que este proceso tome menos de 3 minutos por torre, disminuyendo la fricción en terreno.
+- **Medición:** Se cronometra cuánto se demora un operario desde que busca la torre hasta que marca el último panel del checklist. El objetivo es que la interfaz sea tan intuitiva que este proceso tome menos de 3 minutos por torre, disminuyendo la fricción en terreno.
 
 ### Fiabilidad
 - **Métrica:** Porcentaje de disponibilidad del sistema (Uptime).
-- **Medicion:** Via herramientas de monitoreo en el servidor. El sistema debe garantizar un 99.9% de disponibilidad durante el horario laboral de la faena, asegurando que los operarios no se queden atascados sin poder despachar.
+- **Medición:** Via herramientas de monitoreo en el servidor. El sistema debe garantizar un 99.9% de disponibilidad durante el horario laboral de la faena, asegurando que los operarios no se queden atascados sin poder despachar.
 
 ### Adecuación Funcional
 - **Métrica:** Tasa de exactitud en los despachos.
-- **Cómo se mide:** Se calcula dividiendo la cantidad de camiones despachados con el 100% de los paneles correctos sobre el total de despachos realizados en el mes. Gracias a la validación del sistema, esta métrica debe ser del 100%, cumpliendo con la regla de negocio de no permitir envíos incompletos.
+- **Medición:** Se calcula dividiendo la cantidad de camiones despachados con el 100% de los paneles correctos sobre el total de despachos realizados en el mes. Gracias a la validación del sistema, esta métrica debe ser del 100%, cumpliendo con la regla de negocio de no permitir envíos incompletos.
