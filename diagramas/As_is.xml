@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_1" name="Proceso de Producción y Despacho de Piezas (AS-IS)" processRef="Process_1" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Corte" name="Área de Corte">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Cortar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Torres</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Bodega" name="Bodega (Montacargas)">
+        <bpmn:flowNodeRef>Task_Almacenar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Buscar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Encontrada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_BusquedaExhaustiva</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Despacho" name="Despacho">
+        <bpmn:flowNodeRef>Task_PrepararEnvio</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CargarCamion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    
+    <!-- Elementos del Área de Corte -->
+    <bpmn:startEvent id="StartEvent_1" name="Recibir plano de piezas">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Cortar" name="Cortar piezas en planchas (H1, H2, etc.)">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Torres" name="Almacenar piezas en torres contenedoras">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Elementos de Bodega -->
+    <bpmn:task id="Task_Almacenar" name="Apilar torres juntas en bodega">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Buscar" name="Buscar pieza requerida con montacargas">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:incoming>Flow_Loop</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_Encontrada" name="¿Se encuentra la pieza fácilmente?">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_No</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Si</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_BusquedaExhaustiva" name="Búsqueda exhaustiva torre por torre (Pérdida de tiempo y logística)">
+      <bpmn:incoming>Flow_No</bpmn:incoming>
+      <bpmn:outgoing>Flow_Loop</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Elementos de Despacho -->
+    <bpmn:task id="Task_PrepararEnvio" name="Requerir piezas para envío por camión">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_CargarCamion" name="Cargar piezas en camión y despachar">
+      <bpmn:incoming>Flow_Si</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="EndEvent_1" name="Envío completado">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- Secuencia de Flujos -->
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_Cortar" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Cortar" targetRef="Task_Torres" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Torres" targetRef="Task_Almacenar" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_Almacenar" targetRef="Task_PrepararEnvio" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_PrepararEnvio" targetRef="Task_Buscar" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Buscar" targetRef="Gateway_Encontrada" />
+    <bpmn:sequenceFlow id="Flow_No" name="No" sourceRef="Gateway_Encontrada" targetRef="Task_BusquedaExhaustiva" />
+    <bpmn:sequenceFlow id="Flow_Loop" sourceRef="Task_BusquedaExhaustiva" targetRef="Task_Buscar" />
+    <bpmn:sequenceFlow id="Flow_Si" name="Sí" sourceRef="Gateway_Encontrada" targetRef="Task_CargarCamion" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_CargarCamion" targetRef="EndEvent_1" />
+  </bpmn:process>
+  
+  <!-- Diagram Interchange (Coordenadas visuales básicas) -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Participant_1_di" bpmnElement="Participant_1" isHorizontal="true">
+        <dc:Bounds x="120" y="80" width="1000" height="450" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Corte_di" bpmnElement="Lane_Corte" isHorizontal="true">
+        <dc:Bounds x="150" y="80" width="970" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Bodega_di" bpmnElement="Lane_Bodega" isHorizontal="true">
+        <dc:Bounds x="150" y="230" width="970" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Despacho_di" bpmnElement="Lane_Despacho" isHorizontal="true">
+        <dc:Bounds x="150" y="380" width="970" height="150" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Nodos -->
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="200" y="140" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="180" y="183" width="76" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Cortar_di" bpmnElement="Task_Cortar">
+        <dc:Bounds x="290" y="118" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Torres_di" bpmnElement="Task_Torres">
+        <dc:Bounds x="440" y="118" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Almacenar_di" bpmnElement="Task_Almacenar">
+        <dc:Bounds x="440" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_PrepararEnvio_di" bpmnElement="Task_PrepararEnvio">
+        <dc:Bounds x="440" y="410" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Buscar_di" bpmnElement="Task_Buscar">
+        <dc:Bounds x="600" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Encontrada_di" bpmnElement="Gateway_Encontrada" isMarkerVisible="true">
+        <dc:Bounds x="750" y="275" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="735" y="332" width="80" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_BusquedaExhaustiva_di" bpmnElement="Task_BusquedaExhaustiva">
+        <dc:Bounds x="725" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CargarCamion_di" bpmnElement="Task_CargarCamion">
+        <dc:Bounds x="870" y="410" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <dc:Bounds x="1030" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1005" y="475" width="87" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Líneas -->
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="236" y="158" />
+        <di:waypoint x="290" y="158" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="390" y="158" />
+        <di:waypoint x="440" y="158" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="490" y="198" />
+        <di:waypoint x="490" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="490" y="340" />
+        <di:waypoint x="490" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="540" y="450" />
+        <di:waypoint x="570" y="450" />
+        <di:waypoint x="570" y="300" />
+        <di:waypoint x="600" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="700" y="300" />
+        <di:waypoint x="750" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_No_di" bpmnElement="Flow_No">
+        <di:waypoint x="775" y="275" />
+        <di:waypoint x="775" y="180" />
+        <bpmndi:BPMNLabel><dc:Bounds x="783" y="225" width="15" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Loop_di" bpmnElement="Flow_Loop">
+        <di:waypoint x="725" y="140" />
+        <di:waypoint x="650" y="140" />
+        <di:waypoint x="650" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Si_di" bpmnElement="Flow_Si">
+        <di:waypoint x="800" y="300" />
+        <di:waypoint x="920" y="300" />
+        <di:waypoint x="920" y="410" />
+        <bpmndi:BPMNLabel><dc:Bounds x="855" y="282" width="11" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="970" y="450" />
+        <di:waypoint x="1030" y="450" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

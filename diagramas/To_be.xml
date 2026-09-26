@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_ToBe" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.51.0">
+  <bpmn:collaboration id="Collaboration_ToBe">
+    <bpmn:participant id="Participant_Sistema" name="Gestión de Logística y Despacho con Sistema Web (TO-BE)" processRef="Process_ToBe" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_ToBe" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Operario" name="Operario (Bodega/Corte)">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_BuscarPanel</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ValidarChecklist</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Login</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Sistema" name="Sistema (App Web / Supabase)">
+        <bpmn:flowNodeRef>Task_Auditoria</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Completado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_GenerarPDF</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Despacho" name="Despacho">
+        <bpmn:flowNodeRef>Task_CargarCamion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Requerimiento de armado de torre">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_BuscarPanel" name="Localizar panel mediante motor de búsqueda y jerarquía">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_ValidarChecklist" name="Marcar panel y validar checklist de la torre">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:incoming>Flow_No</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Task_Auditoria" name="Registrar auditoría (Usuario y Timestamp)">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_Completado" name="¿Checklist validado al 100%?">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_No</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Si</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Task_GenerarPDF" name="Marcar como terminada y exportar Guía PDF">
+      <bpmn:incoming>Flow_Si</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_CargarCamion" name="Cargar camión guiado por el PDF exacto">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="EndEvent_1" name="Despacho logístico eficiente">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_Login" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Login" targetRef="Task_BuscarPanel" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_BuscarPanel" targetRef="Task_ValidarChecklist" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_ValidarChecklist" targetRef="Task_Auditoria" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Auditoria" targetRef="Gateway_Completado" />
+    <bpmn:sequenceFlow id="Flow_No" name="Faltan paneles (No permite terminar)" sourceRef="Gateway_Completado" targetRef="Task_ValidarChecklist" />
+    <bpmn:sequenceFlow id="Flow_Si" name="Sí (100%)" sourceRef="Gateway_Completado" targetRef="Task_GenerarPDF" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_GenerarPDF" targetRef="Task_CargarCamion" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_CargarCamion" targetRef="EndEvent_1" />
+    <bpmn:userTask id="Task_Login" name="Iniciar sesión con credenciales privadas">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_ToBe">
+    <bpmndi:BPMNPlane id="BPMNPlane_ToBe" bpmnElement="Collaboration_ToBe">
+      <bpmndi:BPMNShape id="Participant_Sistema_di" bpmnElement="Participant_Sistema" isHorizontal="true">
+        <dc:Bounds x="120" y="80" width="1050" height="450" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Despacho_di" bpmnElement="Lane_Despacho" isHorizontal="true">
+        <dc:Bounds x="150" y="380" width="1020" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Sistema_di" bpmnElement="Lane_Sistema" isHorizontal="true">
+        <dc:Bounds x="150" y="230" width="1020" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Operario_di" bpmnElement="Lane_Operario" isHorizontal="true">
+        <dc:Bounds x="150" y="80" width="1020" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="200" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="175" y="175" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_BuscarPanel_di" bpmnElement="Task_BuscarPanel">
+        <dc:Bounds x="420" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ValidarChecklist_di" bpmnElement="Task_ValidarChecklist">
+        <dc:Bounds x="560" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Auditoria_di" bpmnElement="Task_Auditoria">
+        <dc:Bounds x="560" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Completado_di" bpmnElement="Gateway_Completado" isMarkerVisible="true">
+        <dc:Bounds x="705" y="275" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="692" y="332" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_GenerarPDF_di" bpmnElement="Task_GenerarPDF">
+        <dc:Bounds x="820" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CargarCamion_di" bpmnElement="Task_CargarCamion">
+        <dc:Bounds x="820" y="410" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <dc:Bounds x="1000" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="978" y="475" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Login_di" bpmnElement="Task_Login">
+        <dc:Bounds x="280" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="236" y="150" />
+        <di:waypoint x="280" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="380" y="150" />
+        <di:waypoint x="420" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="520" y="150" />
+        <di:waypoint x="560" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="610" y="190" />
+        <di:waypoint x="610" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="660" y="300" />
+        <di:waypoint x="705" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_No_di" bpmnElement="Flow_No">
+        <di:waypoint x="730" y="275" />
+        <di:waypoint x="730" y="150" />
+        <di:waypoint x="660" y="150" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="742" y="190" width="73" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Si_di" bpmnElement="Flow_Si">
+        <di:waypoint x="755" y="300" />
+        <di:waypoint x="820" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="765" y="282" width="46" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="870" y="340" />
+        <di:waypoint x="870" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="920" y="450" />
+        <di:waypoint x="1000" y="450" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
