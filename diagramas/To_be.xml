@@ -24,11 +24,11 @@
     <bpmn:startEvent id="StartEvent_1" name="Requerimiento de armado de torre">
       <bpmn:outgoing>Flow_1</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Task_BuscarPanel" name="Localizar panel mediante motor de búsqueda y jerarquía">
+    <bpmn:userTask id="Task_BuscarPanel" name="Monitoreo y control de piezas del proyecto">
       <bpmn:incoming>Flow_2</bpmn:incoming>
       <bpmn:outgoing>Flow_3</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Task_ValidarChecklist" name="Marcar panel y validar checklist de la torre">
+    <bpmn:userTask id="Task_ValidarChecklist" name="Verificación y armado de Torres en terreno">
       <bpmn:incoming>Flow_3</bpmn:incoming>
       <bpmn:incoming>Flow_No</bpmn:incoming>
       <bpmn:outgoing>Flow_4</bpmn:outgoing>
@@ -42,7 +42,7 @@
       <bpmn:outgoing>Flow_No</bpmn:outgoing>
       <bpmn:outgoing>Flow_Si</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Task_GenerarPDF" name="Marcar como terminada y exportar Guía PDF">
+    <bpmn:serviceTask id="Task_GenerarPDF" name="Despacho y generación de guía PDF">
       <bpmn:incoming>Flow_Si</bpmn:incoming>
       <bpmn:outgoing>Flow_6</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -62,7 +62,7 @@
     <bpmn:sequenceFlow id="Flow_Si" name="Sí (100%)" sourceRef="Gateway_Completado" targetRef="Task_GenerarPDF" />
     <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_GenerarPDF" targetRef="Task_CargarCamion" />
     <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_CargarCamion" targetRef="EndEvent_1" />
-    <bpmn:userTask id="Task_Login" name="Iniciar sesión con credenciales privadas">
+    <bpmn:userTask id="Task_Login" name="Inicio de sesión y autenticación de usuario">
       <bpmn:incoming>Flow_1</bpmn:incoming>
       <bpmn:outgoing>Flow_2</bpmn:outgoing>
     </bpmn:userTask>
