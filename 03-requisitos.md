@@ -4,15 +4,15 @@
 
 | ID | Requisito | Tipo (funcional/no funcional) | Actividad TO-BE asociada |
 |----|-----------|--------------------------------|----------------------------|
-| RP-01 | La plataforma debe tener un sistema de carpetas o pestañas para organizar los Proyectos, Tipos, Torres y Paneles. | Funcional | Localizar panel mediante motor de búsqueda y jerarquía |
-| RP-02 | La interfaz debe ser fácil de usar y mostrar de forma gráfica las torres y los paneles que tienen adentro. | No funcional | Localizar panel mediante motor de búsqueda y jerarquía |
-| RP-03 | Se debe poder buscar rápido y filtrar paneles específicos dentro de los proyectos. | Funcional | Localizar panel mediante motor de búsqueda y jerarquía |
-| RP-04 | La página debe pedir un login con credenciales para que cada operario inicie sesión. | Funcional | Iniciar sesión con credenciales privadas |
-| RP-05 | El sistema tiene que guardar automáticamente qué usuario hizo el checklist y la hora y fecha exacta. | Funcional | Registrar auditoría (Usuario y Timestamp) |
-| RP-06 | Se debe poder marcar una Torre como "Terminada" cuando el checklist esté listo, y lo mismo con el Proyecto completo. | Funcional | Marcar como terminada y exportar Guía PDF |
-| RP-07 | Se debe poder exportar un PDF (Guía de Despacho) con los paneles listos para que la bodega tenga un respaldo. | Funcional | Marcar como terminada y exportar Guía PDF |
-| RP-08 | Tienen que existir dos roles: Administrador (que crea y borra) y Operario (que solo busca y marca el checklist). | Funcional | Iniciar sesión con credenciales privadas |
-| RP-09 | La aplicación debe ser tipo web para que se pueda usar desde el celular en la faena solo con internet. | No funcional | Marcar panel y validar checklist de la torre |
+| RP-01 | La plataforma debe tener un sistema de carpetas o pestañas para organizar los Proyectos, Tipos, Torres y Paneles. | Funcional | Monitoreo y control de piezas del proyecto|
+| RP-02 | La interfaz debe ser fácil de usar y mostrar de forma gráfica las torres y los paneles que tienen adentro. | No funcional | Monitoreo y control de piezas del proyecto|
+| RP-03 |Se debe poder buscar rápido y filtrar paneles específicos dentro de los proyectos. | Funcional | Monitoreo y control de piezas del proyecto |
+| RP-04 | La página debe pedir un login con credenciales para que cada operario inicie sesión. | Funcional | Inicio de sesión y autenticación de usuario |
+| RP-05 | El sistema tiene que guardar automáticamente qué usuario hizo el checklist y la hora y fecha exacta. | Funcional | Verificación y armado de torres en terreno |
+| RP-06 | Se debe poder marcar una Torre como "Terminada" cuando el checklist esté listo, y lo mismo con el Proyecto completo. | Funcional | Verificación y armado de torres en terreno|
+| RP-07 | Se debe poder exportar un PDF (Guía de Despacho) con los paneles listos para que la bodega tenga un respaldo. | Funcional | Despacho y generación de guía PDF|
+| RP-08 | Tienen que existir dos roles: Administrador (que crea y borra) y Operario (que solo busca y marca el checklist). | Funcional | Inicio de sesión y autenticación de usuario |
+| RP-09 | La aplicación debe ser tipo web para que se pueda usar desde el celular en la faena solo con internet. | No funcional | Verificación y armado de torres en terreno |
 | RP-10 | El servidor debe estar siempre arriba (alta disponibilidad) para que no se caiga en horario de trabajo. | No funcional | (General de plataforma) |
 
 ## Requisitos de proyecto
