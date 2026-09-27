@@ -15,7 +15,7 @@
 - Efecto esperado (tiempo/costo/calidad/flexibilidad): Reducción de tiempos de búsqueda (tiempo/costo), aumento de seguridad en la información (calidad) y trazabilidad completa del armado en terreno.
  
 ## Diagrama TO-BE
-![Proceso TO-BE](diagramas/To_be.png)
+![Proceso TO-BE](diagramas/To_be_v2.png)
  
 Archivo fuente: [`./diagramas/to-be.bpmn`](diagramas/To_be.xml)
  
