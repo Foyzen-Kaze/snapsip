@@ -21,8 +21,10 @@ Verificacion y armado de torres en terreno.
 
 ## HU-03
 Como Dueño de la empresa, quiero que haya dos roles en la aplicación Administrador y operario ,para que solo personal autorizado pueda acceder a ciertas acciones como crear nuevos proyectos y dar por finalizado proyectos ect.
+
 **Actividad TO-BE asociada:** 
 Inicio de seción y autenticacion de usuario.
+
 **Criterios de aceptación:**
 - CA1: El sistema debe permitir el inicio de sesion mediante correo y contraseña.
 - CA2: Solo el Administrador debe tener permisos para registrar y asignar a nuevos usuarios.
