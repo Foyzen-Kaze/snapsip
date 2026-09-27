@@ -11,7 +11,7 @@
         <bpmn:flowNodeRef>Task_ValidarChecklist</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_Login</bpmn:flowNodeRef>
       </bpmn:lane>
-      <bpmn:lane id="Lane_Sistema" name="Sistema (App Web / Supabase)">
+      <bpmn:lane id="Lane_Sistema" name="Sistema (App Web)">
         <bpmn:flowNodeRef>Task_Auditoria</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_Completado</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_GenerarPDF</bpmn:flowNodeRef>
