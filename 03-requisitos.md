@@ -19,8 +19,8 @@
 
 | ID | Requisito |
 |----|-----------|
-| RY-01 | El proyecto se debe subir a las capas gratuitas de Vercel y Supabase para que el costo mensual sea $0 CLP. |
-| RY-02 | El equipo no dará soporte técnico ni mantenciones después de entregarle las claves de administración al cliente. |
+| RY-01 | El proyecto debe ser empaquetado y ejecutado localmente mediante contenedor Docker para su despliegue y evaluación, eliminando la necesidad de servidores en la nube. |
+| RY-02 | El alcance del proyecto finaliza con la entrega del producto funcional. No se contempla soporte técnico, mantenimiento evolutivo ni actualizaciones posteriores a la entrega de los contenedores.El equipo no dará soporte técnico ni mantenciones después de entregarle las claves de administración al cliente. |
 
 ## Requisito derivado
 
