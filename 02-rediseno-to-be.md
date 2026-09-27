@@ -19,7 +19,6 @@
  
 Archivo fuente: [`./diagramas/to-be.bpmn`](diagramas/To_be.xml)
  
-Nota: distingan tareas de usuario, de servicio y manuales con el marcador correspondiente.
  
 ## Actividades que cambian del AS-IS al TO-BE
 | Actividad en el AS-IS | Actividad en el TO-BE | Qué cambia |
