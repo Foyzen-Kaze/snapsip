@@ -18,7 +18,6 @@ Producir, organizar en bodega y cargar correctamente las piezas solicitadas en l
  
 Archivo fuente: [`./diagramas/as-is.bpmn`](diagramas/As_is_1.xml)
 
-Nota: distingan tareas de usuario, de servicio y manuales con el marcador correspondiente.
  
 ## Problemas identificados
 - La búsqueda de piezas es manual y exhaustiva (torre por torre), lo que impide al operario de bodega localizar el material rápidamente y retrasa todo el proceso.
