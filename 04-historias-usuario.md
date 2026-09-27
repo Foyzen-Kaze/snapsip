@@ -18,4 +18,14 @@ Verificacion y armado de torres en terreno.
 - CA2: El checklist debe tener marca de fecha y hora 
 - CA3: EL checklist debe pintar o dar indicios visuales de que la pieza esta lista o su estado.
 - CA4: El sistema debe permitir adjuntar fotografías por torre.
+
+## HU-03
+Como Dueño de la empresa, quiero que haya dos roles en la aplicación Administrador y operario ,para que solo personal autorizado pueda acceder a ciertas acciones como crear nuevos proyectos y dar por finalizado proyectos ect.
+**Actividad TO-BE asociada:** 
+Inicio de seción y autenticacion de usuario.
+**Criterios de aceptación:**
+- CA1: El sistema debe permitir el inicio de sesion mediante correo y contraseña.
+- CA2: Solo el Administrador debe tener permisos para registrar y asignar a nuevos usuarios.
+- CA3: El sistema debe restringir las vistas según el rol: los operarios solo visualizarán el checklist de torres y los administradores la gestión global de proyectos-
+
   
