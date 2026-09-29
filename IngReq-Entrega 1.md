@@ -1,9 +1,9 @@
 # Ingeniería de Requisitos — Entrega 1
  
 ## Equipo
-- Sebastian Fredy Gonzalez
-- David Nuñez
-- Diego Marengo
+- Proceso AS-IS  Y Rediseño y TO BE -> David Núñez
+- Historias de Usuario y Elicitacion -> Sebastián Fredy González
+- Clasificación de requisitos y Atributos de Calidad -> Diego Marengo
  
 ## Proyecto
 ### Proyecto: Snapsip
