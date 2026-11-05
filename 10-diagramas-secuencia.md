@@ -16,47 +16,7 @@ Para garantizar un acceso seguro y simplificado al personal de faena y bodega, S
 ### Diagrama
 ![DSS-01](./diagramas/dss-01.png)
 
-- **Archivo fuente (Mermaid):** [`./diagramas/dss-01.mmd`](./diagramas/dss-01.mmd)
-- **Archivo fuente (PlantUML):** [`./diagramas/dss-01.puml`](./diagramas/dss-01.puml)
-
-### Código editable en Mermaid
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Usuario as Operario de Bodega /<br/>Encargado de Despacho
-    participant Sistema as :SnapSip<br/>(Sistema Central)
-    participant IdP as :ProveedorIdentidad<br/>(Google Workspace OAuth / Auth0)
-
-    Usuario->>Sistema: solicitarInicioSesionCorporativo()
-    activate Sistema
-    Sistema-->>Usuario: redirigirAProveedorIdentidad(urlAuth, clientId)
-    deactivate Sistema
-
-    Usuario->>IdP: ingresarCredenciales(correoCorporativo, credencial)
-    activate IdP
-    IdP->>IdP: validarCredencialesYPoliticas()
-
-    alt Credenciales corporativas válidas y autorizadas
-        IdP-->>Sistema: retornarTokenYPerfil(tokenAcceso, correo, perfilUsuario)
-        activate Sistema
-        
-        opt Primer inicio de sesión del usuario (JIT Provisioning)
-            Sistema->>Sistema: registrarPerfilUsuario(correo, rolAsignado)
-        end
-
-        Sistema->>Sistema: validarPermisosYCrearSesion(tokenAcceso)
-        Sistema-->>Usuario: concederAcceso(sesionIniciada, rolUsuario, panelPrincipal)
-        deactivate Sistema
-    else Credenciales inválidas o cuenta no autorizada
-        IdP-->>Usuario: mostrarErrorAutenticacion('Credenciales no válidas en IdP')
-        IdP-->>Sistema: notificarAccesoDenegado(codigoFallo)
-        activate Sistema
-        Sistema->>Sistema: registrarIntentoFallido(correo, timestamp)
-        Sistema-->>Usuario: denegarAcceso('Acceso denegado: cuenta corporativa no válida')
-        deactivate Sistema
-    end
-    deactivate IdP
-```
+Archivo fuente: [`./diagramas/dss-01.puml`](./diagramas/dss-01.puml)
 
 ### Variantes representadas
 - **`alt` (Credenciales corporativas válidas vs. inválidas / cuenta no autorizada):**
@@ -86,58 +46,7 @@ sequenceDiagram
 ### Diagrama
 ![DSS-02](./diagramas/dss-02.png)
 
-- **Archivo fuente (Mermaid):** [`./diagramas/dss-02.mmd`](./diagramas/dss-02.mmd)
-- **Archivo fuente (PlantUML):** [`./diagramas/dss-02.puml`](./diagramas/dss-02.puml)
-
-### Código editable en Mermaid
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Operario as Operario de Bodega
-    participant Sistema as :SnapSip<br/>(Sistema Central)
-    participant Notif as :ServicioNotificaciones<br/>(Twilio WhatsApp / SendGrid Email)
-    actor Encargado as Encargado de Despacho
-    actor Transportista as Cliente / Transportista
-
-    Operario->>Sistema: asignarPiezaATorre(codigoPieza, idTorre, evidenciaFotografica)
-    activate Sistema
-
-    alt Sin evidencia fotográfica adjunta [Rechazo]
-        Sistema-->>Operario: rechazarAsignacion('Falta evidencia fotográfica requerida')
-    else Con evidencia fotográfica válida
-        Sistema->>Sistema: registrarPiezaLista(codigoPieza, idTorre, evidencia, fechaHora, operario)
-        Sistema->>Sistema: evaluarCompletitudTorre(idTorre)
-
-        alt Checklist de torre incompleto (< 100%)
-            Sistema-->>Operario: confirmarAsignacion(codigoPieza, 'Listo', piezasRestantesTorre)
-        else Checklist de torre completo (100% de paneles verificados)
-            Sistema->>Sistema: habilitarGuiaDespacho(idTorre)
-            Sistema->>Notif: dispararEventoTorreCompletada(idTorre, numeroTorre, datosGuiaPDF)
-            activate Notif
-
-            opt Notificación instantánea a Encargado (Twilio WhatsApp API)
-                Notif->>Encargado: enviarMensajeWhatsApp('Torre completada al 100% y lista para carga de camión')
-                Notif-->>Sistema: confirmarEntregaNotificacion(idWhatsApp, 'Entregado')
-            end
-
-            opt Notificación a Cliente / Transportista (SendGrid / SES Email)
-                Notif->>Transportista: enviarCorreoGuiaDespacho(emailCliente, datosDespacho, linkDescargaPDF)
-                Notif-->>Sistema: confirmarEnvioCorreo(idEmail, 'Enviado')
-            end
-
-            opt Reintento por fallo de red o latencia en pasarela
-                loop Reintento automático con backoff (máximo 3 reintentos)
-                    Sistema->>Notif: reintentarEnvioNotificacion(idEvento)
-                    Notif-->>Sistema: confirmarResultadoReintento(estadoEnvio)
-                end
-            end
-            deactivate Notif
-
-            Sistema-->>Operario: notificarTorreCompletada(idTorre, '100% Completo - Guía habilitada y alertas enviadas')
-        end
-    end
-    deactivate Sistema
-```
+Archivo fuente: [`./diagramas/dss-02.puml`](./diagramas/dss-02.puml)
 
 ### Variantes representadas
 - **`alt` (Validación de evidencia fotográfica - CA2 de HU-05):**
