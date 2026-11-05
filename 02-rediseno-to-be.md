@@ -38,7 +38,7 @@ Nota: El diagrama distingue tareas de usuario (marcadas con el icono de usuario)
 | Actividad en el AS-IS | Actividad en el TO-BE | Qué cambia |
 |-------------------------|--------------------------|------------|
 | Ingresar proyecto manualmente en pizarra/cuaderno | Registrar nuevo proyecto | Pasa de un registro físico vulnerable a un registro digital estructurado. |
-| Interpretar plano e ingresar piezas una a una | Cargar universo de piezas | El sistema inyecta el total de piezas desde un archivo, automatizando el registro inicial en estado "Pendiente". |
+| Interpretar plano e ingresar piezas una a una | Inyectar piezas desde plano/archivo | El sistema inyecta el total de piezas desde un archivo, automatizando el registro inicial en estado "Pendiente". |
 | Agrupar piezas físicamente sin registro | Registrar nueva torre | Se crea un contenedor lógico en el sistema (Torre) asociado a una parte específica de la casa. |
 | Tachar pieza en el plano impreso | Asignar pieza a torre | El operario marca la pieza en el sistema y se exige adjuntar evidencia fotográfica obligatoria. |
 | Revisar torre físicamente para ver qué falta | Consultar piezas pendientes | El sistema filtra y muestra en tiempo real únicamente las piezas que faltan por asignar. |
