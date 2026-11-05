@@ -1,0 +1,7 @@
+stateDiagram-v2
+    [*] --> Abierta : crear torre [universo de piezas cargado] / asignar correlativo
+    Abierta --> Cerrada : cerrar torre [contiene al menos una pieza] / bloquear nuevas asignaciones
+    Cerrada --> Abierta : reabrir torre [ninguna pieza enviada] / habilitar asignaciones e invalidar guías
+    Abierta --> [*] : eliminar torre [torre vacía y código coincide] / marcar eliminación lógica
+    Cerrada --> Despachada : registrar envío [guía Vigente con evidencia] / consolidar despacho físico
+    Despachada --> [*]

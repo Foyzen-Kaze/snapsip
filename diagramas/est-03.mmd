@@ -1,0 +1,6 @@
+stateDiagram-v2
+    [*] --> Vigente : generar guía de despacho [alcance 100% Listo y torres Cerradas] / emitir PDF
+    Vigente --> Invalidada : desasignar pieza o reabrir torre [elemento incluido en la guía] / anular vigencia (RD-01)
+    Vigente --> Enviada : registrar envío [evidencia fotográfica de camión adjunta] / registrar salida y almacenar evidencia
+    Invalidada --> [*]
+    Enviada --> [*]

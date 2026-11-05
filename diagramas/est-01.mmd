@@ -1,0 +1,7 @@
+stateDiagram-v2
+    [*] --> Pendiente : importar archivo de piezas / registrar en parte de la casa
+    Pendiente --> Listo : asignar pieza a torre [torre Abierta y evidencia adjunta] / almacenar evidencia
+    Listo --> Pendiente : desasignar pieza / desvincular torre e invalidar guías vigentes
+    Listo --> Listo : asignar pieza a torre [nueva torre Abierta y confirmación] / actualizar evidencia y torre
+    Listo --> Enviado : registrar envío [guía Vigente y evidencia de camión] / amparar salida
+    Enviado --> [*]
