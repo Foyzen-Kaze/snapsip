@@ -16,7 +16,47 @@ Para garantizar un acceso seguro y simplificado al personal de faena y bodega, S
 ### Diagrama
 ![DSS-01](./diagramas/dss-01.png)
 
-Archivo fuente: [`./diagramas/dss-01.puml`](./diagramas/dss-01.puml)
+- **Archivo fuente (Mermaid):** [`./diagramas/dss-01.mmd`](./diagramas/dss-01.mmd)
+- **Archivo fuente (PlantUML):** [`./diagramas/dss-01.puml`](./diagramas/dss-01.puml)
+
+### Código editable en Mermaid
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Usuario as Operario de Bodega /<br/>Encargado de Despacho
+    participant Sistema as :SnapSip<br/>(Sistema Central)
+    participant IdP as :ProveedorIdentidad<br/>(Google Workspace OAuth / Auth0)
+
+    Usuario->>Sistema: solicitarInicioSesionCorporativo()
+    activate Sistema
+    Sistema-->>Usuario: redirigirAProveedorIdentidad(urlAuth, clientId)
+    deactivate Sistema
+
+    Usuario->>IdP: ingresarCredenciales(correoCorporativo, credencial)
+    activate IdP
+    IdP->>IdP: validarCredencialesYPoliticas()
+
+    alt Credenciales corporativas válidas y autorizadas
+        IdP-->>Sistema: retornarTokenYPerfil(tokenAcceso, correo, perfilUsuario)
+        activate Sistema
+        
+        opt Primer inicio de sesión del usuario (JIT Provisioning)
+            Sistema->>Sistema: registrarPerfilUsuario(correo, rolAsignado)
+        end
+
+        Sistema->>Sistema: validarPermisosYCrearSesion(tokenAcceso)
+        Sistema-->>Usuario: concederAcceso(sesionIniciada, rolUsuario, panelPrincipal)
+        deactivate Sistema
+    else Credenciales inválidas o cuenta no autorizada
+        IdP-->>Usuario: mostrarErrorAutenticacion('Credenciales no válidas en IdP')
+        IdP-->>Sistema: notificarAccesoDenegado(codigoFallo)
+        activate Sistema
+        Sistema->>Sistema: registrarIntentoFallido(correo, timestamp)
+        Sistema-->>Usuario: denegarAcceso('Acceso denegado: cuenta corporativa no válida')
+        deactivate Sistema
+    end
+    deactivate IdP
+```
 
 ### Variantes representadas
 - **`alt` (Credenciales corporativas válidas vs. inválidas / cuenta no autorizada):**
@@ -30,7 +70,7 @@ Archivo fuente: [`./diagramas/dss-01.puml`](./diagramas/dss-01.puml)
 ## DSS-02 — Asignación de pieza con completitud al 100% y Notificación Automática de Despacho
 
 - **Caso de uso:** Asignar pieza a torre (y validación de completitud)
-- **Historia:** [HU-05 — Asignar pieza a torre con evidencia](./04-historias-usuario.md#hu-05--asignar-pieza-a-torre-con-evidencia) (asociada a [HU-08 — Validar completitud](./04-historias-usuario.md#hu-08--validar-completitud-por-parte-o-proyecto) y [HU-09 — Generar guía de despacho](./04-historias-usuario.md#hu-09--generar-guía-de-despacho))
+- **Historia:** [HU-05 — Asignar pieza a torre con evidencia](./04-historias-usuario.md#hu-05) (asociada a [HU-08 — Validar completitud](./04-historias-usuario.md#hu-08) y [HU-09 — Generar guía de despacho](./04-historias-usuario.md#hu-09))
 - **Sistemas externos que participan:** Servicio de Notificaciones y Mensajería Automática (Twilio WhatsApp API / SendGrid Email)
 
 ### Contexto del negocio e integración externa
@@ -46,7 +86,58 @@ Archivo fuente: [`./diagramas/dss-01.puml`](./diagramas/dss-01.puml)
 ### Diagrama
 ![DSS-02](./diagramas/dss-02.png)
 
-Archivo fuente: [`./diagramas/dss-02.puml`](./diagramas/dss-02.puml)
+- **Archivo fuente (Mermaid):** [`./diagramas/dss-02.mmd`](./diagramas/dss-02.mmd)
+- **Archivo fuente (PlantUML):** [`./diagramas/dss-02.puml`](./diagramas/dss-02.puml)
+
+### Código editable en Mermaid
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Operario as Operario de Bodega
+    participant Sistema as :SnapSip<br/>(Sistema Central)
+    participant Notif as :ServicioNotificaciones<br/>(Twilio WhatsApp / SendGrid Email)
+    actor Encargado as Encargado de Despacho
+    actor Transportista as Cliente / Transportista
+
+    Operario->>Sistema: asignarPiezaATorre(codigoPieza, idTorre, evidenciaFotografica)
+    activate Sistema
+
+    alt Sin evidencia fotográfica adjunta [Rechazo]
+        Sistema-->>Operario: rechazarAsignacion('Falta evidencia fotográfica requerida')
+    else Con evidencia fotográfica válida
+        Sistema->>Sistema: registrarPiezaLista(codigoPieza, idTorre, evidencia, fechaHora, operario)
+        Sistema->>Sistema: evaluarCompletitudTorre(idTorre)
+
+        alt Checklist de torre incompleto (< 100%)
+            Sistema-->>Operario: confirmarAsignacion(codigoPieza, 'Listo', piezasRestantesTorre)
+        else Checklist de torre completo (100% de paneles verificados)
+            Sistema->>Sistema: habilitarGuiaDespacho(idTorre)
+            Sistema->>Notif: dispararEventoTorreCompletada(idTorre, numeroTorre, datosGuiaPDF)
+            activate Notif
+
+            opt Notificación instantánea a Encargado (Twilio WhatsApp API)
+                Notif->>Encargado: enviarMensajeWhatsApp('Torre completada al 100% y lista para carga de camión')
+                Notif-->>Sistema: confirmarEntregaNotificacion(idWhatsApp, 'Entregado')
+            end
+
+            opt Notificación a Cliente / Transportista (SendGrid / SES Email)
+                Notif->>Transportista: enviarCorreoGuiaDespacho(emailCliente, datosDespacho, linkDescargaPDF)
+                Notif-->>Sistema: confirmarEnvioCorreo(idEmail, 'Enviado')
+            end
+
+            opt Reintento por fallo de red o latencia en pasarela
+                loop Reintento automático con backoff (máximo 3 reintentos)
+                    Sistema->>Notif: reintentarEnvioNotificacion(idEvento)
+                    Notif-->>Sistema: confirmarResultadoReintento(estadoEnvio)
+                end
+            end
+            deactivate Notif
+
+            Sistema-->>Operario: notificarTorreCompletada(idTorre, '100% Completo - Guía habilitada y alertas enviadas')
+        end
+    end
+    deactivate Sistema
+```
 
 ### Variantes representadas
 - **`alt` (Validación de evidencia fotográfica - CA2 de HU-05):**
