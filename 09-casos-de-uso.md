@@ -9,7 +9,7 @@
 | Servicio de almacenamiento de evidencia | Sistema externo | Repositorio en la nube encargado de recibir, guardar de forma segura y proveer los enlaces de las fotografías de respaldo. |
  
 ## Diagrama de casos de uso
-![Casos de uso](.diagramas/modelodedominio.png)
+![Casos de uso](diagramas/modelodedominio.png)
  
 Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
  
