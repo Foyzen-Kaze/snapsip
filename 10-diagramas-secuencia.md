@@ -70,7 +70,7 @@ sequenceDiagram
 ## DSS-02 — Asignación de pieza con completitud al 100% y Notificación Automática de Despacho
 
 - **Caso de uso:** Asignar pieza a torre (y validación de completitud)
-- **Historia:** [HU-05 — Asignar pieza a torre con evidencia](./04-historias-usuario.md#hu-05--asignar-pieza-a-torre-con-evidencia) (asociada a [HU-08 — Validar completitud](./04-historias-usuario.md#hu-08) y [HU-09 — Generar guía de despacho](./04-historias-usuario.md#hu-09))
+- **Historia:** [HU-05 — Asignar pieza a torre con evidencia](./04-historias-usuario.md#hu-05--asignar-pieza-a-torre-con-evidencia) (asociada a [HU-08 — Validar completitud](./04-historias-usuario.md#hu-08--validar-completitud-por-parte-o-proyecto) y [HU-09 — Generar guía de despacho](./04-historias-usuario.md#hu-09--generar-guía-de-despacho))
 - **Sistemas externos que participan:** Servicio de Notificaciones y Mensajería Automática (Twilio WhatsApp API / SendGrid Email)
 
 ### Contexto del negocio e integración externa
