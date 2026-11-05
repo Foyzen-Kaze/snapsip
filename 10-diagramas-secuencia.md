@@ -14,12 +14,6 @@ En este documento se presentan los **Diagramas de Secuencia de Sistema (DSS)** p
 Para garantizar un acceso seguro y simplificado al personal de faena y bodega, SnapSip delega la autenticación en un **Proveedor de Identidad corporativo (IdP)**. Esto permite a los operarios y encargados ingresar con un solo clic utilizando su correo corporativo institucional, eliminando la necesidad de que SnapSip almacene hashes de contraseñas ni gestione flujos de reseteo de claves locales.
 
 ### Diagrama
-![DSS-01](./diagramas/dss-01.png)
-
-- **Archivo fuente (Mermaid):** [`./diagramas/dss-01.mmd`](./diagramas/dss-01.mmd)
-- **Archivo fuente (PlantUML):** [`./diagramas/dss-01.puml`](./diagramas/dss-01.puml)
-
-### Código editable en Mermaid
 ```mermaid
 sequenceDiagram
     autonumber
@@ -58,6 +52,8 @@ sequenceDiagram
     deactivate IdP
 ```
 
+Archivo fuente: [`./diagramas/dss-01.mmd`](./diagramas/dss-01.mmd)
+
 ### Variantes representadas
 - **`alt` (Credenciales corporativas válidas vs. inválidas / cuenta no autorizada):**
   - **Escenario principal (Éxito):** El usuario provee sus credenciales corporativas correctas en el IdP. El proveedor emite un token de acceso seguro y el perfil del usuario. SnapSip valida la sesión y habilita el acceso con el rol asignado (Operario o Encargado).
@@ -84,12 +80,6 @@ sequenceDiagram
   Reduce drásticamente los tiempos muertos de espera y coordinación en bodega, asegura trazabilidad total del proceso TO-BE y elimina la carga cognitiva del trabajador en terreno.
 
 ### Diagrama
-![DSS-02](./diagramas/dss-02.png)
-
-- **Archivo fuente (Mermaid):** [`./diagramas/dss-02.mmd`](./diagramas/dss-02.mmd)
-- **Archivo fuente (PlantUML):** [`./diagramas/dss-02.puml`](./diagramas/dss-02.puml)
-
-### Código editable en Mermaid
 ```mermaid
 sequenceDiagram
     autonumber
@@ -138,6 +128,8 @@ sequenceDiagram
     end
     deactivate Sistema
 ```
+
+Archivo fuente: [`./diagramas/dss-02.mmd`](./diagramas/dss-02.mmd)
 
 ### Variantes representadas
 - **`alt` (Validación de evidencia fotográfica - CA2 de HU-05):**
