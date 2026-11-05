@@ -1,0 +1,85 @@
+@startuml modelo-dominio
+hide methods
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+skinparam dpi 150
+skinparam linetype polyline
+skinparam nodesep 90
+skinparam ranksep 90
+skinparam shadowing false
+
+skinparam class {
+    BackgroundColor #F8F9FA
+    BorderColor #343A40
+    ArrowColor #495057
+}
+skinparam note {
+    BackgroundColor #FFF8DC
+    BorderColor #999999
+}
+
+title Modelo de dominio — SnapSip
+
+class Proyecto {
+  codigo
+  cliente
+  metraje
+  estado
+}
+
+class ParteCasa {
+  nombre
+  /completa
+}
+
+class Pieza {
+  codigo
+  estado
+}
+
+class Torre {
+  codigo
+  numero
+  estado
+  fechaHoraEliminacion
+  eliminadaPor
+}
+
+class GuiaDespacho {
+  numero
+  alcance
+  estado
+  fechaHoraEmision
+  fechaHoraEnvio
+}
+
+class Evidencia {
+  fotografia
+  fechaHoraCaptura
+  responsable
+  vigente
+}
+
+' Composición: ciclo de vida dependiente
+Proyecto "1" *-down- "0..*" ParteCasa : se divide en >
+ParteCasa "1" *-down- "1..*" Pieza : se compone de >
+Pieza "0..1" *-down- "0..*" Evidencia : respalda la ubicación de <
+GuiaDespacho "0..1" *-down- "0..1" Evidencia : respalda el envío de <
+
+' Agregación: agrupación física o documental temporal
+Torre "0..1" o-right- "0..*" Pieza : agrupa >
+GuiaDespacho "0..*" o-left- "1..*" Pieza : incluye >
+
+' Asociaciones simples
+ParteCasa "1" -down- "0..*" Torre : se almacena en >
+Proyecto "1" -right- "0..*" GuiaDespacho : se despacha con >
+
+' Restricciones que la multiplicidad no expresa
+note "Una torre solo agrupa piezas\nde su misma parte de la casa\n(RP-05, HU-04 CA3)." as N1
+N1 .. Torre
+
+note "{xor} Cada evidencia respalda la ubicación\nde una pieza o el envío de una guía,\nnunca ambos." as N2
+N2 .. Evidencia
+
+@enduml
