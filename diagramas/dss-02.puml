@@ -1,0 +1,47 @@
+@startuml dss-02
+autonumber
+actor "Operario de Bodega" as Operario
+participant ":SnapSip\n(Sistema Central)" as Sistema
+participant ":ServicioNotificaciones\n(Twilio WhatsApp / SendGrid Email)" as Notif
+actor "Encargado de Despacho" as Encargado
+actor "Cliente / Transportista" as Transportista
+
+Operario -> Sistema: asignarPiezaATorre(codigoPieza, idTorre, evidenciaFotografica)
+activate Sistema
+
+alt Sin evidencia fotográfica adjunta [Rechazo]
+    Sistema --> Operario: rechazarAsignacion("Error: Requiere evidencia fotográfica obligatoria")
+else Con evidencia fotográfica válida
+    Sistema -> Sistema: registrarPiezaLista(codigoPieza, idTorre, evidencia, fechaHora, operario)
+    Sistema -> Sistema: evaluarCompletitudTorre(idTorre)
+    
+    alt Checklist de torre incompleto (< 100%)
+        Sistema --> Operario: confirmarAsignacion(codigoPieza, "Listo", piezasRestantesTorre)
+    else Checklist de torre completo (100% de paneles verificados)
+        Sistema -> Sistema: habilitarGuiaDespacho(idTorre)
+        Sistema -> Notif: dispararEventoTorreCompletada(idTorre, numeroTorre, datosGuiaPDF)
+        activate Notif
+        
+        opt Notificación instantánea a Encargado (Twilio WhatsApp API)
+            Notif -> Encargado: enviarMensajeWhatsApp("Torre completada al 100% y lista para carga de camión")
+            Notif --> Sistema: confirmarEntregaNotificacion(idWhatsApp, "Entregado")
+        end
+        
+        opt Notificación a Cliente / Transportista (SendGrid / SES Email)
+            Notif -> Transportista: enviarCorreoGuiaDespacho(emailCliente, datosDespacho, linkDescargaPDF)
+            Notif --> Sistema: confirmarEnvioCorreo(idEmail, "Enviado")
+        end
+        
+        opt Reintento por fallo de red o latencia en pasarela
+            loop Reintento automático con backoff (máximo 3 reintentos)
+                Sistema -> Notif: reintentarEnvioNotificacion(idEvento)
+                Notif --> Sistema: confirmarResultadoReintento(estadoEnvio)
+            end
+        end
+        deactivate Notif
+        
+        Sistema --> Operario: notificarTorreCompletada(idTorre, "100% Completo - Guía habilitada y alertas enviadas")
+    end
+end
+deactivate Sistema
+@enduml
