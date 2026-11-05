@@ -5,3 +5,7 @@ Entrega 1 del proyecto:
 
 **[Ingeniería de Requisitos — Entrega 1](./IngReq-Entrega%201.md)**
 
+## Diagramas
+
+[Ver los diagramas del proyecto](./diagramas/galeria-diagramas.md)
+

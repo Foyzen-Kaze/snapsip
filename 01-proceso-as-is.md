@@ -15,7 +15,7 @@ Organizar las torres de paneles en la bodega, trasladar los proyectos a la zona 
 
 ### Diagrama AS-IS
 
-![Diagrama AS-IS](./proceso-as-is.png)
+![Diagrama AS-IS](./diagramas/proceso-as-is.png)
 
 Archivo fuente: [`./diagramas/panelessip.bpmn`](./diagramas/panelessip.bpmn)
 
