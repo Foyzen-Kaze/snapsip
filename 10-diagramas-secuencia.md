@@ -14,7 +14,7 @@ Notación utilizada:
 ## DSS-01 — Asignar pieza a torre con evidencia fotográfica
 
 - Caso de uso: [CU-05 Asignar pieza a torre](./09-casos-de-uso.md) (incluye [CU-13 Adjuntar evidencia fotográfica](./09-casos-de-uso.md))
-- Historia: [HU-05](./04-historias-usuario.md#hu-05)
+- Historia: [HU-05](./04-historias-usuario.md#hu-05--asignar-pieza-a-torre-con-evidencia)
 - Requisitos que cubre: RP-05, RP-04 (pertenencia de la torre a una parte de la casa)
 - Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
