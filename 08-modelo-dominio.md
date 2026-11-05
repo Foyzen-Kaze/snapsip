@@ -3,7 +3,7 @@
 ## Diagrama
 ![Modelo de dominio](./diagramas/modelo-dominio.png)
 
-Archivo fuente: [`./diagramas/modelo-dominio.puml`](diagramas/casos-de-uso.puml)
+Archivo fuente: [`./diagramas/modelo-dominio.puml`](diagramas/modelo-de-dominio.puml)
 
 ## Descripción de las clases
 | Clase | Qué representa en el negocio | Atributos |
