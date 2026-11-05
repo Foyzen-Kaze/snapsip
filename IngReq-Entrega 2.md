@@ -11,8 +11,8 @@
 ## Responsabilidades individuales
 | Documento | Ítem de rúbrica | Responsable(s) |
 |-----------|:---------------:|----------------|
-| [07-criterios-aceptacion.md](./07-criterios-aceptacion.md) | 1 | Sebastián Fredy González |
-| [08-modelo-dominio.md](./08-modelo-dominio.md) | 2 | Diego Marengo |
+| [07-criterios-aceptacion.md](./07-criterios-aceptacion.md) | 1 |  Diego Marengo |
+| [08-modelo-dominio.md](./08-modelo-dominio.md) | 2 | Sebastián Fredy González|
 | [09-casos-de-uso.md](./09-casos-de-uso.md) | 3 | Sebastián Fredy González |
 | [10-diagramas-secuencia.md](./10-diagramas-secuencia.md) | 4 | David Núñez |
 | [11-diagramas-estado.md](./11-diagramas-estado.md) | 5 | David Núñez |
