@@ -39,7 +39,7 @@ Variantes representadas:
 ## DSS-02 — Generar guía de despacho y registrar envío con evidencia
 
 - Caso de uso: [CU-10 Registrar envío](./09-casos-de-uso.md), precedido por [CU-09 Generar guía de despacho](./09-casos-de-uso.md), que es su condición previa. CU-10 incluye [CU-13 Adjuntar evidencia fotográfica](./09-casos-de-uso.md).
-- Historia: [HU-10](./04-historias-usuario.md#hu-10), precedida por [HU-09](./04-historias-usuario.md#hu-09)
+- Historia: [HU-10](./04-historias-usuario.md#hu-10--Registrar-envío-con-evidencia), precedida por [HU-09](./04-historias-usuario.md#hu-09)
 - Requisitos que cubre: RP-09, RP-10, RD-01
 - Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
