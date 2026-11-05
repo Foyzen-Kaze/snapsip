@@ -1,30 +1,26 @@
-# Atributos de calidad (ISO 25010)
+# Atributos de calidad (ISO/IEC 25010:2023)
 
 ## Priorización de los 9 atributos de primer nivel
-
-1. Usabilidad
+1. Capacidad de interacción (usabilidad)
 2. Fiabilidad
 3. Adecuación funcional
-4. Seguridad
+4. Seguridad de la información
 5. Eficiencia de desempeño
-6. Compatibilidad
-7. Portabilidad
-8. Mantenibilidad
+6. Mantenibilidad
+7. Compatibilidad
+8. Portabilidad
 9. Flexibilidad
 
-## Métricas de los 3 atributos mas relevantes
+## Métricas de los 3 atributos más importantes
 
-### Usabilidad
-**Métrica:** Tiempo de ejecución de tarea y tasa de finalización sin asistencia.
-
-**Cómo se mide:** Se mide el tiempo que le toma a un operario en terreno buscar una torre en el sistema y completar el checklist desde el celular. Al ser un ambiente de fábrica, la interfaz tiene que ir al grano sin flujos enredados. El objetivo es que la tarea completa tome menos de 3 minutos y que el trabajador no necesite leer un manual ni pedir ayuda para entender la pantalla.
+### Capacidad de interacción (usabilidad)
+- **Métrica:** Tiempo de ejecución de la tarea principal y tasa de finalización sin asistencia.
+- **Cómo se mide:** Se registra el tiempo que tarda un operario, desde la selección del proyecto, en localizar una pieza pendiente, asignarla a una torre abierta y adjuntar su evidencia fotográfica desde un dispositivo móvil. El criterio de aceptación es que al menos el 90 % de las tareas se complete correctamente en menos de 3 minutos (180 segundos), sin consultar manuales ni recibir asistencia de terceros.
 
 ### Fiabilidad
-**Métrica:** Porcentaje de disponibilidad (Uptime) en horario operativo.
-
-**Cómo se mide:** Se calcula revisando los dashboards de monitoreo de los servidores en la nube. La meta es mantener un 99.9% de uptime durante los turnos de trabajo. Este atributo es crítico, ya que si la plataforma se cae, el sistema no puede emitir el PDF de despacho, lo que detiene físicamente la salida de los camiones y genera un cuello de botella en la logística.
+- **Métrica:** Porcentaje de disponibilidad durante el horario operativo de la fábrica.
+- **Cómo se mide:** Se monitorea durante veinte días hábiles la disponibilidad de la autenticación, la consulta de piezas y la generación de guías PDF, de lunes a viernes entre las 08:00 y las 18:00, según la zona horaria de Santiago. La disponibilidad se calcula como el porcentaje del tiempo evaluado en que estas funciones operan correctamente. La meta es alcanzar al menos un 99,9 %, incluyendo las interrupciones de los proveedores en el cálculo, para reducir las detenciones del proceso de despacho.
 
 ### Adecuación funcional
-**Métrica:** Tasa de exactitud en la validación de la regla de negocio principal.
-
-**Cómo se mide:** Se revisa la proporción entre los PDFs de despacho generados y las torres que efectivamente tenían su checklist marcado al 100%. El sistema tiene la responsabilidad de bloquear el botón de exportación si falta aunque sea un panel. Esta métrica se mide contrastando las guías generadas con los logs de auditoría en la base de datos. El nivel de aceptación esperado es del 100%.
+- **Métrica:** Porcentaje de decisiones correctas en la validación de las condiciones de despacho.
+- **Cómo se mide:** Se prueban solicitudes válidas e inválidas de generación de guías y se contrastan los resultados con los datos registrados. El sistema debe autorizar la generación únicamente cuando el alcance solicitado —una parte de la casa o el proyecto completo— contenga piezas y todas estén en estado «Listo», asignadas a torres «Cerradas». El criterio de aceptación es un 100 % de decisiones correctas en las pruebas: ninguna solicitud inválida autorizada y ninguna solicitud válida rechazada.
