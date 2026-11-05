@@ -37,14 +37,14 @@ Nota: El diagrama distingue tareas de usuario (marcadas con el icono de usuario)
 ## Actividades que cambian del AS-IS al TO-BE
 | Actividad en el AS-IS | Actividad en el TO-BE | Qué cambia |
 |-------------------------|--------------------------|------------|
-| Ingresar proyecto manualmente en pizarra/cuaderno | Registrar nuevo proyecto | Pasa de un registro físico vulnerable a un registro digital estructurado. |
+| Ingresar proyecto manualmente en pizarra/cuaderno | Autenticación de usuarios | Pasa de un registro físico vulnerable a un registro digital estructurado. |
 | Interpretar plano e ingresar piezas una a una | Inyectar piezas desde plano/archivo | El sistema inyecta el total de piezas desde un archivo, automatizando el registro inicial en estado "Pendiente". |
 | Agrupar piezas físicamente sin registro | Registrar nueva torre | Se crea un contenedor lógico en el sistema (Torre) asociado a una parte específica de la casa. |
-| Tachar pieza en el plano impreso | Asignar pieza a torre | El operario marca la pieza en el sistema y se exige adjuntar evidencia fotográfica obligatoria. |
+| Tachar pieza en el plano impreso | Asignar pieza a torre con evidencia| El operario marca la pieza en el sistema y se exige adjuntar evidencia fotográfica obligatoria. |
 | Revisar torre físicamente para ver qué falta | Consultar piezas pendientes | El sistema filtra y muestra en tiempo real únicamente las piezas que faltan por asignar. |
-| - | Cerrar torre | (Nueva actividad) El operario clausura la recepción de piezas en una torre por falta de espacio físico. |
-| Revisión ocular de todas las torres | Validar completitud | El sistema valida automáticamente por detrás si el 100% de las piezas de un proyecto están en estado "Listo". |
+| - | Cierre manual de torre | (Nueva activida d)El operario clausura la recepción de piezas en una torre por falta de espacio físico. |
+| Revisión ocular de todas las torres | Validar completitud por Parte o Proyecto | El sistema valida automáticamente por detrás si el 100% de las piezas de un proyecto están en estado "Listo". |
 | Escribir guía a mano o en Excel sin restricciones | Generar guía de despacho | El sistema genera el PDF de forma automatizada, condicionado estrictamente a la validación de completitud previa. |
-| Despachar camión | Registrar envío | Se exige tomar una fotografía de evidencia del camión cargado antes de dar de baja el inventario. |
+| Despachar camión | Registrar envío con evidencia| Se exige tomar una fotografía de evidencia del camión cargado antes de dar de baja el inventario. |
 | - | Eliminar torre vacía | (Nueva actividad) Borrado lógico protegido mediante código de confirmación. |
-| Despachar pieza equivocada y arreglarlo en planta | Desasignar pieza | (Nueva actividad) Permite al operario corregir un error de asignación en terreno devolviendo la pieza a estado "Pendiente". |
+| Despachar pieza equivocada y arreglarlo en planta | Desasignar pieza de una torre | (Nueva actividad) Permite al operario corregir un error de asignación en terreno devolviendo la pieza a estado "Pendiente". |
