@@ -493,12 +493,3 @@ Característica: Desasignación de piezas
     Y conserva su estado, asociación y evidencias
 ```
 
-
-
-
-
-
-
-
-
-
