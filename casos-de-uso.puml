@@ -1,0 +1,57 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+    BackgroundColor #f9f9f9
+    BorderColor #333333
+}
+skinparam actor {
+    BackgroundColor white
+    BorderColor black
+}
+
+' Actores Humanos
+actor "Operario de Bodega" as OB <<actor>>
+actor "Encargado de Despacho" as ED <<actor>>
+
+' Actores Externos
+actor "Servicio de Autenticacion" as SA <<sistema externo>>
+actor "Servicio de almacenamiento\nde evidencia" as SAE <<sistema externo>>
+
+' Límite del Sistema
+rectangle "Sistema SnapSip" {
+  usecase "CU-01 Iniciar sesión" as CU01
+  usecase "CU-02 Registrar proyecto" as CU02
+  usecase "CU-03 Cargar universo de piezas" as CU03
+  usecase "CU-04 Registrar torre" as CU04
+  usecase "CU-05 Asignar pieza a torre" as CU05
+  usecase "CU-06 Consultar piezas pendientes" as CU06
+  usecase "CU-07 Cerrar torre" as CU07
+  usecase "CU-09 Generar guía de despacho" as CU09
+  usecase "CU-10 Registrar envío" as CU10
+  usecase "CU-11 Eliminar torre vacía" as CU11
+  usecase "CU-12 Desasignar pieza" as CU12
+}
+
+' Relaciones del Operario de Bodega
+OB --> CU01
+OB --> CU04
+OB --> CU05
+OB --> CU06
+OB --> CU07
+OB --> CU11
+OB --> CU12
+
+' Relaciones del Encargado de Despacho
+ED --> CU01
+ED --> CU02
+ED --> CU03
+ED --> CU09
+ED --> CU10
+
+' Relaciones hacia Sistemas Externos
+CU01 --> SA
+CU05 --> SAE
+CU10 --> SAE
+
+@enduml
