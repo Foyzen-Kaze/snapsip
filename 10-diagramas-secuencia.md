@@ -65,7 +65,7 @@ Variantes representadas:
 ## DSS-03 — Iniciar sesión
 
 - Caso de uso: [CU-01 Iniciar sesión](./09-casos-de-uso.md)
-- Historia: [HU-01](./04-historias-usuario.md#hu-01)
+- Historia: [HU-01](./04-historias-usuario.md#HU-01)
 - Requisitos que cubre: RP-01, RP-15b (autenticación administrada), RP-16 (acceso según rol)
 - Sistemas externos que participan: Servicio de autenticación
 
