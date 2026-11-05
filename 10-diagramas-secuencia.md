@@ -6,7 +6,7 @@ En este documento se presentan los **Diagramas de Secuencia de Sistema (DSS)** p
 
 ## DSS-01 — Autenticación de usuario mediante Proveedor de Identidad externo
 
-- **Caso de uso:** [Iniciar sesión en el sistema]
+- **Caso de uso:** Iniciar sesión en el sistema
 - **Historia:** [HU-01 — Autenticación de usuarios](./04-historias-usuario.md#hu-01)
 - **Sistemas externos que participan:** Proveedor de Identidad / Autenticación (Google Workspace OAuth 2.0 / Auth0)
 
