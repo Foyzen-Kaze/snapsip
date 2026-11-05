@@ -1,46 +1,42 @@
+---
+config:
+  theme: neutral
+  themeVariables:
+    actorBorder: "#333333"
+    actorBkg: "#f4f4f4"
+    actorLineColor: "#555555"
+    signalColor: "#222222"
+    signalTextColor: "#222222"
+    labelBoxBorderColor: "#555555"
+    labelBoxBkgColor: "#eeeeee"
+    loopTextColor: "#222222"
+    noteBkgColor: "#fff8dc"
+    noteBorderColor: "#999999"
+    noteTextColor: "#222222"
+  themeCSS: ".loopText, .loopText tspan, .messageText, .labelText { paint-order: stroke !important; stroke: #ffffff !important; stroke-width: 6px !important; stroke-linejoin: round; }"
+  sequence:
+    width: 260
+    actorMargin: 70
+---
 sequenceDiagram
-    autonumber
-    actor Operario as Operario de Bodega
-    participant Sistema as :SnapSip<br/>(Sistema Central)
-    participant Notif as :ServicioNotificaciones<br/>(Twilio WhatsApp / SendGrid Email)
-    actor Encargado as Encargado de Despacho
-    actor Transportista as Cliente / Transportista
+    actor ED as Encargado de Despacho
+    participant SS as :SnapSip
+    participant ALM as «sistema externo»<br/>Servicio de almacenamiento<br/>de evidencias
 
-    Operario->>Sistema: asignarPiezaATorre(codigoPieza, idTorre, evidenciaFotografica)
-    activate Sistema
-
-    alt Sin evidencia fotográfica adjunta [Rechazo]
-        Sistema-->>Operario: rechazarAsignacion('Falta evidencia fotográfica requerida')
-    else Con evidencia fotográfica válida
-        Sistema->>Sistema: registrarPiezaLista(codigoPieza, idTorre, evidencia, fechaHora, operario)
-        Sistema->>Sistema: evaluarCompletitudTorre(idTorre)
-
-        alt Checklist de torre incompleto (< 100%)
-            Sistema-->>Operario: confirmarAsignacion(codigoPieza, 'Listo', piezasFaltantesTorre)
-        else Checklist de torre completo (100% de paneles verificados)
-            Sistema->>Sistema: habilitarGuiaDespacho(idTorre)
-            Sistema->>Notif: dispararEventoTorreCompletada(idTorre, numeroTorre, datosGuiaPDF)
-            activate Notif
-
-            opt Notificación instantánea a Encargado (Twilio WhatsApp API)
-                Notif->>Encargado: enviarMensajeWhatsApp('Torre completada al 100% y lista para carga de camión')
-                Notif-->>Sistema: confirmarEntregaNotificacion(idWhatsApp, 'Entregado')
-            end
-
-            opt Notificación a Cliente / Transportista (SendGrid / SES Email)
-                Notif->>Transportista: enviarCorreoGuiaDespacho(emailCliente, datosDespacho, linkDescargaPDF)
-                Notif-->>Sistema: confirmarEnvioCorreo(idEmail, 'Enviado')
-            end
-
-            opt Reintento por fallo de red o latencia en pasarela
-                loop Reintento automático con backoff (máximo 3 reintentos)
-                    Sistema->>Notif: reintentarEnvioNotificacion(idEvento)
-                    Notif-->>Sistema: confirmarResultadoReintento(estadoEnvio)
-                end
-            end
-            deactivate Notif
-
-            Sistema-->>Operario: notificarTorreCompletada(idTorre, '100% Completo - Guía habilitada y alertas enviadas')
+    ED->>SS: generar guía de despacho(proyecto, alcance)
+    alt alcance incompleto o con torres Abiertas
+        SS-->>ED: rechazo: piezas faltantes y torres sin cerrar
+    else alcance completo y torres Cerradas
+        SS-->>ED: guía de despacho Vigente en PDF (proyecto, alcance, piezas, torres)
+        Note over ED,SS: carga física del camión
+        ED->>SS: registrar envío(guía de despacho, evidencia fotográfica)
+        alt guía Invalidada por desasignación (RD-01)
+            SS-->>ED: rechazo: la guía fue invalidada, se debe generar una nueva
+        else sin evidencia fotográfica
+            SS-->>ED: rechazo: se exige evidencia fotográfica
+        else guía Vigente con evidencia
+            SS->>ALM: almacenar evidencia(fotografía)
+            ALM-->>SS: referencia de evidencia
+            SS-->>ED: envío registrado: guía Enviada y piezas Enviado (usuario, fecha y hora)
         end
     end
-    deactivate Sistema

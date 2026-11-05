@@ -1,0 +1,34 @@
+---
+config:
+  theme: neutral
+  themeVariables:
+    actorBorder: "#333333"
+    actorBkg: "#f4f4f4"
+    actorLineColor: "#555555"
+    signalColor: "#222222"
+    signalTextColor: "#222222"
+    labelBoxBorderColor: "#555555"
+    labelBoxBkgColor: "#eeeeee"
+    loopTextColor: "#222222"
+    noteBkgColor: "#fff8dc"
+    noteBorderColor: "#999999"
+    noteTextColor: "#222222"
+  themeCSS: ".loopText, .loopText tspan, .messageText, .labelText { paint-order: stroke !important; stroke: #ffffff !important; stroke-width: 6px !important; stroke-linejoin: round; }"
+  sequence:
+    width: 260
+    actorMargin: 70
+---
+sequenceDiagram
+    actor U as Usuario (Operario o Encargado)
+    participant SS as :SnapSip
+    participant AUT as «sistema externo»<br/>Servicio de autenticación
+
+    U->>SS: iniciar sesión(identificador, clave)
+    SS->>AUT: verificar credenciales(identificador, clave)
+    alt credenciales válidas
+        AUT-->>SS: identidad verificada
+        SS-->>U: acceso concedido a las funciones de su rol
+    else credenciales inválidas
+        AUT-->>SS: credenciales rechazadas
+        SS-->>U: rechazo: credenciales inválidas
+    end

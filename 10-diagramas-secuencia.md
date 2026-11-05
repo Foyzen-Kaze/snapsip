@@ -1,146 +1,97 @@
 # Diagramas de secuencia de sistema
 
-En este documento se presentan los **Diagramas de Secuencia de Sistema (DSS)** para el proyecto **SnapSip**, elaborados bajo el estándar **UML 2.0**. De acuerdo con los principios metodológicos de análisis de requisitos, el sistema SnapSip se modela como una **caja negra única** (`:SnapSip`), interactuando exclusivamente a través de eventos y mensajes expresados en el lenguaje del negocio con los actores humanos y los sistemas externos integrados.
+Este documento presenta los Diagramas de Secuencia de Sistema (DSS) de **SnapSip** en notación UML 2.0. En cada diagrama, SnapSip se modela como una **caja negra única** (`:SnapSip`): solo se muestran los mensajes que intercambia con los actores humanos y con los sistemas externos, sin descomponer su funcionamiento interno. Los mensajes usan el vocabulario del negocio y coinciden con los eventos de los [diagramas de estado](./11-diagramas-estado.md) y con los términos del [modelo de dominio](./08-modelo-dominio.md).
+
+Notación utilizada:
+
+- Flecha continua (`→`): solicitud o mensaje enviado.
+- Flecha punteada (`⇠`): respuesta.
+- `alt`: escenarios alternativos excluyentes; el primero que cumple su condición es el que ocurre.
+- `opt`: comportamiento que ocurre solo si se cumple la condición indicada.
 
 ---
 
-## DSS-01 — Autenticación de usuario mediante Proveedor de Identidad externo
+## DSS-01 — Asignar pieza a torre con evidencia fotográfica
 
-- **Caso de uso:** Iniciar sesión en el sistema
-- **Historia:** [HU-01 — Autenticación de usuarios](./04-historias-usuario.md#hu-01)
-- **Sistemas externos que participan:** Proveedor de Identidad / Autenticación (Google Workspace OAuth 2.0 / Auth0)
+- Caso de uso: [CU-05 Asignar pieza a torre](./09-casos-de-uso.md) (incluye [CU-13 Adjuntar evidencia fotográfica](./09-casos-de-uso.md))
+- Historia: [HU-05](./04-historias-usuario.md#hu-05)
+- Requisitos que cubre: RP-05, RP-04 (pertenencia de la torre a una parte de la casa)
+- Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
-### Contexto del negocio e integración externa
-Para garantizar un acceso seguro y simplificado al personal de faena y bodega, SnapSip delega la autenticación en un **Proveedor de Identidad corporativo (IdP)**. Esto permite a los operarios y encargados ingresar con un solo clic utilizando su correo corporativo institucional, eliminando la necesidad de que SnapSip almacene hashes de contraseñas ni gestione flujos de reseteo de claves locales.
-
-### Diagrama
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Usuario as Operario de Bodega /<br/>Encargado de Despacho
-    participant Sistema as :SnapSip<br/>(Sistema Central)
-    participant IdP as :ProveedorIdentidad<br/>(Google Workspace OAuth / Auth0)
-
-    Usuario->>Sistema: solicitarInicioSesionCorporativo()
-    activate Sistema
-    Sistema-->>Usuario: redirigirAProveedorIdentidad(urlAuth, clientId)
-    deactivate Sistema
-
-    Usuario->>IdP: ingresarCredenciales(correoCorporativo, credencial)
-    activate IdP
-    IdP->>IdP: validarCredencialesYPoliticas()
-
-    alt Credenciales corporativas válidas y autorizadas
-        IdP-->>Sistema: retornarTokenYPerfil(tokenAcceso, correo, perfilUsuario)
-        activate Sistema
-        
-        opt Primer inicio de sesión del usuario (JIT Provisioning)
-            Sistema->>Sistema: registrarPerfilUsuario(correo, rolAsignado)
-        end
-
-        Sistema->>Sistema: validarPermisosYCrearSesion(tokenAcceso)
-        Sistema-->>Usuario: concederAcceso(sesionIniciada, rolUsuario, panelPrincipal)
-        deactivate Sistema
-    else Credenciales inválidas o cuenta no autorizada
-        IdP-->>Usuario: mostrarErrorAutenticacion('Credenciales no válidas en IdP')
-        IdP-->>Sistema: notificarAccesoDenegado(codigoFallo)
-        activate Sistema
-        Sistema->>Sistema: registrarIntentoFallido(correo, timestamp)
-        Sistema-->>Usuario: denegarAcceso('Acceso denegado: cuenta corporativa no válida')
-        deactivate Sistema
-    end
-    deactivate IdP
-```
+![DSS-01](./diagramas/dss-01.png)
 
 Archivo fuente: [`./diagramas/dss-01.mmd`](./diagramas/dss-01.mmd)
 
-### Variantes representadas
-- **`alt` (Credenciales corporativas válidas vs. inválidas / cuenta no autorizada):**
-  - **Escenario principal (Éxito):** El usuario provee sus credenciales corporativas correctas en el IdP. El proveedor emite un token de acceso seguro y el perfil del usuario. SnapSip valida la sesión y habilita el acceso con el rol asignado (Operario o Encargado).
-  - **Escenario alternativo / error (Fallo):** Si las credenciales son incorrectas o la cuenta no pertenece a la organización autorizada, el proveedor externo rechaza la solicitud, SnapSip audita el evento y el sistema deniega el acceso al usuario con un mensaje claro de error.
-- **`opt` (Aprovisionamiento Just-In-Time / Primer inicio de sesión):**
-  - Cuando un colaborador institucional ingresa por primera vez a SnapSip, el sistema aprovisiona de forma transparente su registro local a partir de los datos recibidos del proveedor de identidad, asignando el rol operativo preconfigurado sin requerir registro manual previo.
+Variantes representadas:
+
+- **`alt` de validación de la solicitud.** Hay cuatro escenarios excluyentes:
+  - **[sin evidencia fotográfica]:** SnapSip rechaza la asignación y exige la fotografía. Corresponde a HU-05 CA2.
+  - **[torre de otra parte de la casa]:** SnapSip rechaza la asignación porque cada torre pertenece a una sola parte de la casa. Corresponde a HU-04 CA3.
+  - **[torre Cerrada]:** SnapSip rechaza la asignación y sugiere registrar otra torre para esa parte. Corresponde a HU-04 CA4.
+  - **[torre Abierta de la misma parte y evidencia adjunta]:** es el escenario principal y continúa con el almacenamiento de la evidencia.
+- **`opt` [pieza Listo en otra torre].** Si la pieza ya estaba asignada, SnapSip solicita la confirmación del reemplazo antes de reasignarla. Corresponde a HU-05 CA3.
+- **`alt` del almacenamiento de la evidencia en el sistema externo:**
+  - **[evidencia almacenada]:** la pieza pasa a estado Listo y se registran el usuario, la fecha y la hora de la asignación. Corresponde a HU-05 CA1.
+  - **[falla del servicio]:** SnapSip rechaza la asignación y la pieza no cambia de estado. Así nunca queda una pieza Listo sin evidencia que la respalde.
 
 ---
 
-## DSS-02 — Asignación de pieza con completitud al 100% y Notificación Automática de Despacho
+## DSS-02 — Generar guía de despacho y registrar envío con evidencia
 
-- **Caso de uso:** Asignar pieza a torre (y validación de completitud)
-- **Historia:** [HU-05 — Asignar pieza a torre con evidencia](./04-historias-usuario.md#hu-05) (asociada a [HU-08 — Validar completitud](./04-historias-usuario.md#hu-08) y [HU-09 — Generar guía de despacho](./04-historias-usuario.md#hu-09))
-- **Sistemas externos que participan:** Servicio de Notificaciones y Mensajería Automática (Twilio WhatsApp API / SendGrid Email)
+- Caso de uso: [CU-10 Registrar envío](./09-casos-de-uso.md), precedido por [CU-09 Generar guía de despacho](./09-casos-de-uso.md), que es su condición previa. CU-10 incluye [CU-13 Adjuntar evidencia fotográfica](./09-casos-de-uso.md).
+- Historia: [HU-10](./04-historias-usuario.md#hu-10), precedida por [HU-09](./04-historias-usuario.md#hu-09)
+- Requisitos que cubre: RP-09, RP-10, RD-01
+- Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
-### Contexto del negocio e integración externa
-- **¿Cómo se conecta con SnapSip?**
-  Cuando el operario marca el último panel del checklist de una torre alcanzando el 100% de completitud física verificada, SnapSip habilita inmediatamente la Guía de Despacho oficial en PDF. En ese instante exacto, SnapSip dispara una notificación automática asíncrona mediante APIs de mensajería:
-  - **Al Encargado de Despacho:** Alerta por WhatsApp vía Twilio API informando: *"Torre completada al 100% y lista para carga de camión"*.
-  - **Al Cliente / Transportista:** Correo formal vía SendGrid / AWS SES con los detalles del despacho y el enlace de descarga de la Guía de Despacho en PDF.
-- **¿Por qué NO cambia el uso del sistema?**
-  Es un proceso reactivo por eventos en segundo plano (webhooks/APIs). El operario en bodega no tiene que redactar correos, enviar mensajes ni coordinar por radio: únicamente realiza su trabajo regular marcando el panel verificado con fotografía, y el sistema se encarga del resto.
-- **Beneficio metodológico:**
-  Reduce drásticamente los tiempos muertos de espera y coordinación en bodega, asegura trazabilidad total del proceso TO-BE y elimina la carga cognitiva del trabajador en terreno.
+Los dos casos de uso se muestran en un solo diagrama porque un envío solo puede registrarse sobre una guía generada y Vigente (RP-10). Además, entre ambos momentos puede ocurrir la invalidación de la guía definida en RD-01.
 
-### Diagrama
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Operario as Operario de Bodega
-    participant Sistema as :SnapSip<br/>(Sistema Central)
-    participant Notif as :ServicioNotificaciones<br/>(Twilio WhatsApp / SendGrid Email)
-    actor Encargado as Encargado de Despacho
-    actor Transportista as Cliente / Transportista
-
-    Operario->>Sistema: asignarPiezaATorre(codigoPieza, idTorre, evidenciaFotografica)
-    activate Sistema
-
-    alt Sin evidencia fotográfica adjunta [Rechazo]
-        Sistema-->>Operario: rechazarAsignacion('Falta evidencia fotográfica requerida')
-    else Con evidencia fotográfica válida
-        Sistema->>Sistema: registrarPiezaLista(codigoPieza, idTorre, evidencia, fechaHora, operario)
-        Sistema->>Sistema: evaluarCompletitudTorre(idTorre)
-
-        alt Checklist de torre incompleto (< 100%)
-            Sistema-->>Operario: confirmarAsignacion(codigoPieza, 'Listo', piezasRestantesTorre)
-        else Checklist de torre completo (100% de paneles verificados)
-            Sistema->>Sistema: habilitarGuiaDespacho(idTorre)
-            Sistema->>Notif: dispararEventoTorreCompletada(idTorre, numeroTorre, datosGuiaPDF)
-            activate Notif
-
-            opt Notificación instantánea a Encargado (Twilio WhatsApp API)
-                Notif->>Encargado: enviarMensajeWhatsApp('Torre completada al 100% y lista para carga de camión')
-                Notif-->>Sistema: confirmarEntregaNotificacion(idWhatsApp, 'Entregado')
-            end
-
-            opt Notificación a Cliente / Transportista (SendGrid / SES Email)
-                Notif->>Transportista: enviarCorreoGuiaDespacho(emailCliente, datosDespacho, linkDescargaPDF)
-                Notif-->>Sistema: confirmarEnvioCorreo(idEmail, 'Enviado')
-            end
-
-            opt Reintento por fallo de red o latencia en pasarela
-                loop Reintento automático con backoff (máximo 3 reintentos)
-                    Sistema->>Notif: reintentarEnvioNotificacion(idEvento)
-                    Notif-->>Sistema: confirmarResultadoReintento(estadoEnvio)
-                end
-            end
-            deactivate Notif
-
-            Sistema-->>Operario: notificarTorreCompletada(idTorre, '100% Completo - Guía habilitada y alertas enviadas')
-        end
-    end
-    deactivate Sistema
-```
+![DSS-02](./diagramas/dss-02.png)
 
 Archivo fuente: [`./diagramas/dss-02.mmd`](./diagramas/dss-02.mmd)
 
-### Variantes representadas
-- **`alt` (Validación de evidencia fotográfica - CA2 de HU-05):**
-  - **Fallo de precondición:** Si el operario intenta marcar una pieza sin fotografía, SnapSip rechaza la acción exigiendo la evidencia obligatoria.
-  - **Asignación válida:** Si se incluye la fotografía, el sistema registra la pieza como "Listo" con marca de tiempo y autor.
-- **`alt` (Evaluación de completitud de la torre):**
-  - **Torre en proceso (< 100%):** SnapSip actualiza el progreso y confirma la asignación individual sin disparar notificaciones de despacho.
-  - **Torre completada (100%):** Al verificar la última pieza, el sistema cambia el estado a completado, habilita el botón de descarga de la Guía de Despacho en PDF (cumpliendo el requisito derivado de RP-07) y despacha el evento de integración externa.
-- **`opt` (Canal WhatsApp a Encargado de Despacho):**
-  - Envío automático de alerta operativa al móvil del encargado mediante la API de Twilio.
-- **`opt` (Canal Email a Cliente y Transportista):**
-  - Envío de correo corporativo transaccional mediante SendGrid con la información consolidada y el enlace de descarga de la guía en PDF.
-- **`opt` + `loop` (Mecanismo resiliente de reintento ante latencia o fallos de conexión):**
-  - Ante una eventual falla de conectividad temporal con la pasarela de notificaciones, SnapSip ejecuta un bucle de reintento en segundo plano con retroceso exponencial (hasta 3 intentos), asegurando que ninguna notificación crítica de despacho se pierda sin bloquear la experiencia del usuario.
+Variantes representadas:
+
+- **`alt` de la generación de la guía:**
+  - **[alcance incompleto o con torres Abiertas]:** SnapSip rechaza la generación e informa las piezas faltantes y las torres sin cerrar. Corresponde a HU-09 CA2 y RP-09.
+  - **[alcance completo y torres Cerradas]:** SnapSip entrega la guía de despacho en PDF, en estado Vigente, con el proyecto, el alcance, las piezas y las torres. Corresponde a HU-09 CA1.
+- **Nota "carga física del camión".** Indica el tiempo que transcurre en bodega entre la generación de la guía y el registro del envío. Durante ese tiempo, una desasignación puede invalidar la guía.
+- **`alt` del registro del envío:**
+  - **[guía Invalidada por desasignación (RD-01)]:** SnapSip rechaza el registro y exige generar una guía nueva. Corresponde a la verificación de RD-01.
+  - **[sin evidencia fotográfica]:** SnapSip rechaza el registro y exige la fotografía del camión cargado. Corresponde a HU-10 CA2.
+  - **[guía Vigente con evidencia]:** es el escenario principal. SnapSip almacena la evidencia en el servicio externo, la guía pasa a estado Enviada y las piezas a estado Enviado, y se registran el usuario, la fecha y la hora. Corresponde a HU-10 CA1 y RP-10.
+
+---
+
+## DSS-03 — Iniciar sesión
+
+- Caso de uso: [CU-01 Iniciar sesión](./09-casos-de-uso.md)
+- Historia: [HU-01](./04-historias-usuario.md#hu-01)
+- Requisitos que cubre: RP-01, RP-15b (autenticación administrada), RP-16 (acceso según rol)
+- Sistemas externos que participan: Servicio de autenticación
+
+SnapSip delega la verificación de credenciales en un servicio de autenticación administrado. RP-15b lo permite expresamente: "Si se utiliza autenticación administrada, debe verificarse el mecanismo del proveedor". SnapSip conserva el control de acceso según el rol del usuario (RP-16).
+
+![DSS-03](./diagramas/dss-03.png)
+
+Archivo fuente: [`./diagramas/dss-03.mmd`](./diagramas/dss-03.mmd)
+
+Variantes representadas:
+
+- **`alt` de la verificación de credenciales:**
+  - **[credenciales válidas]:** el servicio confirma la identidad y SnapSip concede el acceso a las funciones del rol del usuario. Corresponde a HU-01 CA1.
+  - **[credenciales inválidas]:** el servicio rechaza las credenciales y SnapSip informa que son inválidas. Corresponde a HU-01 CA2.
+
+---
+
+## Correspondencia entre mensajes y eventos de estado
+
+Cada solicitud de un actor que cambia el estado de un objeto del dominio aparece como evento en los [diagramas de estado](./11-diagramas-estado.md):
+
+| Mensaje del actor | DSS | Evento en diagrama de estado | Diagrama de estado |
+|---|---|---|---|
+| asignar pieza a torre | DSS-01 | asignar pieza a torre | EST-01 (Pieza), EST-04 (Proyecto) |
+| generar guía de despacho | DSS-02 | generar guía de despacho | EST-03 (GuiaDespacho) |
+| registrar envío | DSS-02 | registrar envío | EST-01 (Pieza), EST-02 (Torre), EST-03 (GuiaDespacho), EST-04 (Proyecto) |
+| iniciar sesión | DSS-03 | — (no cambia el estado de ningún objeto del dominio) | — |
+
+El evento **desasignar pieza**, que invalida la guía en EST-03, proviene de [CU-12](./09-casos-de-uso.md) / [HU-12](./04-historias-usuario.md#hu-12). En DSS-02 se representa por su efecto: la variante [guía Invalidada por desasignación (RD-01)].

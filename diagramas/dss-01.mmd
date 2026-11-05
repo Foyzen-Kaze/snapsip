@@ -1,35 +1,46 @@
+---
+config:
+  theme: neutral
+  themeVariables:
+    actorBorder: "#333333"
+    actorBkg: "#f4f4f4"
+    actorLineColor: "#555555"
+    signalColor: "#222222"
+    signalTextColor: "#222222"
+    labelBoxBorderColor: "#555555"
+    labelBoxBkgColor: "#eeeeee"
+    loopTextColor: "#222222"
+    noteBkgColor: "#fff8dc"
+    noteBorderColor: "#999999"
+    noteTextColor: "#222222"
+  themeCSS: ".loopText, .loopText tspan, .messageText, .labelText { paint-order: stroke !important; stroke: #ffffff !important; stroke-width: 6px !important; stroke-linejoin: round; }"
+  sequence:
+    width: 260
+    actorMargin: 70
+---
 sequenceDiagram
-    autonumber
-    actor Usuario as Operario de Bodega /<br/>Encargado de Despacho
-    participant Sistema as :SnapSip<br/>(Sistema Central)
-    participant IdP as :ProveedorIdentidad<br/>(Google Workspace OAuth / Auth0)
+    actor OP as Operario de Bodega
+    participant SS as :SnapSip
+    participant ALM as «sistema externo»<br/>Servicio de almacenamiento<br/>de evidencias
 
-    Usuario->>Sistema: solicitarInicioSesionCorporativo()
-    activate Sistema
-    Sistema-->>Usuario: redirigirAProveedorIdentidad(urlAuth, clientId)
-    deactivate Sistema
-
-    Usuario->>IdP: ingresarCredenciales(correoCorporativo, credencial)
-    activate IdP
-    IdP->>IdP: validarCredencialesYPoliticas()
-
-    alt Credenciales corporativas válidas y autorizadas
-        IdP-->>Sistema: retornarTokenYPerfil(tokenAcceso, correo, perfilUsuario)
-        activate Sistema
-        
-        opt Primer inicio de sesión del usuario (JIT Provisioning)
-            Sistema->>Sistema: registrarPerfilUsuario(correo, rolAsignado)
+    OP->>SS: asignar pieza a torre(pieza, torre, evidencia fotográfica)
+    alt sin evidencia fotográfica
+        SS-->>OP: rechazo: se exige evidencia fotográfica
+    else torre de otra parte de la casa
+        SS-->>OP: rechazo: la torre no corresponde a la parte de la pieza
+    else torre Cerrada
+        SS-->>OP: rechazo: se sugiere registrar otra torre para la parte
+    else torre Abierta de la misma parte y evidencia adjunta
+        opt pieza Listo en otra torre
+            SS-->>OP: solicitud de confirmación de reemplazo
+            OP->>SS: confirmar reemplazo
         end
-
-        Sistema->>Sistema: validarPermisosYCrearSesion(tokenAcceso)
-        Sistema-->>Usuario: concederAcceso(sesionIniciada, rolUsuario, panelPrincipal)
-        deactivate Sistema
-    else Credenciales inválidas o cuenta no autorizada
-        IdP-->>Usuario: mostrarErrorAutenticacion('Credenciales no válidas en IdP')
-        IdP-->>Sistema: notificarAccesoDenegado(codigoFallo)
-        activate Sistema
-        Sistema->>Sistema: registrarIntentoFallido(correo, timestamp)
-        Sistema-->>Usuario: denegarAcceso('Acceso denegado: cuenta corporativa no válida')
-        deactivate Sistema
+        SS->>ALM: almacenar evidencia(fotografía)
+        alt evidencia almacenada
+            ALM-->>SS: referencia de evidencia
+            SS-->>OP: pieza Listo, asignación registrada (usuario, fecha y hora)
+        else falla del servicio
+            ALM-->>SS: error de almacenamiento
+            SS-->>OP: rechazo: asignación no registrada, la pieza no cambia de estado
+        end
     end
-    deactivate IdP
