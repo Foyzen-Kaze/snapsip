@@ -14,7 +14,7 @@ Notación utilizada:
 ## DSS-01 — Asignar pieza a torre con evidencia fotográfica
 
 - Caso de uso: [CU-05 Asignar pieza a torre](./09-casos-de-uso.md) (incluye [CU-13 Adjuntar evidencia fotográfica](./09-casos-de-uso.md))
-- Historia: [HU-05](./04-historias-usuario.md#hu-05)
+- Historia: [HU-05](./04-historias-usuario.md#hu-05--asignar-pieza-a-torre-con-evidencia)
 - Requisitos que cubre: RP-05, RP-04 (pertenencia de la torre a una parte de la casa)
 - Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
@@ -39,7 +39,7 @@ Variantes representadas:
 ## DSS-02 — Generar guía de despacho y registrar envío con evidencia
 
 - Caso de uso: [CU-10 Registrar envío](./09-casos-de-uso.md), precedido por [CU-09 Generar guía de despacho](./09-casos-de-uso.md), que es su condición previa. CU-10 incluye [CU-13 Adjuntar evidencia fotográfica](./09-casos-de-uso.md).
-- Historia: [HU-10](./04-historias-usuario.md#hu-10), precedida por [HU-09](./04-historias-usuario.md#hu-09)
+- Historia: [HU-10](./04-historias-usuario.md#hu-10--registrar-envío-con-evidencia), precedida por [HU-09](./04-historias-usuario.md#hu-09--generar-guía-de-despacho)
 - Requisitos que cubre: RP-09, RP-10, RD-01
 - Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
@@ -65,7 +65,7 @@ Variantes representadas:
 ## DSS-03 — Iniciar sesión
 
 - Caso de uso: [CU-01 Iniciar sesión](./09-casos-de-uso.md)
-- Historia: [HU-01](./04-historias-usuario.md#hu-01)
+- Historia: [HU-01](./04-historias-usuario.md#hu-01--autenticación-de-usuarios)
 - Requisitos que cubre: RP-01, RP-15b (autenticación administrada), RP-16 (acceso según rol)
 - Sistemas externos que participan: Servicio de autenticación
 
@@ -94,4 +94,4 @@ Cada solicitud de un actor que cambia el estado de un objeto del dominio aparece
 | registrar envío | DSS-02 | registrar envío | EST-01 (Pieza), EST-02 (Torre), EST-03 (GuiaDespacho), EST-04 (Proyecto) |
 | iniciar sesión | DSS-03 | — (no cambia el estado de ningún objeto del dominio) | — |
 
-El evento **desasignar pieza**, que invalida la guía en EST-03, proviene de [CU-12](./09-casos-de-uso.md) / [HU-12](./04-historias-usuario.md#hu-12). En DSS-02 se representa por su efecto: la variante [guía Invalidada por desasignación (RD-01)].
+El evento **desasignar pieza**, que invalida la guía en EST-03, proviene de [CU-12](./09-casos-de-uso.md) / [HU-12](./04-historias-usuario.md#hu-12--desasignar-pieza-de-una-torre). En DSS-02 se representa por su efecto: la variante [guía Invalidada por desasignación (RD-01)].
