@@ -70,35 +70,30 @@ Como Operario de Bodega, quiero cerrar manualmente una torre cuando ya no admite
 
 <a id="hu-08"></a>
 
-## HU-08 — Validar completitud por Parte o Proyecto
-Como sistema SnapSip, quiero validar que el 100% de las piezas de una parte de la casa, o de todo un proyecto, se encuentren en estado Listo, para habilitar la generación de la guía de despacho a ese nivel, sin exigir completitud a nivel de torre.
-**Actividad TO-BE asociada:** Validar completitud de piezas.
+## HU-08 — Generar guía de despacho
+Como Encargado de Despacho, quiero generar la guía de despacho de una parte de la casa o de un proyecto completo solo cuando todas sus piezas estén Listo y sus torres Cerradas, para despachar únicamente con el 100% de las piezas del alcance y usar la guía como documento de control.
+**Actividad TO-BE asociada:** Generar guía de despacho (incluye Validar completitud de piezas).
+**Regla de alcance:** la guía se genera por parte de la casa (con todas sus torres) o por proyecto completo. No se genera por torre suelta. La completitud se exige solo sobre el alcance solicitado, por lo que se puede despachar una parte aunque el resto del proyecto aún no esté completo.
 **Criterios de aceptación:**
-* CA1: Dado que todas las piezas de una parte de la casa se encuentran en estado Listo, cuando el sistema evalúa la completitud de esa parte, entonces el sistema la marca como Completa y la habilita para la generación de una guía a ese nivel.
-* CA2: Dado que todas las partes de la casa de un proyecto se encuentran marcadas como Completas, cuando el sistema evalúa la completitud del proyecto, entonces el sistema lo marca como Proyecto completo y lo habilita para la generación de una guía a nivel de proyecto.
-* CA3: Dado que una parte de la casa posee piezas en estado Pendiente o En merma sin resolución, cuando el encargado de despacho solicita la generación de la guía para esa parte, entonces el sistema rechaza la solicitud e informa la cantidad de piezas que faltan o están en conflicto.
+* CA1: Dado que todas las piezas de una parte de la casa se encuentran en estado Listo y todas sus torres están Cerradas, cuando el encargado de despacho solicita la generación de la guía de esa parte, entonces el sistema marca la parte como Completa y genera la guía con el detalle de las piezas y las torres cerradas incluidas.
+* CA2: Dado que una parte de la casa o un proyecto posee piezas en estado Pendiente, cuando el encargado de despacho solicita la generación de la guía para ese alcance, entonces el sistema rechaza la solicitud e informa la cantidad de piezas que faltan.
+* CA3: Dado que todas las partes de la casa de un proyecto se encuentran Completas y todas sus torres están Cerradas, cuando el encargado de despacho solicita la generación de la guía del proyecto, entonces el sistema marca el proyecto como Proyecto completo y genera la guía con el detalle de todas las piezas y torres incluidas.
+* CA4: Dado que todas las piezas del alcance solicitado se encuentran en estado Listo pero al menos una de sus torres está Abierta, cuando el encargado de despacho solicita la generación de la guía, entonces el sistema rechaza la solicitud e informa qué torres deben cerrarse.
+* CA5: Dado que un proyecto tiene una parte de la casa Completa con sus torres Cerradas y otras partes con piezas Pendiente, cuando el encargado de despacho solicita la guía solo de la parte Completa, entonces el sistema genera la guía de esa parte sin exigir la completitud del resto del proyecto.
+* CA6: Dado que una parte de la casa se encuentra Completa, cuando una de sus piezas vuelve a estado Pendiente, entonces el sistema deja de considerar Completa esa parte y, si el proyecto estaba como Proyecto completo, deja de considerarlo así.
 
 <a id="hu-09"></a>
 
-## HU-09 — Generar guía de despacho
-Como Encargado de Despacho, quiero generar la guía de despacho de una parte de la casa o de un proyecto completo, para utilizarla como documento de control al despachar.
-**Actividad TO-BE asociada:** Generar guía de despacho.
-**Criterios de aceptación:**
-* CA1: Dado que el alcance solicitado se encuentra al 100% de completitud, cuando el encargado de despacho solicita la generación de la guía de despacho, entonces el sistema genera la guía con el detalle de las piezas y las torres cerradas incluidas.
-* CA2: Dado que el alcance solicitado no se encuentra al 100% de completitud, cuando el encargado de despacho solicita la generación de la guía de despacho, entonces el sistema rechaza la solicitud e informa la cantidad de piezas que faltan.
-
-<a id="hu-10"></a>
-
-## HU-10 — Registrar envío con evidencia
+## HU-09 — Registrar envío con evidencia
 Como Encargado de Despacho, quiero registrar el envío de una guía de despacho con evidencia fotográfica, para dejar constancia de que el despacho salió con las piezas correctas.
 **Actividad TO-BE asociada:** Registrar envío de despacho.
 **Criterios de aceptación:**
 * CA1: Dado que una guía de despacho fue generada, cuando el encargado de despacho solicita registrar el envío y adjunta evidencia fotográfica, entonces el sistema cambia las piezas incluidas a estado Enviado y registra el usuario y la fecha del envío.
 * CA2: Dado que una guía de despacho fue generada, cuando el encargado de despacho solicita registrar el envío sin adjuntar evidencia fotográfica, entonces el sistema rechaza la solicitud y exige la evidencia antes de completar el registro.
 
-<a id="hu-11"></a>
+<a id="hu-10"></a>
 
-## HU-11 — Eliminar torre vacía con código
+## HU-10 — Eliminar torre vacía con código
 Como Operario de Bodega, quiero eliminar una torre vacía confirmando su código, para evitar eliminaciones accidentales mediante un método ágil desde el celular.
 **Actividad TO-BE asociada:** Eliminar torre del sistema.
 **Criterios de aceptación:**
@@ -106,9 +101,9 @@ Como Operario de Bodega, quiero eliminar una torre vacía confirmando su código
 * CA2: Dado que una torre no posee piezas asignadas, cuando el operario de bodega solicita la eliminación de la torre e informa un código distinto al de la torre, entonces el sistema rechaza la solicitud e informa que el código no coincide.
 * CA3: Dado que una torre posee piezas asignadas, cuando el operario de bodega solicita la eliminación de la torre, entonces el sistema rechaza la solicitud y sugiere desasignar las piezas o cerrar la torre previamente.
 
-<a id="hu-12"></a>
+<a id="hu-11"></a>
 
-## HU-12 — Desasignar pieza de una torre
+## HU-11 — Desasignar pieza de una torre
 Como Operario de Bodega, quiero desasignar una pieza que fue asignada por error, para corregir una marca equivocada sin dejar evidencia falsa en el sistema.
 **Actividad TO-BE asociada:** Desasignar pieza.
 **Criterios de aceptación:**
