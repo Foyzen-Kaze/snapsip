@@ -1,0 +1,85 @@
+@startuml casos-de-uso
+left to right direction
+skinparam dpi 150
+skinparam shadowing false
+
+skinparam usecase {
+    BackgroundColor #F8F9FA
+    BorderColor #343A40
+    ArrowColor #495057
+}
+skinparam actor {
+    BackgroundColor white
+    BorderColor #343A40
+}
+skinparam rectangle {
+    BackgroundColor white
+    BorderColor #343A40
+}
+skinparam note {
+    BackgroundColor #FFF8DC
+    BorderColor #999999
+}
+
+title Casos de uso — SnapSip
+
+' Actores humanos (a la izquierda)
+actor "Operario de Bodega" as OB
+actor "Encargado de Despacho" as ED
+
+' Sistemas externos (a la derecha)
+actor "Servicio de autenticación" as SA <<sistema externo>>
+actor "Servicio de almacenamiento\nde evidencias" as SAE <<sistema externo>>
+
+' Límite del sistema
+rectangle "Sistema SnapSip" {
+  usecase "CU-01 Iniciar sesión" as CU01
+  usecase "CU-02 Registrar proyecto" as CU02
+  usecase "CU-03 Cargar universo de piezas" as CU03
+  usecase "CU-04 Registrar torre" as CU04
+  usecase "CU-05 Asignar pieza a torre" as CU05
+  usecase "CU-06 Consultar piezas pendientes" as CU06
+  usecase "CU-07 Cerrar torre" as CU07
+  usecase "CU-08 Generar guía de despacho" as CU08
+  usecase "CU-09 Registrar envío" as CU09
+  usecase "CU-10 Eliminar torre vacía" as CU10
+  usecase "CU-11 Desasignar pieza" as CU11
+  usecase "CU-12 Adjuntar evidencia fotográfica" as CU12
+  usecase "CU-13 Reasignar pieza a otra torre" as CU13
+}
+
+' Operario de Bodega
+OB -- CU01
+OB -- CU04
+OB -- CU05
+OB -- CU06
+OB -- CU07
+OB -- CU10
+OB -- CU11
+OB -- CU13
+
+' Encargado de Despacho
+ED -- CU01
+ED -- CU02
+ED -- CU03
+ED -- CU08
+ED -- CU09
+
+' Sistemas externos
+CU01 -- SA
+CU12 -- SAE
+
+' include: el caso base siempre ejecuta al incluido
+CU05 ..> CU12 : <<include>>
+CU09 ..> CU12 : <<include>>
+
+' extend: el caso que extiende solo se ejecuta bajo una condición
+CU13 ..> CU05 : <<extend>>
+
+note "Siempre se ejecuta como parte de\nCU-05 y CU-09 (HU-05 CA2, HU-09 CA2)." as N1
+N1 .. CU12
+
+note "Solo se ejecuta cuando la pieza ya está\nasignada a otra torre (HU-05 CA3)." as N2
+N2 .. CU13
+
+@enduml
