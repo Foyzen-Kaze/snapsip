@@ -30,7 +30,7 @@
 ## Diagrama TO-BE
 ![Proceso TO-BE](./diagramas/TO-BE1.png)
 diagramas/snapsip3457643.bpmn
-[codigo-fuente](./diagramas/snapsip3457643.bpmn)
+![codigo-fuente](./diagramas/snapsip3457643.bpmn)
 
  
 Nota: El diagrama distingue tareas de usuario (marcadas con el icono de usuario) y tareas de servicio automatizadas por el sistema (marcadas con el icono de engranaje).
