@@ -1,18 +1,18 @@
 # Casos de uso
- 
+
 ## Actores
 | Actor | Tipo (humano / sistema externo) | Descripción |
 |-------|----------------------------------|-------------|
 | Operario de Bodega | Humano | Encargado de agrupar las piezas en torres físicamente y registrar la asignación con evidencia en el sistema. |
 | Encargado de Despacho | Humano | Responsable de crear los proyectos, cargar el universo de piezas, emitir las guías y registrar la salida de los camiones. |
-| Servicio de Autenticación | Sistema externo | Proveedor encargado de validar las credenciales (identificador y clave) y gestionar el acceso según el rol. |
-| Servicio de almacenamiento de evidencia | Sistema externo | Repositorio en la nube encargado de recibir, guardar de forma segura y proveer los enlaces de las fotografías de respaldo. |
- 
+| Servicio de autenticación | Sistema externo | Proveedor encargado de validar las credenciales (identificador y clave) y gestionar el acceso según el rol. |
+| Servicio de almacenamiento de evidencias | Sistema externo | Repositorio en la nube encargado de recibir, guardar de forma segura y proveer los enlaces de las fotografías de respaldo. |
+
 ## Diagrama de casos de uso
-![Casos de uso](diagramas/diagramadecasosdeuso.png)
- 
-Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml )
- 
+![Casos de uso](./diagramas/diagramadecasosdeuso.png)
+
+Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
+
 ## Casos de uso y su origen
 | ID | Caso de uso (objetivo del actor) | Actor principal | Historia de origen |
 |----|-----------------------------------|-----------------|---------------------|
@@ -23,7 +23,7 @@ Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml 
 | CU-05 | Asignar pieza a torre | Operario de Bodega | [HU-05](./04-historias-usuario.md#hu-05) |
 | CU-06 | Consultar piezas pendientes | Operario de Bodega | [HU-06](./04-historias-usuario.md#hu-06) |
 | CU-07 | Cerrar torre | Operario de Bodega | [HU-07](./04-historias-usuario.md#hu-07) |
-| CU-08 | Generar guía de despacho | Encargado de Despacho | [HU-09](./04-historias-usuario.md#hu-08) |
-| CU-09 | Registrar envío | Encargado de Despacho | [HU-10](./04-historias-usuario.md#hu-9) |
-| CU-10 | Eliminar torre vacía | Operario de Bodega | [HU-11](./04-historias-usuario.md#hu-10) |
-| CU-11 | Desasignar pieza | Operario de Bodega | [HU-12](./04-historias-usuario.md#hu-11) |
+| CU-08 | Generar guía de despacho | Encargado de Despacho | [HU-08](./04-historias-usuario.md#hu-08) |
+| CU-09 | Registrar envío | Encargado de Despacho | [HU-09](./04-historias-usuario.md#hu-09) |
+| CU-10 | Eliminar torre vacía | Operario de Bodega | [HU-10](./04-historias-usuario.md#hu-10) |
+| CU-11 | Desasignar pieza | Operario de Bodega | [HU-11](./04-historias-usuario.md#hu-11) |
