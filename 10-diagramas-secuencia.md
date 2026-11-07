@@ -10,7 +10,6 @@ Notación utilizada:
 - `opt`: comportamiento que ocurre solo si se cumple la condición indicada.
 
 ---
-
 ## DSS-01 — Asignar pieza a torre con evidencia fotográfica
 
 - Caso de uso: [CU-05 Asignar pieza a torre](./09-casos-de-uso.md) (incluye [CU-13 Adjuntar evidencia fotográfica](./09-casos-de-uso.md))
@@ -18,7 +17,7 @@ Notación utilizada:
 - Requisitos que cubre: RP-05, RP-04 (pertenencia de la torre a una parte de la casa)
 - Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
-![DSS-01](/.diagramas/dss-01.png)
+![DSS-01](./diagramas/dss-01.png)
 
 Archivo fuente: [`./diagramas/dss-01.mmd`](./diagramas/dss-01.mmd)
 
