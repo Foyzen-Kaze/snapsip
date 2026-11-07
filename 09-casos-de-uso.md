@@ -9,9 +9,9 @@
 | Servicio de almacenamiento de evidencias | Sistema externo | Repositorio en la nube que recibe y guarda las fotografías que respaldan la asignación de una pieza y el envío de un camión (RP-15a). |
 
 ## Diagrama de casos de uso
-![Casos de uso](./diagramas/casos-de-usooo.png)
+![Casos de uso](./diagramas/casos-de-uso.png)
 
-Archivo fuente: [`./diagramas/casos-de-usooo.puml`](./diagramas/casos-de-uso.puml)
+Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
 
 ## Casos de uso y su origen
 | ID | Caso de uso (objetivo del actor) | Actor principal | Sistema externo | Historia de origen |
