@@ -12,7 +12,15 @@ Los nombres de los estados corresponden estrictamente a **situaciones o condicio
 - **Diagramas de secuencia relacionados:** [DSS-01](./10-diagramas-secuencia.md) y [DSS-02](./10-diagramas-secuencia.md)
 - **Casos de uso e historias relacionadas:** [CU-03](./09-casos-de-uso.md) ([HU-03](./04-historias-usuario.md#hu-03)), [CU-05](./09-casos-de-uso.md) ([HU-05](./04-historias-usuario.md#hu-05--Asignar-pieza-a-torre-con-evidencia)), [CU-12](./09-casos-de-uso.md) ([HU-12](./04-historias-usuario.md#hu-12)) y [CU-10](./09-casos-de-uso.md) ([HU-10](./04-historias-usuario.md#hu-10--Registrar-envío-con-evidencia))
 
-![EST-01](./diagramas/est-01.png)
+```mermaid
+stateDiagram-v2
+    [*] --> Pendiente : importar archivo de piezas [archivo válido con filas completas]
+    Pendiente --> Listo : asignar pieza a torre [torre Abierta de la misma parte y evidencia adjunta]
+    Listo --> Listo : asignar pieza a torre [nueva torre Abierta y reemplazo confirmado]
+    Listo --> Pendiente : desasignar pieza
+    Listo --> Enviado : registrar envío [guía Vigente y evidencia del camión adjunta]
+    Enviado --> [*]
+```
 
 Archivo fuente: [`./diagramas/est-01.mmd`](./diagramas/est-01.mmd)
 
@@ -39,7 +47,15 @@ Archivo fuente: [`./diagramas/est-01.mmd`](./diagramas/est-01.mmd)
 - **Diagramas de secuencia relacionados:** [DSS-01](./10-diagramas-secuencia.md) y [DSS-02](./10-diagramas-secuencia.md)
 - **Casos de uso e historias relacionadas:** [CU-04](./09-casos-de-uso.md) ([HU-04](./04-historias-usuario.md#hu-04)), [CU-07](./09-casos-de-uso.md) ([HU-07](./04-historias-usuario.md#hu-07)), [CU-11](./09-casos-de-uso.md) ([HU-11](./04-historias-usuario.md#hu-11)) y [CU-10](./09-casos-de-uso.md) ([HU-10](./04-historias-usuario.md#hu-10--Registrar-envío-con-evidencia))
 
-![EST-02](./diagramas/est-02.png)
+```mermaid
+stateDiagram-v2
+    [*] --> Abierta : crear torre [universo de piezas cargado y parte válida]
+    Abierta --> Cerrada : cerrar torre [al menos una pieza asignada]
+    Abierta --> [*] : eliminar torre [torre vacía y código de confirmación coincide]
+    Cerrada --> Abierta : reabrir torre [ninguna pieza enviada] / invalida guías vigentes (RD-01)
+    Cerrada --> Despachada : registrar envío [piezas amparadas en guía Vigente con evidencia de camión]
+    Despachada --> [*]
+```
 
 Archivo fuente: [`./diagramas/est-02.mmd`](./diagramas/est-02.mmd)
 
@@ -66,7 +82,14 @@ Archivo fuente: [`./diagramas/est-02.mmd`](./diagramas/est-02.mmd)
 - **Diagramas de secuencia relacionados:** [DSS-02](./10-diagramas-secuencia.md)
 - **Casos de uso e historias relacionadas:** [CU-09](./09-casos-de-uso.md) ([HU-09](./04-historias-usuario.md#hu-09)), [CU-10](./09-casos-de-uso.md) ([HU-10](./04-historias-usuario.md#hu-10--Registrar-envío-con-evidencia)), [CU-12](./09-casos-de-uso.md) ([HU-12](./04-historias-usuario.md#hu-12)) y [CU-07](./09-casos-de-uso.md) ([HU-07](./04-historias-usuario.md#hu-07))
 
-![EST-03](./diagramas/est-03.png)
+```mermaid
+stateDiagram-v2
+    [*] --> Vigente : generar guía de despacho [100% de piezas Listo y torres Cerradas]
+    Vigente --> Invalidada : desasignar pieza / reabrir torre [incluida en la guía] (RD-01)
+    Vigente --> Enviada : registrar envío [evidencia fotográfica del camión adjunta]
+    Invalidada --> [*]
+    Enviada --> [*]
+```
 
 Archivo fuente: [`./diagramas/est-03.mmd`](./diagramas/est-03.mmd)
 
