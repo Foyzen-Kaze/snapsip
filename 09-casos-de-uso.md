@@ -11,7 +11,7 @@
 ## Diagrama de casos de uso
 ![Casos de uso](./diagramas/casos-de-usooo.png)
 
-Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
+Archivo fuente: [`./diagramas/casos-de-usooo.puml`](./diagramas/casos-de-uso.puml)
 
 ## Casos de uso y su origen
 | ID | Caso de uso (objetivo del actor) | Actor principal | Sistema externo | Historia de origen |
