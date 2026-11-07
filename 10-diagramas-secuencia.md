@@ -18,7 +18,7 @@ Notación utilizada:
 - Requisitos que cubre: RP-05, RP-04 (pertenencia de la torre a una parte de la casa)
 - Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
-![DSS-01](./diagramas/est-01.mmd)
+![DSS-01](./diagramas/diagramas/dss-01.png)
 
 Archivo fuente: [`./diagramas/dss-01.mmd`](./diagramas/dss-01.mmd)
 
