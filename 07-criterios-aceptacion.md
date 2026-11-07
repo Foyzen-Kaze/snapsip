@@ -1,9 +1,12 @@
-Criterios de aceptación (Gherkin)
+# Criterios de aceptación (Gherkin)
+
 Los escenarios siguen la numeración de [04-historias-usuario.md](./04-historias-usuario.md) (HU-01 a HU-11). Usan los términos del [modelo de dominio](./08-modelo-dominio.md) y los estados de los [diagramas de estado](./11-diagramas-estado.md).
 
-HU-01 — Autenticación de usuarios
+## HU-01 — Autenticación de usuarios
+
 Historia: Como Operario de Bodega o Encargado de Despacho, quiero autenticarme con mis credenciales, para acceder únicamente a los proyectos y funciones que corresponden a mi rol.
 
+```gherkin
 Característica: Autenticación y acceso según rol
 
   Escenario: Acceso con credenciales válidas
@@ -25,9 +28,13 @@ Característica: Autenticación y acceso según rol
     Cuando solicita realizar esa operación
     Entonces el sistema rechaza la solicitud
     Y conserva los datos sin modificaciones
-HU-02 — Crear proyecto
+```
+
+## HU-02 — Crear proyecto
+
 Historia: Como Encargado de Despacho, quiero registrar un nuevo proyecto asociado a un cliente, para iniciar el control de todas las piezas que se esperan producir para esa casa.
 
+```gherkin
 Característica: Registro de proyectos
 
   Escenario: Registro de un proyecto con código único
@@ -45,9 +52,13 @@ Característica: Registro de proyectos
     Entonces el sistema rechaza la solicitud
     Y comunica que el código ya está registrado
     Y conserva el proyecto existente sin modificaciones
-HU-03 — Inyectar piezas desde plano/archivo
+```
+
+## HU-03 — Inyectar piezas desde plano/archivo
+
 Historia: Como Encargado de Despacho, quiero registrar el universo completo de piezas de un proyecto a partir del plano o archivo de piezas, para que el sistema las registre automáticamente en estado Pendiente, organizadas por parte de la casa.
 
+```gherkin
 Característica: Importación del universo de piezas
 
   Escenario: Importación de un archivo válido
@@ -76,9 +87,13 @@ Característica: Importación del universo de piezas
     Y identifica los registros y datos que requieren corrección
     Y no incorpora partes ni piezas del archivo
     Y mantiene el proyecto en estado "Sin piezas cargadas"
-HU-04 — Crear torre
+```
+
+## HU-04 — Crear torre
+
 Historia: Como Operario de Bodega, quiero registrar una torre asociada a un proyecto y a una parte de la casa, para documentar una agrupación física de piezas existente, exclusiva de ese cliente y esa parte.
 
+```gherkin
 Característica: Registro de torres
 
   Escenario: Creación de una torre
@@ -109,9 +124,13 @@ Característica: Registro de torres
     Cuando el operario de bodega solicita crear una torre con esa combinación
     Entonces el sistema rechaza la solicitud
     Y no registra la torre
-HU-05 — Asignar pieza a torre con evidencia
+```
+
+## HU-05 — Asignar pieza a torre con evidencia
+
 Historia: Como Operario de Bodega, quiero asignar una pieza pendiente a una torre junto con evidencia fotográfica, para dejar constancia de que la pieza existe y está ubicada correctamente.
 
+```gherkin
 Característica: Asignación de piezas con evidencia
 
   Escenario: Asignación de una pieza pendiente
@@ -177,9 +196,13 @@ Característica: Asignación de piezas con evidencia
     Cuando el operario de bodega solicita asignarla a otra torre
     Entonces el sistema rechaza la solicitud
     Y conserva la pieza sin modificaciones
-HU-06 — Consultar piezas pendientes
+```
+
+## HU-06 — Consultar piezas pendientes
+
 Historia: Como Operario de Bodega, quiero consultar las piezas pendientes de una parte de la casa, para ubicarlas físicamente y asignarlas a su torre correspondiente.
 
+```gherkin
 Característica: Consulta de piezas pendientes
 
   Escenario: Consulta con piezas pendientes
@@ -194,9 +217,13 @@ Característica: Consulta de piezas pendientes
     Cuando el operario de bodega solicita las piezas pendientes de esa parte y proyecto
     Entonces el sistema devuelve un listado vacío
     Y comunica que existen cero piezas pendientes para esa selección
-HU-07 — Cierre manual de torre
+```
+
+## HU-07 — Cierre manual de torre
+
 Historia: Como Operario de Bodega, quiero cerrar manualmente una torre cuando ya no admite más piezas, para dejar de recibir asignaciones en ella sin depender de un porcentaje que una torre, al no tener capacidad predefinida, nunca podría alcanzar.
 
+```gherkin
 Característica: Cierre y reapertura de torres
 
   Escenario: Cierre de una torre con piezas
@@ -238,11 +265,15 @@ Característica: Cierre y reapertura de torres
     Cuando el operario de bodega solicita reabrirla
     Entonces el sistema rechaza la solicitud
     Y mantiene la torre en estado "Cerrada"
-HU-08 — Generar guía de despacho
+```
+
+## HU-08 — Generar guía de despacho
+
 Historia: Como Encargado de Despacho, quiero generar la guía de despacho de una parte de la casa o de un proyecto completo solo cuando todas sus piezas estén Listo y sus torres Cerradas, para despachar únicamente con el 100% de las piezas del alcance y usar la guía como documento de control.
 
 La validación de completitud (RP-08) se ejecuta dentro de esta historia: el sistema solo genera la guía si el alcance solicitado está completo.
 
+```gherkin
 Característica: Generación de guías de despacho con validación de completitud
 
   Escenario: Generación de la guía de una parte completa
@@ -305,9 +336,13 @@ Característica: Generación de guías de despacho con validación de completitu
     Entonces el sistema deja de identificar esa parte como "Completa"
     Y deja de identificar el proyecto como "Proyecto completo" si tenía esa condición
     Y rechaza nuevas guías de ese alcance mientras existan piezas pendientes
-HU-09 — Registrar envío con evidencia
+```
+
+## HU-09 — Registrar envío con evidencia
+
 Historia: Como Encargado de Despacho, quiero registrar el envío de una guía de despacho con evidencia fotográfica, para dejar constancia de que el despacho salió con las piezas correctas.
 
+```gherkin
 Característica: Registro de envíos
 
   Escenario: Registro de envío con guía vigente y evidencia
@@ -359,9 +394,13 @@ Característica: Registro de envíos
     Y comunica que la evidencia no pudo almacenarse
     Y mantiene la guía en estado "Vigente"
     Y no cambia el estado de las piezas
-HU-10 — Eliminar torre vacía con código
+```
+
+## HU-10 — Eliminar torre vacía con código
+
 Historia: Como Operario de Bodega, quiero eliminar una torre vacía confirmando su código, para evitar eliminaciones accidentales mediante un método ágil desde el celular.
 
+```gherkin
 Característica: Eliminación de torres vacías
 
   Escenario: Eliminación confirmada de una torre vacía
@@ -396,9 +435,13 @@ Característica: Eliminación de torres vacías
     Entonces el sistema rechaza la solicitud
     Y comunica que solo pueden eliminarse torres vacías
     Y conserva la torre y sus piezas sin modificaciones
-HU-11 — Desasignar pieza de una torre
+```
+
+## HU-11 — Desasignar pieza de una torre
+
 Historia: Como Operario de Bodega, quiero desasignar una pieza que fue asignada por error, para corregir una marca equivocada sin dejar evidencia falsa en el sistema.
 
+```gherkin
 Característica: Desasignación de piezas
 
   Escenario: Desasignación de una pieza no enviada
@@ -417,3 +460,4 @@ Característica: Desasignación de piezas
     Entonces el sistema rechaza la solicitud
     Y comunica que una pieza enviada no puede desasignarse
     Y conserva su estado, asociación y evidencias
+```
