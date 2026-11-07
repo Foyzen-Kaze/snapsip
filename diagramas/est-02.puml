@@ -1,0 +1,22 @@
+@startuml est-02
+hide empty description
+skinparam dpi 150
+skinparam shadowing false
+skinparam state {
+    BackgroundColor #F8F9FA
+    BorderColor #343A40
+    ArrowColor #495057
+    StartColor #343A40
+    EndColor #343A40
+}
+
+title EST-02 — Ciclo de vida de Torre
+
+[*] --> Abierta : registrar torre\n[universo cargado y parte válida]\n/ asignar numeración correlativa
+Abierta --> Cerrada : cerrar torre\n[contiene al menos una pieza]\n/ dejar de admitir nuevas piezas
+Cerrada --> Abierta : reabrir torre\n[ninguna pieza enviada]\n/ admitir piezas e invalidar guías\nvigentes (RD-01)
+Abierta --> Eliminada : eliminar torre\n[torre vacía y código exacto]\n/ eliminación lógica con usuario, fecha y\nhora
+Cerrada --> Eliminada : eliminar torre\n[torre vacía y código exacto]\n/ eliminación lógica con usuario, fecha y\nhora
+Eliminada --> [*]
+
+@enduml
