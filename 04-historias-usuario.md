@@ -8,6 +8,7 @@ Como Operario de Bodega o Encargado de Despacho, quiero autenticarme con mis cre
 **Criterios de aceptación:**
 * CA1: Dado que el usuario posee credenciales registradas en el sistema, cuando el usuario solicita el acceso con un identificador y una clave válidos, entonces el sistema concede el acceso y habilita las funciones correspondientes a su rol.
 * CA2: Dado que el usuario posee credenciales registradas en el sistema, cuando el usuario solicita el acceso con una clave incorrecta, entonces el sistema rechaza la solicitud e informa que las credenciales son inválidas.
+* CA3: Dado que un usuario autenticado posee un rol que no autoriza una operación protegida, cuando el usuario solicita esa operación, entonces el sistema rechaza la solicitud y conserva los datos sin modificaciones.
 
 <a id="hu-02"></a>
 
@@ -47,7 +48,9 @@ Como Operario de Bodega, quiero asignar una pieza pendiente a una torre junto co
 **Criterios de aceptación:**
 * CA1: Dado que una pieza se encuentra en estado Pendiente, cuando el operario de bodega solicita asignar la pieza a una torre Abierta y adjunta evidencia fotográfica, entonces el sistema cambia la pieza a estado Listo y registra el usuario, la fecha y la hora de la asignación.
 * CA2: Dado que una pieza se encuentra en estado Pendiente, cuando el operario de bodega solicita marcar la pieza como Lista sin adjuntar evidencia fotográfica, entonces el sistema rechaza la solicitud y exige la evidencia antes de autorizar el cambio de estado.
-* CA3: Dado que una pieza ya se encuentra asignada a una torre, cuando el operario de bodega solicita asignar esa misma pieza a una torre distinta, entonces el sistema solicita confirmación del reemplazo antes de ejecutar la reasignación.
+* CA3: Dado que una pieza ya se encuentra asignada a una torre, cuando el operario de bodega solicita asignar esa misma pieza a una torre distinta, entonces el sistema solicita confirmación del reemplazo antes de ejecutar la reasignación y, al confirmarse, invalida las guías de despacho Vigentes y todavía no enviadas que incluyan esa pieza.
+* CA4: Dado que el servicio de almacenamiento de evidencias no acepta la fotografía, cuando el operario de bodega solicita asignar una pieza Pendiente a una torre Abierta, entonces el sistema rechaza la asignación, mantiene la pieza en estado Pendiente e informa que la evidencia no pudo almacenarse.
+* CA5: Dado que una pieza se encuentra en estado Enviado, cuando el operario de bodega solicita asignarla a otra torre, entonces el sistema rechaza la solicitud y conserva la pieza sin modificaciones.
 
 <a id="hu-06"></a>
 
@@ -64,9 +67,10 @@ Como Operario de Bodega, quiero consultar las piezas pendientes de una parte de 
 Como Operario de Bodega, quiero cerrar manualmente una torre cuando ya no admite más piezas, para dejar de recibir asignaciones en ella sin depender de un porcentaje que una torre, al no tener capacidad predefinida, nunca podría alcanzar.
 **Actividad TO-BE asociada:** Cerrar torre de piezas.
 **Criterios de aceptación:**
-* CA1: Dado que una torre posee al menos una pieza asignada, cuando el operario de bodega solicita el cierre de la torre, entonces el sistema cambia la torre a estado Cerrada y deja de ofrecerla como destino para nuevas piezas.
+* CA1: Dado que una torre posee al menos una pieza asignada, cuando el operario de bodega solicita el cierre de la torre, entonces el sistema cambia la torre a estado Cerrada y deja de ofrecerla como destino para nuevas piezas, aunque queden piezas Pendiente en esa parte de la casa.
 * CA2: Dado que una torre no posee piezas asignadas, cuando el operario de bodega solicita el cierre de la torre, entonces el sistema rechaza la solicitud y sugiere la eliminación de la torre en su lugar.
-* CA3: Dado que una torre se encuentra en estado Cerrada, cuando el operario de bodega solicita la reapertura de la torre, entonces el sistema cambia la torre a estado Abierta y vuelve a admitir piezas nuevas.
+* CA3: Dado que una torre se encuentra en estado Cerrada y ninguna de sus piezas fue enviada, cuando el operario de bodega solicita la reapertura de la torre, entonces el sistema cambia la torre a estado Abierta, vuelve a admitir piezas nuevas e invalida las guías de despacho Vigentes y todavía no enviadas que incluyan esa torre.
+* CA4: Dado que una torre se encuentra en estado Cerrada y contiene piezas en estado Enviado, cuando el operario de bodega solicita la reapertura de la torre, entonces el sistema rechaza la solicitud y mantiene la torre en estado Cerrada.
 
 <a id="hu-08"></a>
 
@@ -75,12 +79,14 @@ Como Encargado de Despacho, quiero generar la guía de despacho de una parte de 
 **Actividad TO-BE asociada:** Generar guía de despacho (incluye Validar completitud de piezas).
 **Regla de alcance:** la guía se genera por parte de la casa (con todas sus torres) o por proyecto completo. No se genera por torre suelta. La completitud se exige solo sobre el alcance solicitado, por lo que se puede despachar una parte aunque el resto del proyecto aún no esté completo.
 **Criterios de aceptación:**
-* CA1: Dado que todas las piezas de una parte de la casa se encuentran en estado Listo y todas sus torres están Cerradas, cuando el encargado de despacho solicita la generación de la guía de esa parte, entonces el sistema marca la parte como Completa y genera la guía con el detalle de las piezas y las torres cerradas incluidas.
+* CA1: Dado que todas las piezas de una parte de la casa se encuentran en estado Listo y todas sus torres están Cerradas, cuando el encargado de despacho solicita la generación de la guía de esa parte, entonces el sistema marca la parte como Completa y genera la guía en estado Vigente con el detalle de las piezas y las torres cerradas incluidas.
 * CA2: Dado que una parte de la casa o un proyecto posee piezas en estado Pendiente, cuando el encargado de despacho solicita la generación de la guía para ese alcance, entonces el sistema rechaza la solicitud e informa la cantidad de piezas que faltan.
-* CA3: Dado que todas las partes de la casa de un proyecto se encuentran Completas y todas sus torres están Cerradas, cuando el encargado de despacho solicita la generación de la guía del proyecto, entonces el sistema marca el proyecto como Proyecto completo y genera la guía con el detalle de todas las piezas y torres incluidas.
+* CA3: Dado que todas las partes de la casa de un proyecto se encuentran Completas y todas sus torres están Cerradas, cuando el encargado de despacho solicita la generación de la guía del proyecto, entonces el sistema marca el proyecto como Proyecto completo y genera la guía en estado Vigente con el detalle de todas las piezas y torres incluidas.
 * CA4: Dado que todas las piezas del alcance solicitado se encuentran en estado Listo pero al menos una de sus torres está Abierta, cuando el encargado de despacho solicita la generación de la guía, entonces el sistema rechaza la solicitud e informa qué torres deben cerrarse.
 * CA5: Dado que un proyecto tiene una parte de la casa Completa con sus torres Cerradas y otras partes con piezas Pendiente, cuando el encargado de despacho solicita la guía solo de la parte Completa, entonces el sistema genera la guía de esa parte sin exigir la completitud del resto del proyecto.
 * CA6: Dado que una parte de la casa se encuentra Completa, cuando una de sus piezas vuelve a estado Pendiente, entonces el sistema deja de considerar Completa esa parte y, si el proyecto estaba como Proyecto completo, deja de considerarlo así.
+* CA7: Dado que el alcance solicitado no posee piezas registradas, cuando el encargado de despacho solicita la generación de la guía, entonces el sistema rechaza la solicitud, no considera completo ese alcance e informa que no existen piezas para incluir.
+* CA8: Dado que el alcance solicitado contiene una pieza en estado Enviado, cuando el encargado de despacho solicita la generación de una nueva guía para ese alcance, entonces el sistema rechaza la solicitud e informa que el alcance incluye piezas ya enviadas.
 
 <a id="hu-09"></a>
 
@@ -88,8 +94,12 @@ Como Encargado de Despacho, quiero generar la guía de despacho de una parte de 
 Como Encargado de Despacho, quiero registrar el envío de una guía de despacho con evidencia fotográfica, para dejar constancia de que el despacho salió con las piezas correctas.
 **Actividad TO-BE asociada:** Registrar envío de despacho.
 **Criterios de aceptación:**
-* CA1: Dado que una guía de despacho fue generada, cuando el encargado de despacho solicita registrar el envío y adjunta evidencia fotográfica, entonces el sistema cambia las piezas incluidas a estado Enviado y registra el usuario y la fecha del envío.
-* CA2: Dado que una guía de despacho fue generada, cuando el encargado de despacho solicita registrar el envío sin adjuntar evidencia fotográfica, entonces el sistema rechaza la solicitud y exige la evidencia antes de completar el registro.
+* CA1: Dado que una guía de despacho se encuentra en estado Vigente y sin envío registrado, cuando el encargado de despacho solicita registrar el envío y adjunta evidencia fotográfica, entonces el sistema cambia la guía a estado Enviada, cambia las piezas incluidas a estado Enviado y registra el usuario, la fecha y la hora del envío.
+* CA2: Dado que una guía de despacho se encuentra en estado Vigente y sin envío registrado, cuando el encargado de despacho solicita registrar el envío sin adjuntar evidencia fotográfica, entonces el sistema rechaza la solicitud y exige la evidencia antes de completar el registro.
+* CA3: Dado que una guía de despacho se encuentra en estado Invalidada, cuando el encargado de despacho solicita registrar su envío, entonces el sistema rechaza la solicitud, no cambia el estado de las piezas y exige la generación de una nueva guía.
+* CA4: Dado que una guía de despacho fue Invalidada y las condiciones de despacho volvieron a cumplirse, cuando el encargado de despacho solicita registrar el envío con esa misma guía, entonces el sistema rechaza la solicitud y mantiene la guía en estado Invalidada.
+* CA5: Dado que alguna pieza incluida en una guía de despacho ya se encuentra en estado Enviado, cuando el encargado de despacho solicita registrar un envío con esa guía, entonces el sistema rechaza la solicitud y conserva el registro del envío anterior.
+* CA6: Dado que el servicio de almacenamiento de evidencias no acepta la fotografía del camión cargado, cuando el encargado de despacho solicita registrar el envío, entonces el sistema rechaza la solicitud, mantiene la guía en estado Vigente y no cambia el estado de las piezas.
 
 <a id="hu-10"></a>
 
@@ -97,9 +107,9 @@ Como Encargado de Despacho, quiero registrar el envío de una guía de despacho 
 Como Operario de Bodega, quiero eliminar una torre vacía confirmando su código, para evitar eliminaciones accidentales mediante un método ágil desde el celular.
 **Actividad TO-BE asociada:** Eliminar torre del sistema.
 **Criterios de aceptación:**
-* CA1: Dado que una torre no posee piezas asignadas, cuando el operario de bodega solicita la eliminación de la torre e informa el código exacto de la torre como confirmación, entonces el sistema elimina la torre de forma lógica y deja de ofrecerla para la asignación de piezas.
+* CA1: Dado que una torre no posee piezas asignadas, cuando el operario de bodega solicita la eliminación de la torre e informa el código exacto de la torre como confirmación, entonces el sistema cambia la torre a estado Eliminada, conserva su registro con el usuario y la fecha y hora de la eliminación, y deja de ofrecerla para la asignación de piezas.
 * CA2: Dado que una torre no posee piezas asignadas, cuando el operario de bodega solicita la eliminación de la torre e informa un código distinto al de la torre, entonces el sistema rechaza la solicitud e informa que el código no coincide.
-* CA3: Dado que una torre posee piezas asignadas, cuando el operario de bodega solicita la eliminación de la torre, entonces el sistema rechaza la solicitud y sugiere desasignar las piezas o cerrar la torre previamente.
+* CA3: Dado que una torre posee piezas asignadas, esté Abierta o Cerrada, cuando el operario de bodega solicita la eliminación de la torre, entonces el sistema rechaza la solicitud y sugiere desasignar las piezas o cerrar la torre previamente.
 
 <a id="hu-11"></a>
 
@@ -107,5 +117,5 @@ Como Operario de Bodega, quiero eliminar una torre vacía confirmando su código
 Como Operario de Bodega, quiero desasignar una pieza que fue asignada por error, para corregir una marca equivocada sin dejar evidencia falsa en el sistema.
 **Actividad TO-BE asociada:** Desasignar pieza.
 **Criterios de aceptación:**
-* CA1: Dado que una pieza se encuentra en estado Listo dentro de una torre, cuando el operario de bodega solicita la desasignación de esa pieza, entonces el sistema devuelve la pieza a estado Pendiente sin torre asignada e invalida la evidencia de marca anterior.
+* CA1: Dado que una pieza se encuentra en estado Listo dentro de una torre, cuando el operario de bodega solicita la desasignación de esa pieza, entonces el sistema devuelve la pieza a estado Pendiente sin torre asignada, invalida la evidencia de marca anterior conservándola en el historial e invalida las guías de despacho Vigentes y todavía no enviadas que incluyan esa pieza.
 * CA2: Dado que una pieza se encuentra en estado Enviado, cuando el operario de bodega solicita la desasignación de esa pieza, entonces el sistema rechaza la solicitud e informa que una pieza enviada no puede desasignarse directamente.
