@@ -27,3 +27,5 @@ Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso6746.p
 | CU-09 | Registrar envío | Encargado de Despacho | [HU-09](./04-historias-usuario.md#hu-09) |
 | CU-10 | Eliminar torre vacía | Operario de Bodega | [HU-10](./04-historias-usuario.md#hu-10) |
 | CU-11 | Desasignar pieza | Operario de Bodega | [HU-11](./04-historias-usuario.md#hu-11) |
+| CU-12 | Adjuntar evidencia fotográfica | Operario de Bodega / Encargado de Despacho | Servicio de almacenamiento de evidencias | [HU-05](./04-historias-usuario.md#hu-05), [HU-09](./04-historias-usuario.md#hu-09) |
+| CU-13 | Reasignar pieza a otra torre | Operario de Bodega | — | [HU-05](./04-historias-usuario.md#hu-05) |
