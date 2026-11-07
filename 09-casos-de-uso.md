@@ -9,9 +9,9 @@
 | Servicio de almacenamiento de evidencias | Sistema externo | Repositorio en la nube encargado de recibir, guardar de forma segura y proveer los enlaces de las fotografías de respaldo. |
 
 ## Diagrama de casos de uso
-![Casos de uso](./diagramas/diagramadecasosdeuso.png)
+![Casos de uso](./diagramas/diagramadecasosdeuso6746.png)
 
-Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
+Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso6746.puml)
 
 ## Casos de uso y su origen
 | ID | Caso de uso (objetivo del actor) | Actor principal | Historia de origen |
