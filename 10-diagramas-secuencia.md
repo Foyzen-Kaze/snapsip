@@ -18,34 +18,7 @@ Notación utilizada:
 - Requisitos que cubre: RP-05, RP-04 (pertenencia de la torre a una parte de la casa)
 - Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
-```mermaid
-sequenceDiagram
-    actor O as Operario
-    participant S as :SnapSip
-    participant E as Servicio de almacenamiento de evidencias
-
-    O->>S: asignar pieza a torre (pieza, torre, evidencia fotográfica)
-    alt sin evidencia fotográfica
-        S-->>O: rechazo: se requiere la evidencia fotográfica
-    else torre de otra parte de la casa
-        S-->>O: rechazo: la torre pertenece a otra parte de la casa
-    else torre Cerrada
-        S-->>O: rechazo: torre Cerrada, se sugiere registrar otra torre para la parte
-    else torre Abierta de la misma parte y evidencia adjunta
-        opt pieza Listo en otra torre
-            S-->>O: solicitar confirmación de reemplazo
-            O->>S: confirmar reemplazo
-        end
-        S->>E: almacenar evidencia
-        alt evidencia almacenada
-            E-->>S: evidencia almacenada
-            S-->>O: pieza asignada, estado Listo (usuario, fecha y hora)
-        else falla del servicio
-            E-->>S: error de almacenamiento
-            S-->>O: rechazo: asignación no realizada, la pieza no cambia de estado
-        end
-    end
-```
+![DSS-01](diagramas/diagramas/dss-01.png)
 
 Archivo fuente: [`./diagramas/dss-01.mmd`](./diagramas/dss-01.mmd)
 
@@ -72,30 +45,7 @@ Variantes representadas:
 
 Los dos casos de uso se muestran en un solo diagrama porque un envío solo puede registrarse sobre una guía generada y Vigente (RP-10). Además, entre ambos momentos puede ocurrir la invalidación de la guía definida en RD-01.
 
-```mermaid
-sequenceDiagram
-    actor O as Operario
-    participant S as :SnapSip
-    participant E as Servicio de almacenamiento de evidencias
-
-    O->>S: generar guía de despacho (proyecto, alcance)
-    alt alcance incompleto o con torres Abiertas
-        S-->>O: rechazo: piezas faltantes y torres sin cerrar
-    else alcance completo y torres Cerradas
-        S-->>O: guía de despacho en PDF, estado Vigente
-    end
-    Note over O,S: carga física del camión (una desasignación puede invalidar la guía, RD-01)
-    O->>S: registrar envío (guía, evidencia fotográfica del camión)
-    alt guía Invalidada por desasignación (RD-01)
-        S-->>O: rechazo: guía Invalidada, se debe generar una guía nueva
-    else sin evidencia fotográfica
-        S-->>O: rechazo: se requiere la fotografía del camión cargado
-    else guía Vigente con evidencia
-        S->>E: almacenar evidencia
-        E-->>S: evidencia almacenada
-        S-->>O: envío registrado, guía Enviada y piezas Enviado (usuario, fecha y hora)
-    end
-```
+![DSS-02](./diagramas/dss-02.png)
 
 Archivo fuente: [`./diagramas/dss-02.mmd`](./diagramas/dss-02.mmd)
 
@@ -121,22 +71,7 @@ Variantes representadas:
 
 SnapSip delega la verificación de credenciales en un servicio de autenticación administrado. RP-15b lo permite expresamente: "Si se utiliza autenticación administrada, debe verificarse el mecanismo del proveedor". SnapSip conserva el control de acceso según el rol del usuario (RP-16).
 
-```mermaid
-sequenceDiagram
-    actor U as Usuario
-    participant S as :SnapSip
-    participant A as Servicio de autenticación
-
-    U->>S: iniciar sesión (credenciales)
-    S->>A: verificar credenciales
-    alt credenciales válidas
-        A-->>S: identidad confirmada
-        S-->>U: acceso concedido a las funciones de su rol
-    else credenciales inválidas
-        A-->>S: credenciales rechazadas
-        S-->>U: credenciales inválidas
-    end
-```
+![DSS-03](./diagramas/dss-03.png)
 
 Archivo fuente: [`./diagramas/dss-03.mmd`](./diagramas/dss-03.mmd)
 
