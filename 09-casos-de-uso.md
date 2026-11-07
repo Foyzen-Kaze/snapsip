@@ -9,7 +9,7 @@
 | Servicio de almacenamiento de evidencias | Sistema externo | Repositorio en la nube que recibe y guarda las fotografías que respaldan la asignación de una pieza y el envío de un camión (RP-15a). |
 
 ## Diagrama de casos de uso
-![Casos de uso](./diagramas/casos-de-uso.png)
+![Casos de uso](./diagramas/casos-de-usooo.png)
 
 Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
 
