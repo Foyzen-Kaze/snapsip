@@ -16,7 +16,7 @@
 | [09-casos-de-uso.md](./09-casos-de-uso.md) | 3 | Sebastián Fredy González |
 | [10-diagramas-secuencia.md](./10-diagramas-secuencia.md) | 4 | David Núñez |
 | [11-diagramas-estado.md](./11-diagramas-estado.md) | 5 | David Núñez |
-| [12-trazabilidad.md](./12-trazabilidad.md) | 6 | Diego Marengo |
+| [12-trazabilidad.md](./12-trazabilidad.md) | 6 |  David Núñez |
 
 ## Uso de IA generativa
 Se utilizó Google Antigravity (Gemini) como herramienta de apoyo para estructurar los borradores iniciales de los artefactos Markdown conforme a las plantillas solicitadas, generar código Mermaid para los diagramas UML 2.0 y formular la matriz de trazabilidad cruzada. Todo el contenido generado fue minuciosamente revisado, corregido y validado por los integrantes del equipo para asegurar estricta coherencia con las reglas del negocio, el modelo de dominio y los procesos TO-BE acordados para SnapSip.
