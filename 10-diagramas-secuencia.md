@@ -22,7 +22,7 @@ Notación utilizada:
 
 ![DSS-01](./diagramas/dss-01pp.png)
 
-Archivo fuente: [`./diagramas/dss-01pp.puml`](./diagramas/dss-01pp.puml)
+Archivo fuente: [`./diagramas/dss-01.puml`](./diagramas/dss-01.puml)
 
 Variantes representadas:
 
@@ -50,7 +50,7 @@ La integración con el sistema externo ocurre en CU-09. El diagrama incluye ante
 
 ![DSS-02](./diagramas/dss-02pp.png)
 
-Archivo fuente: [`./diagramas/dss-02pp.puml`](./diagramas/dss-02pp.puml)
+Archivo fuente: [`./diagramas/dss-02.puml`](./diagramas/dss-02.puml)
 
 Variantes representadas:
 
@@ -80,7 +80,7 @@ SnapSip delega la verificación de credenciales en un servicio de autenticación
 
 ![DSS-03](./diagramas/dss-03pp.png)
 
-Archivo fuente: [`./diagramas/dss-03pp.puml`](./diagramas/dss-03pp.puml)
+Archivo fuente: [`./diagramas/dss-03.puml`](./diagramas/dss-03.puml)
 
 Variantes representadas:
 
