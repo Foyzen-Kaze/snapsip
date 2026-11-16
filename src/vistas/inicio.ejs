@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= titulo %></title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    header { background: #1f2937; color: #fff; padding: 12px 16px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .roles form { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    select, button { padding: 8px 10px; font-size: 14px; }
+    .badge { display: inline-block; padding: 4px 8px; background: #e5e7eb; border-radius: 999px; }
+    .ok { color: #065f46; }
+    .warn { color: #92400e; }
+    ul { margin-top: 8px; }
+    .error { color: #b91c1c; }
+    nav a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>SnapSip</strong> — Demo (HU-01: selector de rol de demostración)
+  </header>
+  <main>
+    <div class="card roles">
+      <h2>Contexto de acceso</h2>
+      <p class="warn">Autenticación de demostración: sin credenciales reales (regla del taller).</p>
+      <% if (typeof error !== 'undefined' && error) { %>
+        <p class="error"><%= error %></p>
+      <% } %>
+      <form method="POST" action="/acceso/rol">
+        <label for="rol"><strong>Rol de demostración:</strong></label>
+        <select id="rol" name="rol" required>
+          <option value="">-- Seleccione un rol --</option>
+          <% rolesDemo.forEach(function(r) { %>
+            <option value="<%= r %>" <%= rolActual === r ? 'selected' : '' %>><%= r %></option>
+          <% }); %>
+        </select>
+        <button type="submit">Establecer / Cambiar rol</button>
+      </form>
+      <p>Rol actual: <% if (rolActual) { %><span class="badge ok"><%= rolActual %></span><% } else { %><span class="badge">Sin rol establecido</span><% } %></p>
+    </div>
+
+    <div class="card">
+      <h2>Funciones habilitadas</h2>
+      <% if (rolActual) { %>
+        <p>Acceso concedido. Funciones autorizadas para <strong><%= rolActual %></strong>:</p>
+        <ul>
+          <% funcionesHabilitadas.forEach(function(f) { %>
+            <li><%= f %></li>
+          <% }); %>
+        </ul>
+        <nav>
+          <p>Ejemplo protegido (HU-01/CA3): <a href="/operaciones/despacho/ejemplo">Operación protegida de ejemplo (solo Encargado de Despacho)</a></p>
+        </nav>
+      <% } else { %>
+        <p class="warn">No se concede acceso a funciones protegidas. Seleccione un rol de demostración para continuar.</p>
+      <% } %>
+    </div>
+  </main>
+</body>
+</html>
