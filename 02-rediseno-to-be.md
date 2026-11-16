@@ -27,25 +27,25 @@
 - Efecto esperado (tiempo/costo/calidad/flexibilidad): Eliminación del costo por envíos incompletos (calidad y costo).
  
 ## Diagrama TO-BE
-## Diagrama TO-BE
-![Proceso TO-BE](./diagramas/TO-BE1.png)
-diagramas/snapsip3457643.bpmn
-[codigo-fuente](./diagramas/snapsip3457643.bpmn)
+![Proceso TO-BE](./diagramas/to-be.png)
+
+Archivo fuente: [`./diagramas/to-be.bpmn`](./diagramas/to-be.bpmn)
 
  
-Nota: El diagrama distingue tareas de usuario (marcadas con el icono de usuario) y tareas de servicio automatizadas por el sistema (marcadas con el icono de engranaje).
+Nota: El diagrama distingue tareas de usuario (icono de persona), tareas de servicio que ejecuta el sistema de forma automática (icono de engranaje) y tareas manuales que se realizan sin apoyo del sistema (icono de mano), como Cargar camión. La compuerta «¿Alcance completo y torres cerradas?» materializa la Iniciativa 3: si la validación falla, no se genera la guía y el proceso vuelve a Consultar piezas pendientes.
  
 ## Actividades que cambian del AS-IS al TO-BE
 | Actividad en el AS-IS | Actividad en el TO-BE | Qué cambia |
 |-------------------------|--------------------------|------------|
-| Ingresar proyecto manualmente en pizarra/cuaderno | Autenticación de usuarios | Pasa de un registro físico vulnerable a un registro digital estructurado. |
+| - | Autenticación de usuarios | (Nueva actividad) Cada usuario ingresa con sus credenciales y accede solo a las funciones de su rol. |
+| Ingresar proyecto manualmente en pizarra/cuaderno | Crear proyecto | Pasa de un registro físico vulnerable a un registro digital estructurado. |
 | Interpretar plano e ingresar piezas una a una | Inyectar piezas desde plano/archivo | El sistema inyecta el total de piezas desde un archivo, automatizando el registro inicial en estado "Pendiente". |
-| Agrupar piezas físicamente sin registro | Registrar nueva torre | Se crea un contenedor lógico en el sistema (Torre) asociado a una parte específica de la casa. |
-| Tachar pieza en el plano impreso | Asignar pieza a torre con evidencia| El operario marca la pieza en el sistema y se exige adjuntar evidencia fotográfica obligatoria. |
+| Agrupar piezas físicamente sin registro | Crear torre | Se crea un contenedor lógico en el sistema (Torre) asociado a una parte específica de la casa. |
+| Tachar pieza en el plano impreso | Asignar pieza a torre con evidencia | El operario marca la pieza en el sistema y se exige adjuntar evidencia fotográfica obligatoria. |
 | Revisar torre físicamente para ver qué falta | Consultar piezas pendientes | El sistema filtra y muestra en tiempo real únicamente las piezas que faltan por asignar. |
-| - | Cierre manual de torre | (Nueva activida d)El operario clausura la recepción de piezas en una torre por falta de espacio físico. |
-| Revisión ocular de todas las torres | Validar completitud por Parte o Proyecto | El sistema valida automáticamente por detrás si el 100% de las piezas de un proyecto están en estado "Listo". |
+| - | Cierre manual de torre | (Nueva actividad) El operario clausura la recepción de piezas en una torre por falta de espacio físico. |
+| Revisión ocular de todas las torres | Validar completitud por Parte o Proyecto | (Tarea de servicio) El sistema valida automáticamente si el 100% de las piezas de un proyecto están en estado "Listo". |
 | Escribir guía a mano o en Excel sin restricciones | Generar guía de despacho | El sistema genera el PDF de forma automatizada, condicionado estrictamente a la validación de completitud previa. |
-| Despachar camión | Registrar envío con evidencia| Se exige tomar una fotografía de evidencia del camión cargado antes de dar de baja el inventario. |
-| - | Eliminar torre vacía | (Nueva actividad) Borrado lógico protegido mediante código de confirmación. |
+| Despachar camión | Registrar envío con evidencia | Se exige tomar una fotografía de evidencia del camión cargado antes de dar de baja el inventario. |
+| - | Eliminar torre vacía con código | (Nueva actividad) Borrado lógico protegido mediante código de confirmación. |
 | Despachar pieza equivocada y arreglarlo en planta | Desasignar pieza de una torre | (Nueva actividad) Permite al operario corregir un error de asignación en terreno devolviendo la pieza a estado "Pendiente". |
