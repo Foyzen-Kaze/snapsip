@@ -6,7 +6,7 @@
 - Diego Marengo
 
 ## Proyecto
-**SnapSip** — Plataforma web para el control de inventario, verificación visual con respaldo fotográfico de torres y paneles, y emisión y validación de guías de despacho en faenas de construcción para casas prefabricadas y proyectos modulares.
+**SnapSip** — Plataforma web para el control de inventario, verificación visual con respaldo fotográfico de torres y paneles, y emisión y validación de guías de despacho en faenas de fabrica de paneles SIP para casas prefabricadas y proyectos modulares.
 
 ## Responsabilidades individuales
 | Documento | Ítem de rúbrica | Responsable(s) |
@@ -19,7 +19,7 @@
 | [12-trazabilidad.md](./12-trazabilidad.md) | 6 |  David Núñez |
 
 ## Uso de IA generativa
-Se utilizó Google Antigravity (Gemini) como herramienta de apoyo para estructurar los borradores iniciales de los artefactos Markdown conforme a las plantillas solicitadas, generar código Mermaid para los diagramas UML 2.0 y formular la matriz de trazabilidad cruzada. Todo el contenido generado fue minuciosamente revisado, corregido y validado por los integrantes del equipo para asegurar estricta coherencia con las reglas del negocio, el modelo de dominio y los procesos TO-BE acordados para SnapSip.
+Se utilizó Google Antigravity (Gemini) como herramienta de apoyo para estructurar los borradores iniciales de los artefactos Markdown conforme a las plantillas solicitadas, generar código PlantUML para los diagramas UML 2.0 y formular la matriz de trazabilidad cruzada. Todo el contenido generado fue minuciosamente revisado, corregido y validado por los integrantes del equipo para asegurar estricta coherencia con las reglas del negocio, el modelo de dominio y los procesos TO-BE acordados para SnapSip.
 
 ## Entrega anterior
 [IngReq-Entrega 1](./IngReq-Entrega%201.md)
