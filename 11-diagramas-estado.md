@@ -1,108 +1,107 @@
 # Diagramas de estado
 
-Este documento presenta los **Diagramas de Estado** del sistema **SnapSip** bajo el estándar **UML 2.0**, modelando el ciclo de vida de las clases del modelo de dominio que presentan transiciones de estado significativas.
+Este documento presenta los diagramas de estado de **SnapSip** en notación UML 2.0. Modelan el ciclo de vida de las tres clases del [modelo de dominio](./08-modelo-dominio.md) cuyo atributo `estado` controla el despacho: Pieza, Torre y GuiaDespacho.
 
-Los nombres de los estados corresponden estrictamente a **situaciones o condiciones del negocio** (no a acciones) y los eventos coinciden de manera unívoca con los mensajes modelados en los [diagramas de secuencia de sistema](./10-diagramas-secuencia.md) y las operaciones de los [casos de uso](./09-casos-de-uso.md).
+Convenciones:
+
+- Los estados son situaciones del negocio, con los mismos nombres que los valores del atributo `estado` en el modelo de dominio.
+- Cada transición se rotula `evento [guarda] / acción`. Los eventos llevan el nombre del caso de uso que los origina y coinciden con los mensajes de los [diagramas de secuencia](./10-diagramas-secuencia.md) cuando la historia tiene uno.
+- Una transición hacia el estado final sin evento es una transición de finalización: el objeto ya no admite más cambios y su ciclo de vida termina.
 
 ---
 
 ## EST-01 — Ciclo de vida de Pieza
 
-- **Clase del dominio:** [Pieza](./08-modelo-dominio.md) (atributo `estado`)
-- **Diagramas de secuencia relacionados:** [DSS-01](./10-diagramas-secuencia.md) y [DSS-02](./10-diagramas-secuencia.md)
-- **Casos de uso e historias relacionadas:** [CU-03](./09-casos-de-uso.md) ([HU-03](./04-historias-usuario.md#hu-03)), [CU-05](./09-casos-de-uso.md) ([HU-05](./04-historias-usuario.md#hu-05--Asignar-pieza-a-torre-con-evidencia)), [CU-12](./09-casos-de-uso.md) ([HU-12](./04-historias-usuario.md#hu-12)) y [CU-10](./09-casos-de-uso.md) ([HU-10](./04-historias-usuario.md#hu-10--Registrar-envío-con-evidencia))
+- Clase del dominio: [Pieza](./08-modelo-dominio.md)
+- Diagramas de secuencia relacionados: [DSS-01](./10-diagramas-secuencia.md) (asignar pieza a torre) y [DSS-02](./10-diagramas-secuencia.md) (registrar envío)
+- Casos de uso e historias de origen: [CU-03](./09-casos-de-uso.md) / [HU-03](./04-historias-usuario.md#hu-03), [CU-05](./09-casos-de-uso.md) / [HU-05](./04-historias-usuario.md#hu-05), [CU-09](./09-casos-de-uso.md) / [HU-09](./04-historias-usuario.md#hu-09) y [CU-11](./09-casos-de-uso.md) / [HU-11](./04-historias-usuario.md#hu-11)
+- Requisitos: RP-03, RP-05, RP-10, RP-12, RD-01
 
-```mermaid
-stateDiagram-v2
-    [*] --> Pendiente : importar archivo de piezas [archivo válido con filas completas]
-    Pendiente --> Listo : asignar pieza a torre [torre Abierta de la misma parte y evidencia adjunta]
-    Listo --> Listo : asignar pieza a torre [nueva torre Abierta y reemplazo confirmado]
-    Listo --> Pendiente : desasignar pieza
-    Listo --> Enviado : registrar envío [guía Vigente y evidencia del camión adjunta]
-    Enviado --> [*]
-```
+![EST-01](./diagramas/est-01.png)
 
-Archivo fuente: [`./diagramas/est-01.mmd`](./diagramas/est-01.mmd)
+Archivo fuente: [`./diagramas/est-01.puml`](./diagramas/est-01.puml)
 
-### Descripción de los estados
-- **`Pendiente`:** La pieza está registrada en el universo del proyecto y asociada a su parte de la casa, pero aún no tiene torre física asignada ni respaldo fotográfico.
-- **`Listo`:** La pieza ha sido verificada físicamente, asignada a una torre abierta de su misma parte y cuenta con evidencia fotográfica obligatoria registrada con usuario, fecha y hora.
-- **`Enviado`:** La pieza se encuentra cargada físicamente en el camión y su salida de bodega fue respaldada mediante una guía de despacho vigente con envío registrado. Es un estado terminal; una pieza enviada no admite desasignación ni modificaciones.
+### Estados
 
-### Tabla de transiciones — Pieza
+- **Pendiente:** la pieza está registrada en su parte de la casa y no tiene torre asignada (HU-03 CA1).
+- **Listo:** la pieza está asignada a una torre de su misma parte y cuenta con evidencia fotográfica vigente (HU-05 CA1).
+- **Enviado:** la pieza salió de la bodega en un envío registrado (HU-09 CA1). No admite reasignación ni desasignación (HU-05 CA5, HU-11 CA2).
+
+### Tabla de transiciones
+
 | Estado origen | Evento | Guarda | Acción | Estado destino |
-|---|---|---|---|---|
-| `[*]` | importar archivo de piezas | archivo válido con filas completas | registrar pieza asociada a su parte de la casa en el proyecto | `Pendiente` |
-| `Pendiente` | asignar pieza a torre | torre Abierta de la misma parte y evidencia fotográfica adjunta | almacenar evidencia fotográfica, asociar pieza a torre y registrar auditoría (usuario, fecha y hora) | `Listo` |
-| `Listo` | asignar pieza a torre | nueva torre Abierta de la misma parte y confirmación de reemplazo | almacenar nueva evidencia fotográfica, actualizar asociación de torre e invalidar guías vigentes no enviadas | `Listo` |
-| `Listo` | desasignar pieza | — | desvincular pieza de la torre, invalidar evidencia de asignación actual e invalidar guías vigentes no enviadas (RD-01) | `Pendiente` |
-| `Listo` | registrar envío | guía de despacho Vigente y evidencia fotográfica del camión adjunta | amparar salida física de la pieza en el envío y registrar usuario, fecha y hora | `Enviado` |
-| `Enviado` | — | — | — | `[*]` |
+|---------------|--------|--------|--------|----------------|
+| Inicial | cargar universo de piezas | archivo válido | — | Pendiente |
+| Pendiente | asignar pieza a torre | torre Abierta de la misma parte y evidencia almacenada | registrar evidencia, usuario, fecha y hora | Listo |
+| Listo | asignar pieza a torre | otra torre Abierta de la misma parte, reemplazo confirmado y evidencia almacenada | invalidar evidencia anterior y guías Vigentes que incluyen la pieza | Listo |
+| Listo | desasignar pieza | — | invalidar evidencia y guías Vigentes que incluyen la pieza | Pendiente |
+| Listo | registrar envío | guía Vigente que incluye la pieza y evidencia almacenada | — | Enviado |
+| Enviado | — (finalización) | — | — | Final |
 
 ---
 
 ## EST-02 — Ciclo de vida de Torre
 
-- **Clase del dominio:** [Torre](./08-modelo-dominio.md) (atributo `estado`)
-- **Diagramas de secuencia relacionados:** [DSS-01](./10-diagramas-secuencia.md) y [DSS-02](./10-diagramas-secuencia.md)
-- **Casos de uso e historias relacionadas:** [CU-04](./09-casos-de-uso.md) ([HU-04](./04-historias-usuario.md#hu-04)), [CU-07](./09-casos-de-uso.md) ([HU-07](./04-historias-usuario.md#hu-07)), [CU-11](./09-casos-de-uso.md) ([HU-11](./04-historias-usuario.md#hu-11)) y [CU-10](./09-casos-de-uso.md) ([HU-10](./04-historias-usuario.md#hu-10--Registrar-envío-con-evidencia))
+- Clase del dominio: [Torre](./08-modelo-dominio.md)
+- Diagramas de secuencia relacionados: [DSS-02](./10-diagramas-secuencia.md) (registrar envío). En [DSS-01](./10-diagramas-secuencia.md), el estado de la torre aparece como condición de la asignación.
+- Casos de uso e historias de origen: [CU-04](./09-casos-de-uso.md) / [HU-04](./04-historias-usuario.md#hu-04), [CU-07](./09-casos-de-uso.md) / [HU-07](./04-historias-usuario.md#hu-07), [CU-09](./09-casos-de-uso.md) / [HU-09](./04-historias-usuario.md#hu-09) y [CU-10](./09-casos-de-uso.md) / [HU-10](./04-historias-usuario.md#hu-10)
+- Requisitos: RP-04, RP-07, RP-10, RP-11, RD-01
 
-```mermaid
-stateDiagram-v2
-    [*] --> Abierta : crear torre [universo de piezas cargado y parte válida]
-    Abierta --> Cerrada : cerrar torre [al menos una pieza asignada]
-    Abierta --> [*] : eliminar torre [torre vacía y código de confirmación coincide]
-    Cerrada --> Abierta : reabrir torre [ninguna pieza enviada] / invalida guías vigentes (RD-01)
-    Cerrada --> Despachada : registrar envío [piezas amparadas en guía Vigente con evidencia de camión]
-    Despachada --> [*]
-```
+![EST-02](./diagramas/est-02.png)
 
-Archivo fuente: [`./diagramas/est-02.mmd`](./diagramas/est-02.mmd)
+Archivo fuente: [`./diagramas/est-02.puml`](./diagramas/est-02.puml)
 
-### Descripción de los estados
-- **`Abierta`:** La torre fue creada para una parte específica de la casa y está disponible para recibir asignaciones físicas de piezas de esa parte.
-- **`Cerrada`:** El operario cerró manualmente la torre al completar su capacidad física. No admite nuevas piezas. Es condición obligatoria para generar una guía de despacho que incluya esta torre.
-- **`Despachada`:** La torre y todas sus piezas fueron cargadas en el camión y despachadas con guía de despacho vigente. Es un estado terminal.
+### Estados
 
-### Tabla de transiciones — Torre
+- **Abierta:** la torre admite piezas de su parte de la casa (HU-04 CA1).
+- **Cerrada:** la torre no admite piezas nuevas (HU-07 CA1). Es condición para incluirla en una guía de despacho (RP-09).
+- **Eliminada:** la torre vacía fue dada de baja con su código de confirmación. Conserva su registro, con el usuario, la fecha y la hora de la eliminación, y deja de ofrecerse para asignaciones (HU-10 CA1).
+
+El envío no crea un estado nuevo: al registrarse el envío de la guía que la incluye, la torre conserva su registro como Cerrada y su ciclo de vida termina. Desde ese momento no puede reabrirse (HU-07 CA4) ni eliminarse, porque contiene piezas enviadas (HU-10 CA3).
+
+### Tabla de transiciones
+
 | Estado origen | Evento | Guarda | Acción | Estado destino |
-|---|---|---|---|---|
-| `[*]` | crear torre | universo de piezas cargado y parte de la casa válida | asignar código correlativo dentro del proyecto y vincular a la parte | `Abierta` |
-| `Abierta` | cerrar torre | contiene al menos una pieza asignada | cambiar estado y bloquear recepción de nuevas piezas | `Cerrada` |
-| `Abierta` | eliminar torre | torre vacía (cero piezas) y código de confirmación coincide | registrar eliminación lógica en auditoría | `[*]` |
-| `Cerrada` | reabrir torre | ninguna de sus piezas ha sido enviada | habilitar recepción de piezas e invalidar permanentemente las guías vigentes que incluyan la torre (RD-01) | `Abierta` |
-| `Cerrada` | registrar envío | todas las piezas de la torre amparadas en guía de despacho Vigente con evidencia de camión | consolidar salida física del bulto y registrar auditoría de despacho | `Despachada` |
-| `Despachada` | — | — | — | `[*]` |
+|---------------|--------|--------|--------|----------------|
+| Inicial | registrar torre | universo de piezas cargado | asignar numeración correlativa | Abierta |
+| Abierta | cerrar torre | al menos una pieza asignada | — | Cerrada |
+| Cerrada | reabrir torre | ninguna pieza Enviado | invalidar guías Vigentes que incluyen la torre | Abierta |
+| Abierta | eliminar torre | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
+| Cerrada | eliminar torre | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
+| Cerrada | registrar envío | guía Vigente que incluye la torre y evidencia almacenada | — | Final |
+| Eliminada | — (finalización) | — | — | Final |
+
+Una torre Cerrada puede quedar vacía si todas sus piezas se desasignan (HU-11 CA1). HU-10 CA1 solo exige que la torre esté vacía y que el código coincida, por lo que `eliminar torre` parte tanto de Abierta como de Cerrada.
 
 ---
 
 ## EST-03 — Ciclo de vida de GuiaDespacho
 
-- **Clase del dominio:** [GuiaDespacho](./08-modelo-dominio.md) (atributo `estado`)
-- **Diagramas de secuencia relacionados:** [DSS-02](./10-diagramas-secuencia.md)
-- **Casos de uso e historias relacionadas:** [CU-09](./09-casos-de-uso.md) ([HU-09](./04-historias-usuario.md#hu-09)), [CU-10](./09-casos-de-uso.md) ([HU-10](./04-historias-usuario.md#hu-10--Registrar-envío-con-evidencia)), [CU-12](./09-casos-de-uso.md) ([HU-12](./04-historias-usuario.md#hu-12)) y [CU-07](./09-casos-de-uso.md) ([HU-07](./04-historias-usuario.md#hu-07))
+- Clase del dominio: [GuiaDespacho](./08-modelo-dominio.md)
+- Diagramas de secuencia relacionados: [DSS-02](./10-diagramas-secuencia.md) (generar guía de despacho y registrar envío) y [DSS-01](./10-diagramas-secuencia.md) (asignar pieza a torre, en su variante de reasignación)
+- Casos de uso e historias de origen: [CU-05](./09-casos-de-uso.md) / [HU-05](./04-historias-usuario.md#hu-05), [CU-07](./09-casos-de-uso.md) / [HU-07](./04-historias-usuario.md#hu-07), [CU-08](./09-casos-de-uso.md) / [HU-08](./04-historias-usuario.md#hu-08), [CU-09](./09-casos-de-uso.md) / [HU-09](./04-historias-usuario.md#hu-09) y [CU-11](./09-casos-de-uso.md) / [HU-11](./04-historias-usuario.md#hu-11)
+- Requisitos: RP-05, RP-07, RP-09, RP-10, RP-12, RD-01
 
-```mermaid
-stateDiagram-v2
-    [*] --> Vigente : generar guía de despacho [100% de piezas Listo y torres Cerradas]
-    Vigente --> Invalidada : desasignar pieza / reabrir torre [incluida en la guía] (RD-01)
-    Vigente --> Enviada : registrar envío [evidencia fotográfica del camión adjunta]
-    Invalidada --> [*]
-    Enviada --> [*]
-```
+![EST-03](./diagramas/est-03.png)
 
-Archivo fuente: [`./diagramas/est-03.mmd`](./diagramas/est-03.mmd)
+Archivo fuente: [`./diagramas/est-03.puml`](./diagramas/est-03.puml)
 
-### Descripción de los estados
-- **`Vigente`:** La guía oficial fue emitida en PDF tras validar que el 100% de las piezas del alcance solicitado están `Listo` y en torres `Cerradas`. Es apta para autorizar la carga del camión en bodega.
-- **`Invalidada`:** La guía perdió su validez oficial debido a que, con posterioridad a su emisión, se desasignó una pieza (HU-12) o se reabrió una torre incluida (HU-07), rompiendo la regla de integridad RD-01. Es un estado terminal: no admite registro de envío ni recupera vigencia; debe emitirse una nueva guía.
-- **`Enviada`:** El camión cargado salió de la bodega y el envío fue formalizado con la fotografía de respaldo adjunta. Es el estado final de cumplimiento exitoso.
+### Estados
 
-### Tabla de transiciones — GuiaDespacho
+- **Vigente:** la guía fue generada para un alcance completo con sus torres Cerradas y todavía no tiene envío registrado (HU-08 CA1 y CA3).
+- **Invalidada:** después de su generación cambió una pieza o una torre incluida, por lo que la guía ya no representa lo preparado (RD-01). No admite envío ni recupera su vigencia; debe generarse una guía nueva (HU-09 CA3 y CA4).
+- **Enviada:** el envío fue registrado con la evidencia fotográfica del camión cargado (HU-09 CA1).
+
+### Tabla de transiciones
+
 | Estado origen | Evento | Guarda | Acción | Estado destino |
-|---|---|---|---|---|
-| `[*]` | generar guía de despacho | 100% de piezas del alcance en estado Listo y torres asociadas Cerradas | generar documento oficial en PDF con número correlativo, fecha de emisión y detalle de piezas y torres | `Vigente` |
-| `Vigente` | desasignar pieza / reabrir torre | la pieza o torre modificada está incluida en la guía de despacho | marcar guía como anulada, bloquear registro de envío y notificar requerimiento de nueva guía (RD-01) | `Invalidada` |
-| `Vigente` | registrar envío | evidencia fotográfica del camión cargado adjunta | registrar salida de camión, almacenar evidencia fotográfica en servicio externo y cambiar piezas a estado Enviado | `Enviada` |
-| `Invalidada` | — | — | — | `[*]` |
-| `Enviada` | — | — | — | `[*]` |
+|---------------|--------|--------|--------|----------------|
+| Inicial | generar guía de despacho | alcance completo y torres Cerradas | — | Vigente |
+| Vigente | desasignar pieza | pieza incluida en la guía | — | Invalidada |
+| Vigente | asignar pieza a torre | pieza incluida en la guía y reemplazo confirmado | — | Invalidada |
+| Vigente | reabrir torre | torre incluida en la guía | — | Invalidada |
+| Vigente | registrar envío | evidencia almacenada | cambiar piezas a Enviado y registrar usuario, fecha y hora | Enviada |
+| Invalidada | — (finalización) | — | — | Final |
+| Enviada | — (finalización) | — | — | Final |
+
+«Alcance completo» significa que el alcance solicitado (una parte de la casa o el proyecto) contiene al menos una pieza y todas están en estado Listo (RP-08). Las tres transiciones de Vigente a Invalidada corresponden a HU-11 CA1 (desasignación), HU-05 CA3 (reasignación) y HU-07 CA3 (reapertura).
