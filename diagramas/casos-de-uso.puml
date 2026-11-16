@@ -1,0 +1,42 @@
+@startuml casos-de-uso
+left to right direction
+skinparam shadowing false
+title Casos de uso — SnapSip
+
+actor "Operario de Bodega" as OB
+actor "Encargado de Despacho" as ED
+actor "Servicio de autenticación" as SA <<sistema externo>>
+actor "Servicio de almacenamiento\nde evidencias" as SAE <<sistema externo>>
+
+rectangle "Sistema SnapSip" {
+  usecase "CU-01 Autenticar usuario" as CU01
+  usecase "CU-02 Crear proyecto" as CU02
+  usecase "CU-03 Inyectar piezas\ndesde plano/archivo" as CU03
+  usecase "CU-04 Crear torre" as CU04
+  usecase "CU-05 Asignar pieza a torre\ncon evidencia" as CU05
+  usecase "CU-06 Consultar piezas pendientes" as CU06
+  usecase "CU-07 Cerrar torre manualmente" as CU07
+  usecase "CU-08 Generar guía de despacho" as CU08
+  usecase "CU-09 Registrar envío\ncon evidencia" as CU09
+  usecase "CU-10 Eliminar torre vacía\ncon código" as CU10
+  usecase "CU-11 Desasignar pieza\nde una torre" as CU11
+}
+
+OB -- CU01
+OB -- CU04
+OB -- CU05
+OB -- CU06
+OB -- CU07
+OB -- CU10
+OB -- CU11
+
+ED -- CU01
+ED -- CU02
+ED -- CU03
+ED -- CU08
+ED -- CU09
+
+CU01 -- SA
+CU05 -- SAE
+CU09 -- SAE
+@enduml
