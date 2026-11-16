@@ -47,7 +47,7 @@ describe("HU-01 · Autenticación de usuarios (acceso por rol de demostración)"
     expect(res.status).toBe(200);
     expect(res.text).toContain("Acceso concedido");
     expect(res.text).toContain("Encargado de Despacho");
-    expect(res.text).toContain("Crear proyecto (HU-02, pendiente)");
+    expect(res.text).toContain("Crear proyecto (HU-02)");
     expect(res.text).not.toContain("Crear torre (HU-04, pendiente)");
   });
 
@@ -105,7 +105,7 @@ describe("HU-01 · Autenticación de usuarios (acceso por rol de demostración)"
     expect(segundo.status).toBe(200);
     expect(segundo.text).toContain("Acceso concedido");
     expect(segundo.text).toContain("Encargado de Despacho");
-    expect(segundo.text).toContain("Crear proyecto (HU-02, pendiente)");
+    expect(segundo.text).toContain("Crear proyecto (HU-02)");
     expect(segundo.text).not.toContain("Crear torre (HU-04, pendiente)");
   });
 });

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= titulo %></title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    header { background: #1f2937; color: #fff; padding: 12px 16px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .ok { color: #065f46; }
+    dl { display: grid; grid-template-columns: 180px 1fr; gap: 6px 12px; }
+    dt { font-weight: 600; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <header><strong>SnapSip</strong> — HU-02: Crear proyecto</header>
+  <main>
+    <div class="card">
+      <h1 class="ok"><%= titulo %></h1>
+      <p>El proyecto fue registrado correctamente.</p>
+      <dl>
+        <dt>Cliente</dt><dd><%= proyecto.cliente %></dd>
+        <dt>Código</dt><dd><%= proyecto.codigo %></dd>
+        <dt>Metraje</dt><dd><%= proyecto.metraje %></dd>
+        <dt>Estado</dt><dd><%= proyecto.estado %></dd>
+        <dt>Partes de la casa</dt><dd>0 (sin partes registradas)</dd>
+        <dt>Piezas</dt><dd>0 (sin piezas registradas)</dd>
+      </dl>
+      <p><a href="/proyectos/nuevo">Crear otro proyecto</a> · <a href="/proyectos">Ver proyectos</a> · <a href="/">Volver al inicio</a></p>
+    </div>
+  </main>
+</body>
+</html>

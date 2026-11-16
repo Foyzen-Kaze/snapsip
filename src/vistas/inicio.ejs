@@ -53,6 +53,9 @@
           <% }); %>
         </ul>
         <nav>
+          <% if (rolActual === 'Encargado de Despacho') { %>
+            <p><strong>HU-02:</strong> <a href="/proyectos/nuevo">Crear proyecto</a> · <a href="/proyectos">Ver proyectos</a></p>
+          <% } %>
           <p>Ejemplo protegido (HU-01/CA3): <a href="/operaciones/despacho/ejemplo">Operación protegida de ejemplo (solo Encargado de Despacho)</a></p>
         </nav>
       <% } else { %>

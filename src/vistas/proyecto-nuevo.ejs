@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= titulo %></title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    header { background: #1f2937; color: #fff; padding: 12px 16px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin-top: 10px; font-weight: 600; }
+    input { width: 100%; max-width: 420px; padding: 8px; margin-top: 4px; }
+    button { margin-top: 14px; padding: 8px 12px; }
+    .error { color: #b91c1c; margin-top: 8px; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <header><strong>SnapSip</strong> — HU-02: Crear proyecto (CU-02)</header>
+  <main>
+    <div class="card">
+      <h1><%= titulo %></h1>
+      <p>Rol actual: <strong><%= rolActual %></strong> (acceso de demostración).</p>
+      <% if (error) { %><p class="error"><strong><%= error %></strong></p><% } %>
+      <form method="POST" action="/proyectos">
+        <label for="cliente">Cliente *</label>
+        <input id="cliente" name="cliente" type="text" required value="<%= valores.cliente %>" />
+        <label for="codigo">Código *</label>
+        <input id="codigo" name="codigo" type="text" required value="<%= valores.codigo %>" />
+        <label for="metraje">Metraje *</label>
+        <input id="metraje" name="metraje" type="text" required value="<%= valores.metraje %>" />
+        <div>
+          <button type="submit">Registrar proyecto</button>
+        </div>
+      </form>
+      <p><a href="/proyectos">Ver proyectos registrados</a> · <a href="/">Volver al inicio</a></p>
+    </div>
+  </main>
+</body>
+</html>

@@ -3,8 +3,10 @@ import path from "path";
 import { contextoAcceso } from "./middleware/contextoAcceso";
 import { routerAcceso } from "./rutas/acceso";
 import { routerOperaciones } from "./rutas/operaciones";
+import { routerProyectos } from "./rutas/proyectos";
 
 // HU-01, CU-01, TO-BE Autenticación de usuarios: app web con selector de rol de demostración
+// HU-02, CU-02, TO-BE Crear proyecto: registro de proyectos (Encargado de Despacho)
 export function crearApp() {
   const app = express();
   app.locals.contadorOperacionesProtegidas = 0;
@@ -17,6 +19,7 @@ export function crearApp() {
 
   app.use(routerAcceso);
   app.use(routerOperaciones);
+  app.use(routerProyectos);
 
   return app;
 }

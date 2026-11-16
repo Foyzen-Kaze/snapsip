@@ -36,7 +36,7 @@
 | Historia | Estado | Cambio de OpenSpec | Fecha | Observaciones |
 |----------|--------|--------------------|-------|----------------|
 | HU-01 — Autenticación de usuarios | hecha | hu-01-autenticacion-usuarios (archivado: `openspec/changes/archive/2026-11-16-hu-01-autenticacion-usuarios/`) | 2026-11-16 | Ficha: `.cin324/historias/HU-01.md` (Opción 2: selector de rol de demostración). Specs sincronizadas en `openspec/specs/acceso-por-rol-demo/spec.md`. Instalar: `npm install`; seed: `npm run db:seed`; ejecutar: `npm run dev` (http://localhost:3000); pruebas: `npm test` (4/4). Servicio de autenticación simulado/omitido en flujo principal; SQLite vía `node:sqlite`. |
-| HU-02 — Crear proyecto | pendiente | — | — | Depende de HU-01 (acceso/autorización por rol en operaciones protegidas). |
+| HU-02 — Crear proyecto | hecha | hu-02-crear-proyecto (archivado: `openspec/changes/archive/2026-11-16-hu-02-crear-proyecto/`) | 2026-11-16 | Ficha: `.cin324/historias/HU-02.md`. Specs sincronizadas en `openspec/specs/crear-proyecto/spec.md`. Instalar: `npm install`; seed: `npm run db:seed`; ejecutar: `npm run dev` (http://localhost:3000); pruebas: `npm test` (7/7). CA3: condición implementada (estado "Sin piezas cargadas", sin partes/piezas); rechazo al crear torre corresponde a HU-04. |
 | HU-03 — Inyectar piezas desde plano/archivo | pendiente | — | — | Depende de HU-02 (proyecto existente, estado inicial). |
 | HU-04 — Crear torre | pendiente | — | — | Depende de HU-03 (universo de piezas cargado, partes de la casa). |
 | HU-05 — Asignar pieza a torre con evidencia | pendiente | — | — | Depende de HU-04 (torre) y HU-03 (piezas); integra almacenamiento de evidencias (simulado). |

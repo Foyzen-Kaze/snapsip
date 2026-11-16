@@ -13,7 +13,7 @@ export function esRolValido(rol: string | undefined | null): rol is RolDemo {
 export function funcionesPorRol(rol: RolDemo): string[] {
   if (rol === "Encargado de Despacho") {
     return [
-      "Crear proyecto (HU-02, pendiente)",
+      "Crear proyecto (HU-02)",
       "Inyectar piezas desde plano/archivo (HU-03, pendiente)",
       "Generar guía de despacho (HU-08, pendiente)",
       "Registrar envío con evidencia (HU-09, pendiente)",
