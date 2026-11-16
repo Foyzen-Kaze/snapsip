@@ -16,13 +16,13 @@ Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
 ## Casos de uso y su origen
 | ID | Caso de uso (objetivo del actor) | Actor principal | Sistema externo | Historia de origen |
 |----|-----------------------------------|-----------------|-----------------|---------------------|
-| CU-01 | Autenticar usuario | Operario de Bodega / Encargado de Despacho | Servicio de autenticación | [HU-01 Autenticación de usuarios](./04-historias-usuario.md#hu-01) |
+| CU-01 | Autenticación de usuarios | Operario de Bodega / Encargado de Despacho | Servicio de autenticación | [HU-01 Autenticación de usuarios](./04-historias-usuario.md#hu-01) |
 | CU-02 | Crear proyecto | Encargado de Despacho | — | [HU-02 Crear proyecto](./04-historias-usuario.md#hu-02) |
 | CU-03 | Inyectar piezas desde plano/archivo | Encargado de Despacho | — | [HU-03 Inyectar piezas desde plano/archivo](./04-historias-usuario.md#hu-03) |
 | CU-04 | Crear torre | Operario de Bodega | — | [HU-04 Crear torre](./04-historias-usuario.md#hu-04) |
 | CU-05 | Asignar pieza a torre con evidencia | Operario de Bodega | Servicio de almacenamiento de evidencias | [HU-05 Asignar pieza a torre con evidencia](./04-historias-usuario.md#hu-05) |
 | CU-06 | Consultar piezas pendientes | Operario de Bodega | — | [HU-06 Consultar piezas pendientes](./04-historias-usuario.md#hu-06) |
-| CU-07 | Cerrar torre manualmente | Operario de Bodega | — | [HU-07 Cierre manual de torre](./04-historias-usuario.md#hu-07) |
+| CU-07 | Cierre manual de torre | Operario de Bodega | — | [HU-07 Cierre manual de torre](./04-historias-usuario.md#hu-07) |
 | CU-08 | Generar guía de despacho | Encargado de Despacho | — | [HU-08 Generar guía de despacho](./04-historias-usuario.md#hu-08) |
 | CU-09 | Registrar envío con evidencia | Encargado de Despacho | Servicio de almacenamiento de evidencias | [HU-09 Registrar envío con evidencia](./04-historias-usuario.md#hu-09) |
 | CU-10 | Eliminar torre vacía con código | Operario de Bodega | — | [HU-10 Eliminar torre vacía con código](./04-historias-usuario.md#hu-10) |
