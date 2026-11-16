@@ -1,5 +1,5 @@
 @startuml dss-01
-title DSS-01 — Asignar pieza a torre con evidencia fotográfica
+title DSS-01 — Asignar pieza a torre con evidencia
 hide footbox
 skinparam shadowing false
 skinparam sequenceMessageAlign center
@@ -18,7 +18,7 @@ actor "Operario de Bodega" as OP
 participant ":SnapSip" as SS
 participant "Servicio de almacenamiento\nde evidencias" as ALM <<sistema externo>>
 
-OP -> SS : asignar pieza a torre(pieza, torre, evidencia fotográfica)
+OP -> SS : asignar pieza a torre con evidencia(pieza, torre, evidencia fotográfica)
 alt sin evidencia fotográfica
   SS --> OP : rechazo: se exige evidencia fotográfica
 else pieza Enviado
