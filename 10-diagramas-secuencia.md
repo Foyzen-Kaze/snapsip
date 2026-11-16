@@ -20,7 +20,7 @@ Notación utilizada:
 - Requisitos: RP-04, RP-05, RP-13, RP-15a
 - Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
-![DSS-01](./diagramas/dss-01pp.png)
+![DSS-01](./diagramas/dss-01.png)
 
 Archivo fuente: [`./diagramas/dss-01.puml`](./diagramas/dss-01.puml)
 
@@ -48,7 +48,7 @@ Variantes representadas:
 
 La integración con el sistema externo ocurre en CU-09. El diagrama incluye antes la generación de la guía (CU-08) porque un envío solo puede registrarse sobre una guía generada y Vigente (RP-10), y porque entre ambos momentos la guía puede quedar Invalidada (RD-01).
 
-![DSS-02](./diagramas/dss-02pp.png)
+![DSS-02](./diagramas/dss-02.png)
 
 Archivo fuente: [`./diagramas/dss-02.puml`](./diagramas/dss-02.puml)
 
@@ -78,7 +78,7 @@ Variantes representadas:
 
 SnapSip delega la verificación de credenciales en un servicio de autenticación administrado, opción que RP-15b contempla. SnapSip conserva el control de acceso según el rol del usuario (RP-16).
 
-![DSS-03](./diagramas/dss-03pp.png)
+![DSS-03](./diagramas/dss-03.png)
 
 Archivo fuente: [`./diagramas/dss-03.puml`](./diagramas/dss-03.puml)
 
