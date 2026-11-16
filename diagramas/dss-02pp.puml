@@ -1,0 +1,45 @@
+@startuml dss-02
+title DSS-02 — Generar guía de despacho y registrar envío con evidencia
+hide footbox
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 300
+skinparam sequence {
+  ArrowColor #343A40
+  LifeLineBorderColor #495057
+  ParticipantBackgroundColor #F8F9FA
+  ParticipantBorderColor #343A40
+  ActorBackgroundColor #F8F9FA
+  ActorBorderColor #343A40
+  GroupBorderColor #495057
+}
+
+actor "Encargado de Despacho" as ED
+participant ":SnapSip" as SS
+participant "Servicio de almacenamiento\nde evidencias" as ALM <<sistema externo>>
+
+ED -> SS : generar guía de despacho(proyecto, alcance)
+alt alcance incompleto o con torres Abiertas
+  SS --> ED : rechazo: impedimentos (piezas faltantes, torres sin cerrar)
+else alcance completo y torres Cerradas
+  SS --> ED : guía de despacho Vigente en PDF (proyecto, alcance, piezas, torres)
+  note over ED, SS : carga física del camión
+  ED -> SS : registrar envío(guía de despacho, evidencia fotográfica)
+  alt guía Invalidada (RD-01)
+    SS --> ED : rechazo: la guía fue invalidada, se debe generar una nueva
+  else envío ya registrado
+    SS --> ED : rechazo: se conserva el registro del envío anterior
+  else sin evidencia fotográfica
+    SS --> ED : rechazo: se exige evidencia fotográfica
+  else guía Vigente y evidencia adjunta
+    SS -> ALM : almacenar evidencia(fotografía)
+    alt evidencia almacenada
+      ALM --> SS : referencia de evidencia
+      SS --> ED : envío registrado: guía Enviada y piezas Enviado (usuario, fecha y hora)
+    else falla del servicio
+      ALM --> SS : error de almacenamiento
+      SS --> ED : rechazo: envío no registrado, la guía sigue Vigente
+    end
+  end
+end
+@enduml
