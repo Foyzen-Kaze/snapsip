@@ -1,0 +1,30 @@
+@startuml dss-03
+title DSS-03 — Iniciar sesión
+hide footbox
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 300
+skinparam sequence {
+  ArrowColor #343A40
+  LifeLineBorderColor #495057
+  ParticipantBackgroundColor #F8F9FA
+  ParticipantBorderColor #343A40
+  ActorBackgroundColor #F8F9FA
+  ActorBorderColor #343A40
+  GroupBorderColor #495057
+}
+
+actor "Usuario\n(Operario de Bodega o\nEncargado de Despacho)" as U
+participant ":SnapSip" as SS
+participant "Servicio de autenticación" as AUT <<sistema externo>>
+
+U -> SS : iniciar sesión(identificador, contraseña)
+SS -> AUT : verificar credenciales(identificador, contraseña)
+alt credenciales válidas
+  AUT --> SS : identidad verificada
+  SS --> U : acceso concedido a las funciones de su rol
+else credenciales inválidas
+  AUT --> SS : credenciales rechazadas
+  SS --> U : rechazo: credenciales inválidas
+end
+@enduml
