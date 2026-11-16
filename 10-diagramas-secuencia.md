@@ -13,10 +13,10 @@ Notación utilizada:
 
 ---
 
-## DSS-01 — Asignar pieza a torre con evidencia fotográfica
+## DSS-01 — Asignar pieza a torre con evidencia
 
-- Caso de uso: [CU-05 Asignar pieza a torre](./09-casos-de-uso.md)
-- Historia: [HU-05](./04-historias-usuario.md#hu-05)
+- Caso de uso: [CU-05 Asignar pieza a torre con evidencia](./09-casos-de-uso.md)
+- Historia: [HU-05 Asignar pieza a torre con evidencia](./04-historias-usuario.md#hu-05)
 - Requisitos: RP-04, RP-05, RP-13, RP-15a
 - Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
@@ -41,8 +41,8 @@ Variantes representadas:
 
 ## DSS-02 — Generar guía de despacho y registrar envío con evidencia
 
-- Caso de uso: [CU-09 Registrar envío](./09-casos-de-uso.md), precedido por [CU-08 Generar guía de despacho](./09-casos-de-uso.md)
-- Historia: [HU-09](./04-historias-usuario.md#hu-09), precedida por [HU-08](./04-historias-usuario.md#hu-08)
+- Caso de uso: [CU-09 Registrar envío con evidencia](./09-casos-de-uso.md), precedido por [CU-08 Generar guía de despacho](./09-casos-de-uso.md)
+- Historia: [HU-09 Registrar envío con evidencia](./04-historias-usuario.md#hu-09), precedida por [HU-08 Generar guía de despacho](./04-historias-usuario.md#hu-08)
 - Requisitos: RP-08, RP-09, RP-10, RP-12, RP-14, RP-15a, RD-01
 - Sistemas externos que participan: Servicio de almacenamiento de evidencias
 
@@ -57,9 +57,9 @@ Variantes representadas:
 - **`alt` de la generación de la guía:**
   - **[alcance incompleto o con torres Abiertas]:** SnapSip rechaza la generación e informa los impedimentos (HU-08 CA2 y CA4; RP-09). Un alcance sin piezas o con piezas ya enviadas tampoco está completo y recibe el mismo rechazo (HU-08 CA7 y CA8).
   - **[alcance completo y torres Cerradas]:** SnapSip entrega la guía de despacho en PDF, en estado Vigente, con el proyecto, el alcance, las piezas y las torres (HU-08 CA1, CA3 y CA5).
-- **Nota «carga física del camión»:** indica el tiempo que transcurre en bodega entre la generación de la guía y el registro del envío. Durante ese tiempo la guía puede quedar Invalidada.
+- **Nota «Cargar camión»:** corresponde a la tarea manual «Cargar camión» del [diagrama TO-BE](./02-rediseno-to-be.md), que ocurre fuera del sistema entre la generación de la guía y el registro del envío. Durante ese tiempo la guía puede quedar Invalidada.
 - **`alt` del registro del envío**, con cuatro escenarios excluyentes:
-  - **[guía Invalidada (RD-01)]:** SnapSip rechaza el registro y exige generar una guía nueva (HU-09 CA3 y CA4). Es el efecto de la desasignación de una pieza incluida en la guía (RP-12).
+  - **[guía Invalidada (RD-01)]:** SnapSip rechaza el registro y exige generar una guía nueva (HU-09 CA3 y CA4). Es el efecto de desasignar o reasignar una pieza incluida en la guía, o de reabrir una torre incluida (RD-01).
   - **[envío ya registrado]:** SnapSip rechaza el registro y conserva el envío anterior (HU-09 CA5).
   - **[sin evidencia fotográfica]:** SnapSip rechaza el registro y exige la fotografía del camión cargado (HU-09 CA2).
   - **[guía Vigente y evidencia adjunta]:** es el escenario principal y continúa con el almacenamiento de la evidencia.
@@ -69,10 +69,10 @@ Variantes representadas:
 
 ---
 
-## DSS-03 — Iniciar sesión
+## DSS-03 — Autenticarse
 
-- Caso de uso: [CU-01 Iniciar sesión](./09-casos-de-uso.md)
-- Historia: [HU-01](./04-historias-usuario.md#hu-01)
+- Caso de uso: [CU-01 Autenticarse](./09-casos-de-uso.md)
+- Historia: [HU-01 Autenticación de usuarios](./04-historias-usuario.md#hu-01)
 - Requisitos: RP-01, RP-14, RP-15a, RP-15b, RP-16
 - Sistemas externos que participan: Servicio de autenticación
 
@@ -92,13 +92,24 @@ Variantes representadas:
 
 ## Correspondencia entre mensajes y eventos de estado
 
-Cada mensaje de un actor que cambia el estado de un objeto del dominio aparece con el mismo nombre como evento en los [diagramas de estado](./11-diagramas-estado.md):
+Cada mensaje de un actor lleva el nombre de su caso de uso en minúscula. Los que cambian el estado de un objeto del dominio aparecen con ese mismo nombre como evento en los [diagramas de estado](./11-diagramas-estado.md):
 
 | Mensaje del actor | DSS | Evento en diagrama de estado | Diagrama de estado |
 |---|---|---|---|
-| asignar pieza a torre | DSS-01 | asignar pieza a torre | EST-01 (Pieza), EST-03 (GuiaDespacho, cuando es una reasignación) |
+| asignar pieza a torre con evidencia | DSS-01 | asignar pieza a torre con evidencia | EST-01 (Pieza), EST-03 (GuiaDespacho, cuando es una reasignación) |
 | generar guía de despacho | DSS-02 | generar guía de despacho | EST-03 (GuiaDespacho) |
-| registrar envío | DSS-02 | registrar envío | EST-01 (Pieza), EST-02 (Torre), EST-03 (GuiaDespacho) |
-| iniciar sesión | DSS-03 | — (no cambia el estado de ningún objeto del dominio) | — |
+| registrar envío con evidencia | DSS-02 | registrar envío con evidencia | EST-01 (Pieza), EST-02 (Torre), EST-03 (GuiaDespacho) |
+| autenticarse | DSS-03 | — (no cambia el estado de ningún objeto del dominio) | — |
 
-Los eventos `desasignar pieza` ([CU-11](./09-casos-de-uso.md) / [HU-11](./04-historias-usuario.md#hu-11)) y `reabrir torre` ([CU-07](./09-casos-de-uso.md) / [HU-07](./04-historias-usuario.md#hu-07)) invalidan la guía en EST-03. Sus historias no se integran con sistemas externos, por lo que no tienen un diagrama de secuencia propio. En DSS-02 se representa su efecto: la variante [guía Invalidada (RD-01)].
+Los demás eventos de los diagramas de estado pertenecen a casos de uso que no se integran con sistemas externos, por lo que no tienen un diagrama de secuencia propio:
+
+| Evento en diagrama de estado | Caso de uso | Diagrama de estado |
+|---|---|---|
+| inyectar piezas desde plano/archivo | [CU-03 Inyectar piezas desde plano/archivo](./09-casos-de-uso.md) | EST-01 |
+| crear torre | [CU-04 Crear torre](./09-casos-de-uso.md) | EST-02 |
+| cerrar torre manualmente | [CU-07 Cerrar torre manualmente](./09-casos-de-uso.md) | EST-02 |
+| reabrir torre | [CU-07 Cerrar torre manualmente](./09-casos-de-uso.md) (variante de HU-07 CA3) | EST-02, EST-03 |
+| eliminar torre vacía con código | [CU-10 Eliminar torre vacía con código](./09-casos-de-uso.md) | EST-02 |
+| desasignar pieza de una torre | [CU-11 Desasignar pieza de una torre](./09-casos-de-uso.md) | EST-01, EST-03 |
+
+`desasignar pieza de una torre` y `reabrir torre`, igual que la reasignación de DSS-01, invalidan la guía en EST-03 (RD-01). En DSS-02 se representa ese efecto: la variante [guía Invalidada (RD-01)].
