@@ -3,7 +3,7 @@
 ## Diagrama
 ![Modelo de dominio](./diagramas/modelodedominio.png)
 
-Archivo fuente: [`./diagramas/modelo-dominio.puml`](diagramas/modelo-de-dominio.puml)
+Archivo fuente: [`./diagramas/modelo-de-dominio.puml`](./diagramas/modelo-de-dominio.puml)
 
 ## Descripción de las clases
 | Clase | Qué representa en el negocio | Atributos |
@@ -18,7 +18,7 @@ Archivo fuente: [`./diagramas/modelo-dominio.puml`](diagramas/modelo-de-dominio.
 ## Asociaciones
 | Asociación | Clases | Multiplicidades | Justificación |
 |------------|--------|-----------------|----------------|
-| se divide en (composición) | Proyecto – ParteCasa | 1 a 0..* | Una parte de la casa solo existe dentro de su proyecto. El proyecto se crea sin partes y las recibe al cargar el universo de piezas (RP-02, RP-03). |
+| se divide en (composición) | Proyecto – ParteCasa | 1 a 0..* | Una parte de la casa solo existe dentro de su proyecto. El proyecto se crea sin partes y las recibe al inyectar las piezas desde plano/archivo (RP-02, RP-03). |
 | se compone de (composición) | ParteCasa – Pieza | 1 a 1..* | Cada panel se carga dentro de una parte de la casa y pertenece a ella toda su vida. Una parte existe porque el archivo de piezas le trae al menos un panel (RP-03). |
 | se almacena en | ParteCasa – Torre | 1 a 0..* | Cada torre pertenece a una única parte de la casa. Una parte puede ocupar varias torres, con numeración correlativa (RP-04, HU-04 CA2). |
 | agrupa (agregación) | Torre – Pieza | 0..1 a 0..* | Un panel está en una sola torre a la vez, y un panel Pendiente no está en ninguna. La torre puede estar vacía (RP-05, RP-11, RP-12). |
