@@ -9,13 +9,13 @@ actor "Servicio de autenticación" as SA <<sistema externo>>
 actor "Servicio de almacenamiento\nde evidencias" as SAE <<sistema externo>>
 
 rectangle "Sistema SnapSip" {
-  usecase "CU-01 Autenticación de usuarios" as CU01
+  usecase "CU-01 Autenticarse" as CU01
   usecase "CU-02 Crear proyecto" as CU02
   usecase "CU-03 Inyectar piezas\ndesde plano/archivo" as CU03
   usecase "CU-04 Crear torre" as CU04
   usecase "CU-05 Asignar pieza a torre\ncon evidencia" as CU05
   usecase "CU-06 Consultar piezas pendientes" as CU06
-  usecase "CU-07 Cierre manual de torre" as CU07
+  usecase "CU-07 Cerrar torre manualmente" as CU07
   usecase "CU-08 Generar guía de despacho" as CU08
   usecase "CU-09 Registrar envío\ncon evidencia" as CU09
   usecase "CU-10 Eliminar torre vacía\ncon código" as CU10
