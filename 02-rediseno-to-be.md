@@ -9,19 +9,19 @@
 ## Iniciativas de rediseño
 
 ### Iniciativa 1: Ingreso estructurado del universo de piezas
-- Actividad(es) del AS-IS que afecta: Recepción y lectura de planos / Ingreso manual de piezas.
+- Actividad(es) del AS-IS que afecta: Buscar freneticamente las piezas faltantes en la bodega (hoy no existe un listado de las piezas del proyecto contra el cual comparar).
 - Heurística aplicada: **Automatización / Captura de datos en el origen**
 - Objetivo o mejora que resuelve: Evitar el ingreso manual pieza por pieza, mitigando errores de tipeo y acelerando el inicio del control.
 - Efecto esperado (tiempo/costo/calidad/flexibilidad): Reducción del tiempo de inicio de proyecto y aumento de la calidad (cero piezas omitidas al inyectar un CSV/Excel).
 
 ### Iniciativa 2: Validación fotográfica in situ
-- Actividad(es) del AS-IS que afecta: Marcado físico de la pieza en bodega / Verificación de completitud.
+- Actividad(es) del AS-IS que afecta: Apilar torre verticalmente sobre otros proyectos o hacia el lado / Revisar visualmente las piezas mientras se carga el camion.
 - Heurística aplicada: **Poka-Yoke (Prevención de errores) / Trazabilidad**
 - Objetivo o mejora que resuelve: Asegurar que la pieza realmente existe físicamente en la torre, evitando marcas falsas.
 - Efecto esperado (tiempo/costo/calidad/flexibilidad): Aumento drástico de la calidad del inventario despachado y reducción de costos por fletes de reposición.
 
 ### Iniciativa 3: Bloqueo sistémico de la Guía de Despacho
-- Actividad(es) del AS-IS que afecta: Generación de documento de despacho / Control de salida del camión.
+- Actividad(es) del AS-IS que afecta: Revisar visualmente las piezas mientras se carga el camion / Anotar pieza faltante para envio posterior / General Respaldo Manual.
 - Heurística aplicada: **Control basado en reglas de negocio (Business Rule Task)**
 - Objetivo o mejora que resuelve: Impedir que un camión salga si falta una sola pieza del proyecto.
 - Efecto esperado (tiempo/costo/calidad/flexibilidad): Eliminación del costo por envíos incompletos (calidad y costo).
@@ -38,14 +38,14 @@ Nota: El diagrama distingue tareas de usuario (icono de persona), tareas de serv
 | Actividad en el AS-IS | Actividad en el TO-BE | Qué cambia |
 |-------------------------|--------------------------|------------|
 | - | Autenticación de usuarios | (Nueva actividad) Cada usuario ingresa con sus credenciales y accede solo a las funciones de su rol. |
-| Ingresar proyecto manualmente en pizarra/cuaderno | Crear proyecto | Pasa de un registro físico vulnerable a un registro digital estructurado. |
-| Interpretar plano e ingresar piezas una a una | Inyectar piezas desde plano/archivo | El sistema inyecta el total de piezas desde un archivo, automatizando el registro inicial en estado "Pendiente". |
-| Agrupar piezas físicamente sin registro | Crear torre | Se crea un contenedor lógico en el sistema (Torre) asociado a una parte específica de la casa. |
-| Tachar pieza en el plano impreso | Asignar pieza a torre con evidencia | El operario marca la pieza en el sistema y se exige adjuntar evidencia fotográfica obligatoria. |
-| Revisar torre físicamente para ver qué falta | Consultar piezas pendientes | El sistema filtra y muestra en tiempo real únicamente las piezas que faltan por asignar. |
+| - | Crear proyecto | (Nueva actividad) El proyecto queda registrado en el sistema con su cliente, código y metraje, en lugar de existir solo en papel. |
+| - | Inyectar piezas desde plano/archivo | (Nueva actividad) El sistema inyecta el total de piezas desde un archivo, automatizando el registro inicial en estado "Pendiente". Así existe un listado contra el cual controlar lo que falta. |
+| Apilar torre verticalmente sobre otros proyectos o hacia el lado | Crear torre | La torre deja de ser solo una pila física: se crea en el sistema asociada a un proyecto y a una parte específica de la casa. |
+| Apilar torre verticalmente sobre otros proyectos o hacia el lado | Asignar pieza a torre con evidencia | Cada pieza que se apila queda registrada en su torre y se exige adjuntar evidencia fotográfica obligatoria. |
+| Buscar freneticamente las piezas faltantes en la bodega | Consultar piezas pendientes | En lugar de buscar a ciegas durante la carga, el sistema muestra en tiempo real únicamente las piezas que faltan por asignar. |
 | - | Cierre manual de torre | (Nueva actividad) El operario clausura la recepción de piezas en una torre por falta de espacio físico. |
-| Revisión ocular de todas las torres | Validar completitud por Parte o Proyecto | (Tarea de servicio) El sistema valida automáticamente si el 100% de las piezas de un proyecto están en estado "Listo". |
-| Escribir guía a mano o en Excel sin restricciones | Generar guía de despacho | El sistema genera el PDF de forma automatizada, condicionado estrictamente a la validación de completitud previa. |
-| Despachar camión | Registrar envío con evidencia | Se exige tomar una fotografía de evidencia del camión cargado antes de dar de baja el inventario. |
+| Revisar visualmente las piezas mientras se carga el camion / Anotar pieza faltante para envio posterior | Validar completitud por Parte o Proyecto | (Tarea de servicio) La revisión deja de ser visual y durante la carga: el sistema valida antes del despacho que el 100% de las piezas del alcance estén en estado "Listo", por lo que ya no se despachan piezas pendientes para un envío posterior. |
+| Recibir orden de despacho | Generar guía de despacho | La orden de despacho pasa a ser una guía PDF generada por el sistema, condicionada estrictamente a la validación de completitud previa. |
+| General Respaldo Manual | Registrar envío con evidencia | El respaldo manual (fotos o papeles) se reemplaza por el registro del envío en el sistema, con fotografía obligatoria del camión cargado. |
 | - | Eliminar torre vacía con código | (Nueva actividad) Borrado lógico protegido mediante código de confirmación. |
-| Despachar pieza equivocada y arreglarlo en planta | Desasignar pieza de una torre | (Nueva actividad) Permite al operario corregir un error de asignación en terreno devolviendo la pieza a estado "Pendiente". |
+| - | Desasignar pieza de una torre | (Nueva actividad) Permite al operario corregir un error de asignación devolviendo la pieza a estado "Pendiente", en lugar de detectarlo recién al cargar el camión. |
