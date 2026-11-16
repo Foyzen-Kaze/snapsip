@@ -5,7 +5,7 @@ Este documento presenta los diagramas de estado de **SnapSip** en notación UML 
 Convenciones:
 
 - Los estados son situaciones del negocio, con los mismos nombres que los valores del atributo `estado` en el modelo de dominio.
-- Cada transición se rotula `evento [guarda] / acción`. Los eventos llevan el nombre del caso de uso que los origina y coinciden con los mensajes de los [diagramas de secuencia](./10-diagramas-secuencia.md) cuando la historia tiene uno.
+- Cada transición se rotula `evento [guarda] / acción`. Cada evento es el nombre del caso de uso que lo origina, en minúscula, y coincide con el mensaje del [diagrama de secuencia](./10-diagramas-secuencia.md) cuando ese caso de uso tiene uno. La única excepción es `reabrir torre`, una variante de CU-07 Cerrar torre manualmente (HU-07 CA3).
 - Una transición hacia el estado final sin evento es una transición de finalización: el objeto ya no admite más cambios y su ciclo de vida termina.
 
 ---
@@ -13,8 +13,8 @@ Convenciones:
 ## EST-01 — Ciclo de vida de Pieza
 
 - Clase del dominio: [Pieza](./08-modelo-dominio.md)
-- Diagramas de secuencia relacionados: [DSS-01](./10-diagramas-secuencia.md) (asignar pieza a torre) y [DSS-02](./10-diagramas-secuencia.md) (registrar envío)
-- Casos de uso e historias de origen: [CU-03](./09-casos-de-uso.md) / [HU-03](./04-historias-usuario.md#hu-03), [CU-05](./09-casos-de-uso.md) / [HU-05](./04-historias-usuario.md#hu-05), [CU-09](./09-casos-de-uso.md) / [HU-09](./04-historias-usuario.md#hu-09) y [CU-11](./09-casos-de-uso.md) / [HU-11](./04-historias-usuario.md#hu-11)
+- Diagramas de secuencia relacionados: [DSS-01](./10-diagramas-secuencia.md) (asignar pieza a torre con evidencia) y [DSS-02](./10-diagramas-secuencia.md) (registrar envío con evidencia)
+- Casos de uso e historias de origen: [CU-03 Inyectar piezas desde plano/archivo](./09-casos-de-uso.md) / [HU-03](./04-historias-usuario.md#hu-03), [CU-05 Asignar pieza a torre con evidencia](./09-casos-de-uso.md) / [HU-05](./04-historias-usuario.md#hu-05), [CU-09 Registrar envío con evidencia](./09-casos-de-uso.md) / [HU-09](./04-historias-usuario.md#hu-09) y [CU-11 Desasignar pieza de una torre](./09-casos-de-uso.md) / [HU-11](./04-historias-usuario.md#hu-11)
 - Requisitos: RP-03, RP-05, RP-10, RP-12, RD-01
 
 ![EST-01](./diagramas/est-01.png)
@@ -31,11 +31,11 @@ Archivo fuente: [`./diagramas/est-01.puml`](./diagramas/est-01.puml)
 
 | Estado origen | Evento | Guarda | Acción | Estado destino |
 |---------------|--------|--------|--------|----------------|
-| Inicial | cargar universo de piezas | archivo válido | — | Pendiente |
-| Pendiente | asignar pieza a torre | torre Abierta de la misma parte y evidencia almacenada | registrar evidencia, usuario, fecha y hora | Listo |
-| Listo | asignar pieza a torre | otra torre Abierta de la misma parte, reemplazo confirmado y evidencia almacenada | invalidar evidencia anterior y guías Vigentes que incluyen la pieza | Listo |
-| Listo | desasignar pieza | — | invalidar evidencia y guías Vigentes que incluyen la pieza | Pendiente |
-| Listo | registrar envío | guía Vigente que incluye la pieza y evidencia almacenada | — | Enviado |
+| Inicial | inyectar piezas desde plano/archivo | archivo válido | — | Pendiente |
+| Pendiente | asignar pieza a torre con evidencia | torre Abierta de la misma parte y evidencia almacenada | registrar evidencia, usuario, fecha y hora | Listo |
+| Listo | asignar pieza a torre con evidencia | otra torre Abierta de la misma parte, reemplazo confirmado y evidencia almacenada | invalidar evidencia anterior y guías Vigentes que incluyen la pieza | Listo |
+| Listo | desasignar pieza de una torre | — | invalidar evidencia y guías Vigentes que incluyen la pieza | Pendiente |
+| Listo | registrar envío con evidencia | guía Vigente que incluye la pieza y evidencia almacenada | — | Enviado |
 | Enviado | — (finalización) | — | — | Final |
 
 ---
@@ -43,8 +43,8 @@ Archivo fuente: [`./diagramas/est-01.puml`](./diagramas/est-01.puml)
 ## EST-02 — Ciclo de vida de Torre
 
 - Clase del dominio: [Torre](./08-modelo-dominio.md)
-- Diagramas de secuencia relacionados: [DSS-02](./10-diagramas-secuencia.md) (registrar envío). En [DSS-01](./10-diagramas-secuencia.md), el estado de la torre aparece como condición de la asignación.
-- Casos de uso e historias de origen: [CU-04](./09-casos-de-uso.md) / [HU-04](./04-historias-usuario.md#hu-04), [CU-07](./09-casos-de-uso.md) / [HU-07](./04-historias-usuario.md#hu-07), [CU-09](./09-casos-de-uso.md) / [HU-09](./04-historias-usuario.md#hu-09) y [CU-10](./09-casos-de-uso.md) / [HU-10](./04-historias-usuario.md#hu-10)
+- Diagramas de secuencia relacionados: [DSS-02](./10-diagramas-secuencia.md) (registrar envío con evidencia). En [DSS-01](./10-diagramas-secuencia.md), el estado de la torre aparece como condición de la asignación.
+- Casos de uso e historias de origen: [CU-04 Crear torre](./09-casos-de-uso.md) / [HU-04](./04-historias-usuario.md#hu-04), [CU-07 Cerrar torre manualmente](./09-casos-de-uso.md) / [HU-07](./04-historias-usuario.md#hu-07), [CU-09 Registrar envío con evidencia](./09-casos-de-uso.md) / [HU-09](./04-historias-usuario.md#hu-09) y [CU-10 Eliminar torre vacía con código](./09-casos-de-uso.md) / [HU-10](./04-historias-usuario.md#hu-10)
 - Requisitos: RP-04, RP-07, RP-10, RP-11, RD-01
 
 ![EST-02](./diagramas/est-02.png)
@@ -63,23 +63,23 @@ El envío no crea un estado nuevo: al registrarse el envío de la guía que la i
 
 | Estado origen | Evento | Guarda | Acción | Estado destino |
 |---------------|--------|--------|--------|----------------|
-| Inicial | registrar torre | universo de piezas cargado | asignar numeración correlativa | Abierta |
-| Abierta | cerrar torre | al menos una pieza asignada | — | Cerrada |
+| Inicial | crear torre | universo de piezas inyectado | asignar numeración correlativa | Abierta |
+| Abierta | cerrar torre manualmente | al menos una pieza asignada | — | Cerrada |
 | Cerrada | reabrir torre | ninguna pieza Enviado | invalidar guías Vigentes que incluyen la torre | Abierta |
-| Abierta | eliminar torre | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
-| Cerrada | eliminar torre | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
-| Cerrada | registrar envío | guía Vigente que incluye la torre y evidencia almacenada | — | Final |
+| Abierta | eliminar torre vacía con código | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
+| Cerrada | eliminar torre vacía con código | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
+| Cerrada | registrar envío con evidencia | guía Vigente que incluye la torre y evidencia almacenada | — | Final |
 | Eliminada | — (finalización) | — | — | Final |
 
-Una torre Cerrada puede quedar vacía si todas sus piezas se desasignan (HU-11 CA1). HU-10 CA1 solo exige que la torre esté vacía y que el código coincida, por lo que `eliminar torre` parte tanto de Abierta como de Cerrada.
+Una torre Cerrada puede quedar vacía si todas sus piezas se desasignan (HU-11 CA1). HU-10 CA1 solo exige que la torre esté vacía y que el código coincida, por lo que `eliminar torre vacía con código` parte tanto de Abierta como de Cerrada.
 
 ---
 
 ## EST-03 — Ciclo de vida de GuiaDespacho
 
 - Clase del dominio: [GuiaDespacho](./08-modelo-dominio.md)
-- Diagramas de secuencia relacionados: [DSS-02](./10-diagramas-secuencia.md) (generar guía de despacho y registrar envío) y [DSS-01](./10-diagramas-secuencia.md) (asignar pieza a torre, en su variante de reasignación)
-- Casos de uso e historias de origen: [CU-05](./09-casos-de-uso.md) / [HU-05](./04-historias-usuario.md#hu-05), [CU-07](./09-casos-de-uso.md) / [HU-07](./04-historias-usuario.md#hu-07), [CU-08](./09-casos-de-uso.md) / [HU-08](./04-historias-usuario.md#hu-08), [CU-09](./09-casos-de-uso.md) / [HU-09](./04-historias-usuario.md#hu-09) y [CU-11](./09-casos-de-uso.md) / [HU-11](./04-historias-usuario.md#hu-11)
+- Diagramas de secuencia relacionados: [DSS-02](./10-diagramas-secuencia.md) (generar guía de despacho y registrar envío con evidencia) y [DSS-01](./10-diagramas-secuencia.md) (asignar pieza a torre con evidencia, en su variante de reasignación)
+- Casos de uso e historias de origen: [CU-05 Asignar pieza a torre con evidencia](./09-casos-de-uso.md) / [HU-05](./04-historias-usuario.md#hu-05), [CU-07 Cerrar torre manualmente](./09-casos-de-uso.md) / [HU-07](./04-historias-usuario.md#hu-07), [CU-08 Generar guía de despacho](./09-casos-de-uso.md) / [HU-08](./04-historias-usuario.md#hu-08), [CU-09 Registrar envío con evidencia](./09-casos-de-uso.md) / [HU-09](./04-historias-usuario.md#hu-09) y [CU-11 Desasignar pieza de una torre](./09-casos-de-uso.md) / [HU-11](./04-historias-usuario.md#hu-11)
 - Requisitos: RP-05, RP-07, RP-09, RP-10, RP-12, RD-01
 
 ![EST-03](./diagramas/est-03.png)
@@ -97,10 +97,10 @@ Archivo fuente: [`./diagramas/est-03.puml`](./diagramas/est-03.puml)
 | Estado origen | Evento | Guarda | Acción | Estado destino |
 |---------------|--------|--------|--------|----------------|
 | Inicial | generar guía de despacho | alcance completo y torres Cerradas | — | Vigente |
-| Vigente | desasignar pieza | pieza incluida en la guía | — | Invalidada |
-| Vigente | asignar pieza a torre | pieza incluida en la guía y reemplazo confirmado | — | Invalidada |
+| Vigente | desasignar pieza de una torre | pieza incluida en la guía | — | Invalidada |
+| Vigente | asignar pieza a torre con evidencia | pieza incluida en la guía y reemplazo confirmado | — | Invalidada |
 | Vigente | reabrir torre | torre incluida en la guía | — | Invalidada |
-| Vigente | registrar envío | evidencia almacenada | cambiar piezas a Enviado y registrar usuario, fecha y hora | Enviada |
+| Vigente | registrar envío con evidencia | evidencia almacenada | cambiar piezas a Enviado y registrar usuario, fecha y hora | Enviada |
 | Invalidada | — (finalización) | — | — | Final |
 | Enviada | — (finalización) | — | — | Final |
 
