@@ -80,7 +80,7 @@ SnapSip delega la verificación de credenciales en un servicio de autenticación
 
 ![DSS-03](./diagramas/dss-03pp.png)
 
-Archivo fuente: [`./diagramas/dss-03.puml`](./diagramas/dss-03pp.puml)
+Archivo fuente: [`./diagramas/dss-03pp.puml`](./diagramas/dss-03pp.puml)
 
 Variantes representadas:
 
