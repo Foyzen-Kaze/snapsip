@@ -23,8 +23,8 @@ alt alcance incompleto o con torres Abiertas
   SS --> ED : rechazo: impedimentos (piezas faltantes, torres sin cerrar)
 else alcance completo y torres Cerradas
   SS --> ED : guía de despacho Vigente en PDF (proyecto, alcance, piezas, torres)
-  note over ED, SS : carga física del camión
-  ED -> SS : registrar envío(guía de despacho, evidencia fotográfica)
+  note over ED, SS : Cargar camión (tarea manual del TO-BE)
+  ED -> SS : registrar envío con evidencia(guía de despacho, evidencia fotográfica)
   alt guía Invalidada (RD-01)
     SS --> ED : rechazo: la guía fue invalidada, se debe generar una nueva
   else envío ya registrado
