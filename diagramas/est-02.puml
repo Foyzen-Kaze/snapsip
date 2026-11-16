@@ -10,11 +10,11 @@ skinparam state {
   EndColor #343A40
 }
 
-[*] --> Abierta : registrar torre\n[universo de piezas cargado]\n/ asignar numeración correlativa
-Abierta --> Cerrada : cerrar torre\n[al menos una pieza asignada]
+[*] --> Abierta : crear torre\n[universo de piezas inyectado]\n/ asignar numeración correlativa
+Abierta --> Cerrada : cerrar torre manualmente\n[al menos una pieza asignada]
 Cerrada --> Abierta : reabrir torre\n[ninguna pieza Enviado]\n/ invalidar guías Vigentes\nque incluyen la torre
-Abierta --> Eliminada : eliminar torre\n[torre vacía y código coincide]\n/ registrar usuario, fecha y hora
-Cerrada --> Eliminada : eliminar torre\n[torre vacía y código coincide]\n/ registrar usuario, fecha y hora
-Cerrada --> [*] : registrar envío\n[guía Vigente que incluye la torre\ny evidencia almacenada]
+Abierta --> Eliminada : eliminar torre vacía con código\n[torre vacía y código coincide]\n/ registrar usuario, fecha y hora
+Cerrada --> Eliminada : eliminar torre vacía con código\n[torre vacía y código coincide]\n/ registrar usuario, fecha y hora
+Cerrada --> [*] : registrar envío con evidencia\n[guía Vigente que incluye la torre\ny evidencia almacenada]
 Eliminada --> [*]
 @enduml
