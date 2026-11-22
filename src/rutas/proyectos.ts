@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { requiereRol } from "../middleware/contextoAcceso";
 import { crearProyecto, listarProyectos } from "../dominio/proyectos";
+import { inyectarPiezasDesdePlano } from "../dominio/piezas";
 
 export const routerProyectos = Router();
 
@@ -49,6 +50,28 @@ routerProyectos.post(
     return res.status(201).render("proyecto-creado", {
       titulo: "Proyecto creado",
       proyecto: resultado.proyecto,
+    });
+  }
+);
+
+// HU-03, CU-03, TO-BE Inyectar piezas desde plano/archivo: acción simulada del Encargado de Despacho
+routerProyectos.post(
+  "/proyectos/:codigo/inyectar-piezas",
+  requiereRol(["Encargado de Despacho"]),
+  (req, res) => {
+    const codigo = String(req.params.codigo);
+    const resultado = inyectarPiezasDesdePlano(codigo);
+    if (!resultado.ok) {
+      return res.status(400).render("inyeccion-resultado", {
+        titulo: "No se pudo inyectar piezas",
+        universo: null,
+        error: resultado.mensaje,
+      });
+    }
+    return res.status(201).render("inyeccion-resultado", {
+      titulo: "Piezas inyectadas",
+      universo: resultado.universo,
+      error: null as string | null,
     });
   }
 );

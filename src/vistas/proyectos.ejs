@@ -16,7 +16,7 @@
   </style>
 </head>
 <body>
-  <header><strong>SnapSip</strong> — HU-02: Proyectos</header>
+  <header><strong>SnapSip</strong> — HU-02 / HU-03: Proyectos</header>
   <main>
     <div class="card">
       <h1><%= titulo %></h1>
@@ -26,7 +26,7 @@
       <% } else { %>
         <table>
           <thead>
-            <tr><th>Código</th><th>Cliente</th><th>Metraje</th><th>Estado</th><th>Partes</th><th>Piezas</th></tr>
+            <tr><th>Código</th><th>Cliente</th><th>Metraje</th><th>Estado</th><th>Partes</th><th>Piezas</th><th>Inyección de piezas</th></tr>
           </thead>
           <tbody>
             <% proyectos.forEach(function(p) { %>
@@ -35,8 +35,18 @@
                 <td><%= p.cliente %></td>
                 <td><%= p.metraje %></td>
                 <td><%= p.estado %></td>
-                <td>0</td>
-                <td>0</td>
+                <td><%= p.partes %></td>
+                <td><%= p.piezas %></td>
+                <td>
+                  <% if (rolActual === 'Encargado de Despacho' && p.estado === 'Sin piezas cargadas' && p.partes === 0 && p.piezas === 0) { %>
+                    <form method="post" action="/proyectos/<%= encodeURIComponent(p.codigo) %>/inyectar-piezas">
+                      <button type="submit">Inyectar piezas desde plano/archivo</button>
+                    </form>
+                    <small>Plano/archivo simulado (demo).</small>
+                  <% } else { %>
+                    <small>Sin acción disponible.</small>
+                  <% } %>
+                </td>
               </tr>
             <% }); %>
           </tbody>

@@ -114,13 +114,14 @@ describe("HU-02 · Crear proyecto", () => {
     expect(proyecto).toBeTruthy();
     expect(proyecto.estado).toBe("Sin piezas cargadas");
 
-    // Sin partes de la casa ni piezas registradas (HU-02 no crea tablas de ParteCasa/Pieza; el proyecto no tiene partes/piezas)
-    const tablas = obtenerBd()
+    // Sin partes de la casa ni piezas registradas para este proyecto (las tablas ya existen desde HU-03)
+    const conteos = obtenerBd()
       .prepare(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('partes_casa','piezas')"
+        "SELECT (SELECT COUNT(*) FROM partes_casa WHERE proyecto_id = (SELECT id FROM proyectos WHERE codigo = ?)) AS partes, (SELECT COUNT(*) FROM piezas p JOIN partes_casa pc ON pc.id = p.parte_casa_id WHERE pc.proyecto_id = (SELECT id FROM proyectos WHERE codigo = ?)) AS piezas"
       )
-      .all() as any[];
-    expect(tablas.length).toBe(0);
+      .get("TORRE-CA3", "TORRE-CA3") as any;
+    expect(conteos.partes).toBe(0);
+    expect(conteos.piezas).toBe(0);
 
     // Evidencia adicional en UI: listado muestra 0 partes y 0 piezas
     const listado = await agente.get("/proyectos");

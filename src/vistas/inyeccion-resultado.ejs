@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= titulo %></title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    header { background: #1f2937; color: #fff; padding: 12px 16px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .ok { color: #065f46; }
+    .error { color: #991b1b; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #f3f4f6; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <header><strong>SnapSip</strong> — HU-03: Inyectar piezas desde plano/archivo</header>
+  <main>
+    <div class="card">
+      <h1 class="<%= error ? 'error' : 'ok' %>"><%= titulo %></h1>
+      <% if (error) { %>
+        <p><%= error %></p>
+      <% } else { %>
+        <p>Proyecto <strong><%= universo.proyecto.codigo %></strong></p>
+        <p>Se crearon <strong><%= universo.totalPartes %></strong> partes de la casa y <strong><%= universo.totalPiezas %></strong> piezas. Cada pieza quedó en estado «Pendiente» y sin torre asignada; el proyecto pasó a «En preparación».</p>
+        <table>
+          <thead><tr><th>Parte de la casa</th><th>Piezas</th><th>Primera pieza</th><th>Última pieza</th></tr></thead>
+          <tbody>
+            <% universo.partes.forEach(function(parte) { %>
+              <tr>
+                <td><%= parte.nombre %></td>
+                <td><%= parte.piezas.length %></td>
+                <td><%= parte.piezas[0].codigo %></td>
+                <td><%= parte.piezas[parte.piezas.length - 1].codigo %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <p><small>Nota de la demo: el plano/archivo está simulado; no se cargó ningún archivo real.</small></p>
+      <% } %>
+      <p><a href="/proyectos">Volver a proyectos</a> · <a href="/">Inicio</a></p>
+    </div>
+  </main>
+</body>
+</html>

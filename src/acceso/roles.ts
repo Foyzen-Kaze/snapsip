@@ -14,7 +14,7 @@ export function funcionesPorRol(rol: RolDemo): string[] {
   if (rol === "Encargado de Despacho") {
     return [
       "Crear proyecto (HU-02)",
-      "Inyectar piezas desde plano/archivo (HU-03, pendiente)",
+      "Inyectar piezas desde plano/archivo (HU-03)",
       "Generar guía de despacho (HU-08, pendiente)",
       "Registrar envío con evidencia (HU-09, pendiente)",
       "Operación protegida de ejemplo (solo Encargado de Despacho)",
@@ -23,7 +23,7 @@ export function funcionesPorRol(rol: RolDemo): string[] {
   return [
     "Crear torre (HU-04, pendiente)",
     "Asignar pieza a torre con evidencia (HU-05, pendiente)",
-    "Consultar piezas pendientes (HU-06, pendiente)",
+    "Consultar piezas pendientes (HU-06)",
     "Cierre manual de torre (HU-07, pendiente)",
     "Eliminar torre vacía con código (HU-10, pendiente)",
     "Desasignar pieza de una torre (HU-11, pendiente)",

@@ -1,0 +1,41 @@
+{
+  "name": "snapsip-prueba",
+  "version": "1.0.0",
+  "description": "Aplicación web sencilla del proyecto **SnapSip** (CIN 324 — Ingeniería de Requisitos), generada historia por historia a partir de la documentación del repositorio.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "db:seed": "tsx src/db/seed.ts",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Foyzen-Kaze/snapsip.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Foyzen-Kaze/snapsip/issues"
+  },
+  "homepage": "https://github.com/Foyzen-Kaze/snapsip#readme",
+  "dependencies": {
+    "ejs": "^7.0.2",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "@types/supertest": "^7.2.1",
+    "supertest": "^7.3.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}

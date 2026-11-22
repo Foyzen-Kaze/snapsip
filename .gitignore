@@ -1,6 +1,4 @@
 # Dependencias y manifiestos de paquetes
-package.json
-package-lock.json
 node_modules/
 node_modules
 **/node_modules/
@@ -18,8 +16,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Compilación / Build (TypeScript)
-tsconfig.json
-tsconfig.*.json
+
 dist/
 build/
 out/
