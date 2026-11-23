@@ -83,7 +83,7 @@ N1 .. Torre
 note "{xor} Cada evidencia respalda la ubicación\nde una pieza o el envío de una guía,\nnunca ambos." as N2
 N2 .. Evidencia
 
-note "una torre agrupa como maximo \n tantas piezas como su capacidadMax siendo capacidadMax un numero entero entre 0 y 30 piezas" as N3
+note "una torre agrupa como maximo \n tantas piezas como su capacidadMax siendo capacidadMax un numero entero entre 1 y 30 piezas" as N3
 N3 .. Torre
 
 @enduml
