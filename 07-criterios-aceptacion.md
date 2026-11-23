@@ -243,6 +243,39 @@ Característica: Consultar piezas pendientes
     Cuando el operario de bodega solicita consultar las piezas pendientes de esa parte de la casa
     Entonces el sistema no presenta piezas
     Y comunica explícitamente que hay "0 pendientes" para esa parte
+
+  # CA3
+  Escenario: Identificar el proyecto por cliente y código
+    Dado que existen proyectos registrados
+    Cuando el operario de bodega abre la consulta de piezas pendientes
+    Entonces el sistema ofrece cada proyecto identificado por su cliente y su código
+
+  # CA4
+  Esquema del escenario: Ofrecer las partes del proyecto elegido
+    Dado que el proyecto elegido tiene piezas cargadas en la parte de la casa "<parte>"
+    Cuando el operario de bodega selecciona ese proyecto
+    Entonces el sistema ofrece la parte de la casa "<parte>" para consultar
+
+    Ejemplos:
+      | parte            |
+      | Techo            |
+      | Muros exteriores |
+      | Muros interiores |
+      | Piso             |
+      | Entrepiso        |
+
+  # CA5
+  Escenario: Ofrecer únicamente las partes que tiene el proyecto
+    Dado que el proyecto elegido tiene piezas cargadas solo en "Muros interiores", "Techo" y "Entrepiso"
+    Cuando el operario de bodega selecciona ese proyecto
+    Entonces el sistema ofrece únicamente "Muros interiores", "Techo" y "Entrepiso"
+    Y no ofrece "Muros exteriores" ni "Piso"
+
+  # CA6
+  Escenario: Proyecto sin piezas cargadas
+    Dado que el proyecto elegido está en estado "Sin piezas cargadas"
+    Cuando el operario de bodega selecciona ese proyecto
+    Entonces el sistema informa que el proyecto no tiene partes de la casa con piezas cargadas
 ```
 
 ## HU-07 — Cierre manual de torre

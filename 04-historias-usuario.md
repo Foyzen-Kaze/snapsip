@@ -60,6 +60,10 @@ Como Operario de Bodega, quiero consultar las piezas pendientes de una parte de 
 **Criterios de aceptación:**
 * CA1: Dado que un proyecto cuenta con piezas en estado Pendiente, cuando el operario de bodega solicita el listado de piezas pendientes filtrado por una parte de la casa, entonces el sistema presenta únicamente las piezas de esa parte que aún no poseen torre asignada.
 * CA2: Dado que una parte de la casa no posee piezas en estado Pendiente, cuando el operario de bodega solicita el listado de piezas pendientes de esa parte, entonces el sistema informa explícitamente "0 pendientes" para esa parte.
+* CA3: Dado que existen proyectos registrados, cuando el operario de bodega abre la consulta de piezas pendientes, entonces el sistema ofrece cada proyecto identificado por su cliente y su código.
+* CA4: Dado que el proyecto elegido tiene piezas cargadas en una parte de la casa, cuando el operario de bodega selecciona ese proyecto, entonces el sistema ofrece esa parte de la casa para consultar (por ejemplo, Techo, Muros exteriores, Muros interiores, Piso o Entrepiso).
+* CA5: Dado que el proyecto elegido tiene piezas cargadas solo en algunas partes de la casa, cuando el operario de bodega selecciona ese proyecto, entonces el sistema ofrece únicamente esas partes y no ofrece las que no tienen piezas cargadas.
+* CA6: Dado que el proyecto elegido está en estado "Sin piezas cargadas", cuando el operario de bodega selecciona ese proyecto, entonces el sistema informa que el proyecto no tiene partes de la casa con piezas cargadas.
 
 <a id="hu-07"></a>
 
