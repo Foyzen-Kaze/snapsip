@@ -37,3 +37,4 @@ Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
 - **Reasignación dentro de CU-05:** cambiar una pieza de torre es una variante de asignar pieza a torre, con confirmación del reemplazo y nueva evidencia (HU-05 CA3). No se modela como un caso de uso aparte.
 - **Reapertura dentro de CU-07:** reabrir una torre Cerrada corrige un cierre y proviene de la misma historia (HU-07 CA3 y CA4). Se trata como una variante de CU-07 y no como un caso de uso aparte.
 - **Sin include ni extend:** como la evidencia, la reasignación y la reapertura quedan dentro de sus casos de uso base, el diagrama no necesita estas relaciones.
+**sobre cambio:** el caso de uso 04 crear torre cubre con los requerimientos pedidos en el cambio ya que crear al torre solo tendría que crearla con su capacidadMax y asignar el caso de uso 05 asignar pieza a torre a evidencia ya cumple solo habria que no dejarla que se asigne a una torre ya llena.
