@@ -89,8 +89,11 @@ describe("HU-03 · Inyectar piezas desde plano/archivo", () => {
     const columnas = filas("PRAGMA table_info(piezas)").map((c) => c.name);
     expect(columnas).toContain("proyecto_id");
     expect(columnas).toContain("estado");
-    expect(columnas).not.toContain("torre_id");
-    expect(filas("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'torres'")).toHaveLength(0);
+    // HU-05 agrega `torre_id` en la migración 005; HU-03 no asigna ninguna torre (queda nula).
+    expect(columnas).toContain("torre_id");
+    expect(filas("SELECT * FROM piezas WHERE torre_id IS NOT NULL")).toHaveLength(0);
+    // HU-04 crea la tabla `torres` en la migración 004; HU-03 no debe registrar ninguna torre.
+    expect(filas("SELECT * FROM torres")).toHaveLength(0);
   });
 
   it("HU-03 · Universo simulado generado dentro de los límites acordados", async () => {

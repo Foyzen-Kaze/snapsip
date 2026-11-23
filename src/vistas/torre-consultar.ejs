@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= titulo %></title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    header { background: #1f2937; color: #fff; padding: 12px 16px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+    th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; font-size: 14px; }
+    th { background: #f3f4f6; }
+    .error { color: #b91c1c; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <header><strong>SnapSip</strong> — HU-05: Consultar torre</header>
+  <main>
+    <div class="card">
+      <h2>Consultar piezas de una torre</h2>
+      <% if (error) { %>
+        <p class="error"><%= error %></p>
+      <% } else { %>
+        <p>Torre <strong><%= consulta.torre.codigo %></strong> — parte de la casa: <strong><%= consulta.torre.parte_casa %></strong> — estado: <strong><%= consulta.torre.estado %></strong></p>
+        <table>
+          <thead><tr><th>Código de pieza</th><th>Estado</th></tr></thead>
+          <tbody>
+            <% consulta.piezas.forEach(function(pieza) { %>
+              <tr><td><%= pieza.codigo %></td><td><%= pieza.estado %></td></tr>
+            <% }); %>
+            <% if (consulta.piezas.length === 0) { %><tr><td colspan="2">0 piezas asignadas a esta torre</td></tr><% } %>
+          </tbody>
+        </table>
+      <% } %>
+      <p><a href="/piezas/asignar">Asignar piezas</a> · <a href="/">Volver al inicio</a></p>
+    </div>
+  </main>
+</body>
+</html>

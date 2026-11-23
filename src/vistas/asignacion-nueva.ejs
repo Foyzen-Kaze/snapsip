@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= titulo %></title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    header { background: #1f2937; color: #fff; padding: 12px 16px; }
+    main { max-width: 980px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    form { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
+    label { display: block; font-weight: 600; margin-bottom: 4px; }
+    select, button { padding: 8px 10px; font-size: 14px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+    th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; font-size: 14px; }
+    th { background: #f3f4f6; }
+    .error { color: #b91c1c; }
+    .warn { color: #92400e; }
+    .fotos label { display: block; font-weight: 400; margin: 4px 0; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <header><strong>SnapSip</strong> — HU-05: Asignar pieza a torre con evidencia</header>
+  <main>
+    <div class="card">
+      <h2>Asignar pieza a torre</h2>
+      <p>Seleccione un proyecto. Se listan sus piezas <strong>Pendiente</strong> y <strong>todas</strong> sus torres, con código, parte de la casa y estado.</p>
+      <% if (error) { %>
+        <p class="error"><%= error %></p>
+      <% } %>
+      <form method="GET" action="/piezas/asignar">
+        <div>
+          <label for="proyectoId">Proyecto</label>
+          <select id="proyectoId" name="proyectoId" required>
+            <option value="">-- Seleccione un proyecto --</option>
+            <% proyectos.forEach(function(proyecto) { %>
+              <option value="<%= proyecto.id %>" <%= proyectoId === proyecto.id ? 'selected' : '' %>><%= proyecto.cliente %> (<%= proyecto.codigo %>)</option>
+            <% }); %>
+          </select>
+        </div>
+        <button type="submit">Ver piezas y torres</button>
+      </form>
+    </div>
+
+    <% if (proyectoId !== null) { %>
+      <div class="card">
+        <h3>Piezas pendientes</h3>
+        <table>
+          <thead><tr><th>Código</th><th>Parte de la casa</th><th>Estado</th></tr></thead>
+          <tbody>
+            <% piezas.forEach(function(pieza) { %>
+              <tr><td><%= pieza.codigo %></td><td><%= pieza.parte_casa %></td><td><%= pieza.estado %></td></tr>
+            <% }); %>
+            <% if (piezas.length === 0) { %><tr><td colspan="3">0 piezas pendientes en este proyecto</td></tr><% } %>
+          </tbody>
+        </table>
+
+        <h3 id="lista-torres">Todas las torres del proyecto</h3>
+        <table>
+          <thead><tr><th>Código</th><th>Parte de la casa</th><th>Estado</th><th>Consulta</th></tr></thead>
+          <tbody>
+            <% torres.forEach(function(torre) { %>
+              <tr>
+                <td><%= torre.codigo %></td>
+                <td><%= torre.parte_casa %></td>
+                <td><%= torre.estado %></td>
+                <td><a href="/torres/consultar/<%= torre.id %>">Consultar piezas</a></td>
+              </tr>
+            <% }); %>
+            <% if (torres.length === 0) { %><tr><td colspan="4">0 torres registradas en este proyecto</td></tr><% } %>
+          </tbody>
+        </table>
+
+        <h3>Datos de la asignación</h3>
+        <p class="warn">La evidencia fotográfica es obligatoria: elija una de las tres fotos de demostración. No hay subida real de archivos.</p>
+        <form method="POST" action="/piezas/asignar">
+          <input type="hidden" name="proyectoId" value="<%= proyectoId %>" />
+          <div>
+            <label for="piezaId">Pieza</label>
+            <select id="piezaId" name="piezaId" required>
+              <option value="">-- Seleccione una pieza --</option>
+              <% piezasSelector.forEach(function(pieza) { %>
+                <option value="<%= pieza.id %>" <%= piezaId === pieza.id ? 'selected' : '' %>><%= pieza.codigo %> — <%= pieza.parte_casa %> — <%= pieza.estado %><% if (pieza.torre_codigo) { %> (torre <%= pieza.torre_codigo %>)<% } %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div>
+            <label for="torreId">Torre de destino</label>
+            <select id="torreId" name="torreId" required>
+              <option value="">-- Seleccione una torre --</option>
+              <% torres.forEach(function(torre) { %>
+                <option value="<%= torre.id %>" <%= torreId === torre.id ? 'selected' : '' %>><%= torre.codigo %> — <%= torre.parte_casa %> — <%= torre.estado %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="fotos">
+            <label>Evidencia fotográfica (elija una; ninguna viene preseleccionada)</label>
+            <% fotos.forEach(function(foto) { %>
+              <label><input type="radio" name="fotografia" value="<%= foto.id %>" required /> <%= foto.etiqueta %></label>
+            <% }); %>
+          </div>
+          <button type="submit">Asignar pieza</button>
+        </form>
+      </div>
+    <% } %>
+
+    <p><a href="/">Volver al inicio</a></p>
+  </main>
+
+  <!-- HU-05: llenar piezas y torres al elegir Proyecto (patrón de HU-04/HU-06). -->
+  <script>
+    (function () {
+      var proyecto = document.getElementById('proyectoId');
+      if (!proyecto) return;
+      proyecto.addEventListener('change', function () {
+        proyecto.form.submit();
+      });
+    })();
+  </script>
+</body>
+</html>

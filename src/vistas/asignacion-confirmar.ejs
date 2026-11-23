@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= titulo %></title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    header { background: #1f2937; color: #fff; padding: 12px 16px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    button { padding: 8px 10px; font-size: 14px; }
+    .warn { color: #92400e; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <header><strong>SnapSip</strong> — HU-05: Confirmar reasignación</header>
+  <main>
+    <div class="card">
+      <h2>Confirmar reasignación</h2>
+      <p>La pieza <strong><%= pieza.codigo %></strong> (<%= pieza.parte_casa %>) ya está en estado <strong>Listo</strong>.</p>
+      <p>Torre actual: <strong><%= torreActual ? torreActual.codigo : 'sin torre' %></strong><br />
+         Torre destino: <strong><%= torreDestino.codigo %></strong> (<%= torreDestino.parte_casa %>, <%= torreDestino.estado %>)</p>
+      <p class="warn">Si confirma, la evidencia anterior se conservará en el historial como no vigente y se registrará la nueva evidencia con el usuario, la fecha y la hora. No se modifica ninguna guía de despacho (HU-08).</p>
+      <form method="POST" action="/piezas/asignar">
+        <input type="hidden" name="proyectoId" value="<%= proyectoId %>" />
+        <input type="hidden" name="piezaId" value="<%= pieza.id %>" />
+        <input type="hidden" name="torreId" value="<%= torreDestino.id %>" />
+        <input type="hidden" name="fotografia" value="<%= fotografia %>" />
+        <input type="hidden" name="confirmar" value="1" />
+        <button type="submit">Confirmar reasignación</button>
+      </form>
+      <p><a href="/piezas/asignar?proyectoId=<%= proyectoId %>">Cancelar sin cambios</a></p>
+    </div>
+  </main>
+</body>
+</html>

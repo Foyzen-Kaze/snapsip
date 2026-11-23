@@ -51,6 +51,7 @@ Como Operario de Bodega, quiero asignar una pieza pendiente a una torre junto co
 * CA3: Dado que una pieza ya se encuentra asignada a una torre, cuando el operario de bodega solicita asignar esa misma pieza a una torre distinta, entonces el sistema solicita confirmación del reemplazo antes de ejecutar la reasignación y, al confirmarse, invalida las guías de despacho Vigentes y todavía no enviadas que incluyan esa pieza.
 * CA4: Dado que el servicio de almacenamiento de evidencias no acepta la fotografía, cuando el operario de bodega solicita asignar una pieza Pendiente a una torre Abierta, entonces el sistema rechaza la asignación, mantiene la pieza en estado Pendiente e informa que la evidencia no pudo almacenarse.
 * CA5: Dado que una pieza se encuentra en estado Enviado, cuando el operario de bodega solicita asignarla a otra torre, entonces el sistema rechaza la solicitud y conserva la pieza sin modificaciones.
+* CA6: Dado que una torre tiene piezas asignadas, cuando el operario de bodega consulta esa torre, entonces el sistema presenta las piezas que contiene, con su código y su estado
 
 <a id="hu-06"></a>
 

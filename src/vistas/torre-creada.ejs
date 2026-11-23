@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= titulo %></title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    header { background: #1f2937; color: #fff; padding: 12px 16px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .ok { color: #065f46; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <header><strong>SnapSip</strong> — HU-04: Crear torre</header>
+  <main>
+    <div class="card">
+      <h2 class="ok">Torre creada</h2>
+      <ul>
+        <li>Proyecto: <strong><%= proyecto.cliente %> (<%= proyecto.codigo %>)</strong></li>
+        <li>Parte de la casa: <strong><%= parte.nombre %></strong></li>
+        <li>Número: <strong><%= torre.numero %></strong> (correlativo dentro del proyecto)</li>
+        <li>Código: <strong><%= torre.codigo %></strong></li>
+        <li>Estado: <strong><%= torre.estado %></strong></li>
+        <li>Piezas asignadas: <strong>sin piezas asignadas</strong></li>
+      </ul>
+      <p><a href="/torres/nuevo">Crear otra torre</a> · <a href="/">Volver al inicio</a></p>
+    </div>
+  </main>
+</body>
+</html>

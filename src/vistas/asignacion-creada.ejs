@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= titulo %></title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    header { background: #1f2937; color: #fff; padding: 12px 16px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .ok { color: #065f46; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <header><strong>SnapSip</strong> — HU-05: Asignar pieza a torre con evidencia</header>
+  <main>
+    <div class="card">
+      <h2>Asignación registrada</h2>
+      <p class="ok">La pieza <strong><%= pieza.codigo %></strong> quedó asignada a la torre <strong><%= torre.codigo %></strong> (<%= torre.parte_casa %>) en estado <strong>Listo</strong>.</p>
+      <p>Evidencia: <%= evidencia.fotografia %><br />
+         Responsable: <%= evidencia.responsable %><br />
+         Fecha y hora de captura: <%= evidencia.fecha_hora_captura %></p>
+      <p>
+        <a href="/torres/consultar/<%= torre.id %>">Consultar las piezas de la torre</a> ·
+        <a href="/piezas/asignar">Asignar otra pieza</a> ·
+        <a href="/">Volver al inicio</a>
+      </p>
+    </div>
+  </main>
+</body>
+</html>

@@ -220,6 +220,12 @@ Característica: Asignar pieza a torre con evidencia
     Cuando el operario de bodega solicita asignarla a otra torre
     Entonces el sistema rechaza la solicitud
     Y conserva la pieza sin modificaciones
+
+  # CA6
+  Escenario: Consulta de las piezas de una torre
+    Dado que una torre tiene piezas asignadas
+    Cuando el operario de bodega consulta esa torre
+    Entonces el sistema presenta las piezas que contiene, con su código y su estado
 ```
 
 ## HU-06 — Consultar piezas pendientes
