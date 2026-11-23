@@ -35,10 +35,11 @@ Como Encargado de Despacho, quiero registrar el universo completo de piezas de u
 Como Operario de Bodega, quiero registrar una torre asociada a un proyecto y a una parte de la casa, para documentar una agrupación física de piezas existente, exclusiva de ese cliente y esa parte.
 **Actividad TO-BE asociada:** Crear torre.
 **Criterios de aceptación:**
-* CA1: Dado que un proyecto se encuentra en estado "En preparación" o posterior, cuando el operario de bodega solicita el registro de una torre para una parte de la casa específica, entonces el sistema registra una torre asociada únicamente a ese cliente y a esa parte, con cero piezas y en estado Abierta.
-* CA2: Dado que una parte de la casa posee piezas que exceden la capacidad física de una torre existente, cuando el operario de bodega solicita el registro de una segunda torre para esa misma parte, entonces el sistema registra la nueva torre con una numeración correlativa.
+* CA1: Dado que un proyecto se encuentra en estado "En preparación" o posterior, cuando el operario de bodega solicita el registro de una torre para una parte de la casa específica indicando una capacidad máxima entre 1 y 30 piezas, entonces el sistema registra una torre asociada únicamente a ese cliente y a esa parte, con la capacidad máxima definida, cero piezas y en estado Abierta.
+* CA2: Dado que una parte de la casa posee una torre que alcanzo su capacidad máxima, cuando el operario de bodega solicita el registro de una segunda torre para esa misma parte, indicando una capacidad máxima entre 1 y 30 piezas, entonces el sistema registra la nueva torre con la capacidad máxima permitida y una numeración correlativa.
 * CA3: Dado que una torre está asociada exclusivamente a una parte de la casa, cuando el operario de bodega solicita asignar a esa torre una pieza de una parte distinta, entonces el sistema rechaza la solicitud.
 * CA4: Dado que una torre se encuentra en estado Cerrada, cuando el operario de bodega solicita asignar una pieza nueva a esa torre, entonces el sistema rechaza la solicitud y sugiere el registro de otra torre para esa parte.
+* CA5: Dado que un proyecto se encuentra en estado "En preparación" o posterior, cuando el operario de bodega solicita el registro de una torre indicando una capacidad máxima fuera del rango de 1 a 30 piezas respectivas, entonces el sistema rechaza la solicitud y en consecuencia no crea la torre. 
 
 <a id="hu-05"></a>
 
@@ -46,13 +47,14 @@ Como Operario de Bodega, quiero registrar una torre asociada a un proyecto y a u
 Como Operario de Bodega, quiero asignar una pieza pendiente a una torre junto con evidencia fotográfica, para dejar constancia de que la pieza existe y está ubicada correctamente.
 **Actividad TO-BE asociada:** Asignar pieza a torre con evidencia (incluye la tarea del sistema Validar y registrar piezas).
 **Criterios de aceptación:**
-* CA1: Dado que una pieza se encuentra en estado Pendiente, cuando el operario de bodega solicita asignar la pieza a una torre Abierta y adjunta evidencia fotográfica, entonces el sistema cambia la pieza a estado Listo y registra el usuario, la fecha y la hora de la asignación.
+* CA1: Dado que una pieza se encuentra en estado Pendiente, cuando el operario de bodega solicita asignar la pieza a una torre Abierta y adjunta evidencia fotográfica, entonces el sistema cambia la pieza a estado Listo, registra el usuario, la fecha y la hora de la asignación, también informa cuántos cupos le quedan disponibles a la torre.
 * CA2: Dado que una pieza se encuentra en estado Pendiente, cuando el operario de bodega solicita asignar la pieza a una torre Abierta sin adjuntar evidencia fotográfica, entonces el sistema rechaza la solicitud y exige la evidencia antes de autorizar el cambio de estado.
 * CA3: Dado que una pieza ya se encuentra asignada a una torre, cuando el operario de bodega solicita asignar esa misma pieza a una torre distinta, entonces el sistema solicita confirmación del reemplazo antes de ejecutar la reasignación y, al confirmarse, invalida las guías de despacho Vigentes y todavía no enviadas que incluyan esa pieza.
 * CA4: Dado que el servicio de almacenamiento de evidencias no acepta la fotografía, cuando el operario de bodega solicita asignar una pieza Pendiente a una torre Abierta, entonces el sistema rechaza la asignación, mantiene la pieza en estado Pendiente e informa que la evidencia no pudo almacenarse.
 * CA5: Dado que una pieza se encuentra en estado Enviado, cuando el operario de bodega solicita asignarla a otra torre, entonces el sistema rechaza la solicitud y conserva la pieza sin modificaciones.
 * CA6: Dado que una torre tiene piezas asignadas, cuando el operario de bodega consulta esa torre, entonces el sistema presenta las piezas que contiene, con su código y su estado
-
+* CA7: Dado que una pieza se encuentra en estado Pendiente y la torre Abierta tiene un cupo disponible, cuando el operario de bodega solicita asignar la pieza con evidencia fotográfica, entonces el sistema completa la asignación, informando que quedan 0 cupos disponibles y cierra automáticamente la torre en estado cerrado.
+* CA8: Dado que una torre ya alcanzo su capacidad máxima, cuando el operario de bodega solicita asignar una pieza a la torre, el sistema rechaza la solicitud y sugiere crear otra torre para esa parte de la casa.
 <a id="hu-06"></a>
 
 ## HU-06 — Consultar piezas pendientes
@@ -69,7 +71,7 @@ Como Operario de Bodega, quiero consultar las piezas pendientes de una parte de 
 <a id="hu-07"></a>
 
 ## HU-07 — Cierre manual de torre
-Como Operario de Bodega, quiero cerrar manualmente una torre cuando ya no admite más piezas, para dejar de recibir asignaciones en ella sin depender de un porcentaje que una torre, al no tener capacidad predefinida, nunca podría alcanzar.
+Como Operario de Bodega, quiero cerrar manualmente una torre antes de que alcance su capacidad máxima y que el sistema la cierre automaticamente al llenarse, para dejar de recibir asignaciones en ella cuando corresponda. 
 **Actividad TO-BE asociada:** Cierre manual de torre.
 **Criterios de aceptación:**
 * CA1: Dado que una torre posee al menos una pieza asignada, cuando el operario de bodega solicita el cierre de la torre, entonces el sistema cambia la torre a estado Cerrada y deja de ofrecerla como destino para nuevas piezas, aunque queden piezas Pendiente en esa parte de la casa.

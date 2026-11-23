@@ -118,9 +118,10 @@ Característica: Crear torre
   Escenario: Creación de una torre para una parte de la casa
     Dado que un proyecto se encuentra en estado "En preparación"
     Y la parte de la casa seleccionada pertenece a ese proyecto
-    Cuando el operario de bodega solicita crear una torre para esa parte
+    Cuando el operario solicita crear una torre para esa parte indicando una capacidad máxima entre 1 y 30 piezas
     Entonces el sistema registra una torre asociada únicamente a ese proyecto y a esa parte
     Y le asigna la siguiente numeración correlativa dentro del proyecto
+    Y registra la capacidad máxima de piezas permitidas
     Y establece su estado en "Abierta"
     Y la torre queda sin piezas asignadas
 
@@ -128,8 +129,9 @@ Característica: Crear torre
   Escenario: Creación de una segunda torre para la misma parte
     Dado que una parte de la casa tiene una torre creada
     Y sus piezas exceden la capacidad física de esa torre
-    Cuando el operario de bodega solicita crear otra torre para la misma parte
+    Cuando el operario de bodega solicita crear otra torre para la misma parte indicando una capacidad máxima entre 1 y 30 piezas
     Entonces el sistema registra una nueva torre en estado "Abierta"
+    Y registra la capacidad máxima de piezas permitidas
     Y le asigna la siguiente numeración correlativa dentro del proyecto
     Y conserva las piezas y el estado de la torre anterior
 
@@ -158,6 +160,19 @@ Característica: Crear torre
     Entonces el sistema rechaza la solicitud
     Y no crea la torre
 ```
+# CA5
+  Esquema del escenario: Rechazo de una capacidad máxima fuera de rango
+    Dado que un proyecto se encuentra en estado "En preparación"
+    Y la parte de la casa seleccionada pertenece a ese proyecto
+    Cuando el operario de bodega solicita crear una torre para esa parte indicando una capacidad máxima de <capacidad> piezas
+    Entonces el sistema rechaza la solicitud
+    Y comunica que la capacidad máxima debe estar entre 1 y 30 piezas
+    Y no crea la torre
+
+    Ejemplos:
+      | capacidad |
+      | 0         |
+      | 31        |
 
 ## HU-05 — Asignar pieza a torre con evidencia
 
@@ -176,6 +191,7 @@ Característica: Asignar pieza a torre con evidencia
     Y cambia la pieza a estado "Listo"
     Y conserva la evidencia como respaldo de la asignación
     Y registra el usuario, la fecha y la hora de la asignación
+    Y comunica cuántos cupos le quedan disponibles a la torre
 
   # CA2
   Escenario: Rechazo de una asignación sin evidencia
@@ -227,6 +243,29 @@ Característica: Asignar pieza a torre con evidencia
     Cuando el operario de bodega consulta esa torre
     Entonces el sistema presenta las piezas que contiene, con su código y su estado
 ```
+# CA7
+  Escenario: Cierre automático de la torre al alcanzar su capacidad máxima
+    Dado que una pieza se encuentra en estado "Pendiente" y sin torre asignada
+    Y la torre de destino está en estado "Abierta" y le queda un único cupo disponible
+    Y la pieza y la torre pertenecen al mismo proyecto y a la misma parte de la casa
+    Cuando el operario de bodega solicita asignar la pieza a la torre y adjunta evidencia fotográfica
+    Entonces el sistema asocia la pieza a la torre
+    Y cambia la pieza a estado "Listo"
+    Y conserva la evidencia como respaldo de la asignación
+    Y registra el usuario, la fecha y la hora de la asignación
+    Y comunica que a la torre le quedan 0 cupos disponibles
+    Y cambia automáticamente la torre a estado "Cerrada"
+    Y deja de admitirla como destino de nuevas piezas
+
+  # CA8
+  Escenario: Rechazo de la asignación en una torre llena
+    Dado que una pieza se encuentra en estado "Pendiente" y sin torre asignada
+    Y la torre de destino ya alcanzó su capacidad máxima y se encuentra en estado "Cerrada"
+    Y la pieza y la torre pertenecen al mismo proyecto y a la misma parte de la casa
+    Cuando el operario de bodega solicita asignar la pieza a la torre
+    Entonces el sistema rechaza la solicitud
+    Y sugiere crear otra torre para esa parte de la casa
+    Y mantiene la pieza en estado "Pendiente" y sin torre asignada
 
 ## HU-06 — Consultar piezas pendientes
 
@@ -286,8 +325,7 @@ Característica: Consultar piezas pendientes
 
 ## HU-07 — Cierre manual de torre
 
-Historia: Como Operario de Bodega, quiero cerrar manualmente una torre cuando ya no admite más piezas, para dejar de recibir asignaciones en ella sin depender de un porcentaje que una torre, al no tener capacidad predefinida, nunca podría alcanzar.
-
+Historia: Como Operario de Bodega, quiero cerrar manualmente una torre antes de que alcance su capacidad máxima y que el sistema la cierre automáticamente al llenarse, para dejar de recibir asignaciones en ella cuando corresponda.
 ```gherkin
 Característica: Cierre manual de torre
 
@@ -327,6 +365,13 @@ Característica: Cierre manual de torre
     Cuando el operario de bodega solicita reabrir la torre
     Entonces el sistema rechaza la solicitud
     Y mantiene la torre en estado "Cerrada"
+  # CA5
+  Escenario: Cierre automático al completar la capacidad máxima
+    Dado que una torre está en estado "Abierta"
+    Y alcanza la cantidad de piezas igual a su capacidad máxima definida
+    Cuando se registra la asignación de la última pieza permitida
+    Entonces el sistema cambia automáticamnete la torre a estado "Cerrada"
+    Y deja de admitirla como destino de nuevas piezas     
 ```
 
 ## HU-08 — Generar guía de despacho
