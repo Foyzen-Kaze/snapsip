@@ -1,7 +1,7 @@
 # Cambios — Evaluación 2
 
 ## Cambio solicitado
-(El cambio explicado con palabras del equipo.)
+El cliente de SnapSip tuvo un accidente en bodega: una torre muy alta se vino abajo. Desde ahora cada torre tiene una capacidad máxima de piezas, que el operario de bodega define al registrar la torre (un número entre 1 y 30). Cuando una torre alcanza su capacidad, el sistema la cierra automáticamente y no admite más piezas. Si el operario intenta asignar una pieza a una torre que ya está llena, el sistema lo rechaza y le sugiere crear otra torre para esa parte. Además, al asignar una pieza, el sistema debe informar cuántos cupos le quedan a la torre.
 
 ## Cambios por artefacto
 
