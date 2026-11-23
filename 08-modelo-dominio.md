@@ -11,7 +11,7 @@ Archivo fuente: [`./diagramas/modelo-de-dominio.puml`](./diagramas/modelo-de-dom
 | Proyecto | Casa encargada por un cliente, cuyo despacho de paneles SIP se controla. | codigo, cliente, metraje, estado (Sin piezas cargadas, En preparación, Proyecto completo) |
 | ParteCasa | Sección de la casa (por ejemplo, el techo) que organiza los paneles del plano. | nombre, /completa (derivado: tiene al menos una pieza y todas están Listo) |
 | Pieza | Panel SIP del universo de piezas del proyecto. | codigo, estado (Pendiente, Listo, Enviado) |
-| Torre | Pila física de paneles en la bodega, exclusiva de una parte de la casa. | codigo, numero (correlativo dentro del proyecto), estado (Abierta, Cerrada, Eliminada), fechaHoraEliminacion, eliminadaPor, por cambios de requirimientos capacidadMax |
+| Torre | Pila física de paneles en la bodega, exclusiva de una parte de la casa. | codigo, numero (correlativo dentro del proyecto), estado (Abierta, Cerrada, Eliminada), fechaHoraEliminacion, eliminadaPor, capacidadMax, \cupos (derivado: numero de piezas que se le pueden seguir añadiendo a la torre) |
 | GuiaDespacho | Documento de control de lo que se despacha para una parte de la casa o para el proyecto completo. | numero, alcance (Parte de la casa o Proyecto), estado (Vigente, Invalidada, Enviada), fechaHoraEmision, fechaHoraEnvio |
 | Evidencia | Fotografía que respalda la ubicación de un panel en su torre o la salida del camión cargado. | fotografia, fechaHoraCaptura, responsable, vigente |
 
@@ -37,5 +37,3 @@ Archivo fuente: [`./diagramas/modelo-de-dominio.puml`](./diagramas/modelo-de-dom
 - **Restricción Torre – Pieza:** una torre solo agrupa paneles de su misma parte de la casa (RP-05, HU-04 CA3). La multiplicidad no alcanza a expresarlo, por lo que se indica con una nota en el diagrama.
 - **Relaciones derivadas:** el proyecto de una torre se obtiene a través de su parte de la casa, y las torres de una guía se obtienen a través de sus paneles. Por eso no se dibujan como asociaciones directas.
 - **Herencia:** no se usó, porque ningún concepto del dominio es una especialización de otro.
-- **Cupos** cupos de las piezas que se pueden añadir a la torre no es un atributo una funcion lo calcula como cupos = capacidadMax - numero de piezas de torre por eso no aparece en el modelo de dominio
-  
