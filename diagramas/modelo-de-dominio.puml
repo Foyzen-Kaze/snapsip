@@ -44,8 +44,7 @@ class Torre {
   estado
   fechaHoraEliminacion
   eliminadaPor
-  capacidadmax
-  cupos
+  capacidadMax
 }
 
 class GuiaDespacho {
