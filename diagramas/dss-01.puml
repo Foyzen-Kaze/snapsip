@@ -18,8 +18,12 @@ actor "Operario de Bodega" as OP
 participant ":SnapSip" as SS
 participant "Servicio de almacenamiento\nde evidencias" as ALM <<sistema externo>>
 
+
 OP -> SS : asignar pieza a torre con evidencia(pieza, torre, evidencia fotográfica)
-alt sin evidencia fotográfica
+
+alt Limite de piezas excedido
+  SS --> OP : rechazo: Se ha alcanzado el limite de piezas
+else sin evidencia fotográfica
   SS --> OP : rechazo: se exige evidencia fotográfica
 else pieza Enviado
   SS --> OP : rechazo: una pieza enviada no puede reasignarse

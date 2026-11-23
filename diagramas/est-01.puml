@@ -11,8 +11,8 @@ skinparam state {
 }
 
 [*] --> Pendiente : inyectar piezas desde plano/archivo\n[archivo válido]
-Pendiente --> Listo : asignar pieza a torre con evidencia\n[torre Abierta de la misma parte\ny evidencia almacenada]\n/ registrar evidencia, usuario, fecha y hora
-Listo --> Listo : asignar pieza a torre con evidencia\n[otra torre Abierta de la misma parte,\nreemplazo confirmado y evidencia almacenada]\n/ invalidar evidencia anterior y guías Vigentes\nque incluyen la pieza
+Pendiente --> Listo : asignar pieza a torre con evidencia\n[torre Abierta de la misma parte,\ncapacidad máxima no alcanzada\ny evidencia almacenada]\n/ registrar evidencia, usuario, fecha y hora
+Listo --> Listo : asignar pieza a torre con evidencia\n[otra torre Abierta de la misma parte,\nCapacidad máxima no alcanzada,\nreemplazo confirmado y evidencia almacenada]\n/ invalidar evidencia anterior y guías Vigentes\nque incluyen la pieza
 Listo --> Pendiente : desasignar pieza de una torre\n/ invalidar evidencia y guías Vigentes\nque incluyen la pieza
 Listo --> Enviado : registrar envío con evidencia\n[guía Vigente que incluye la pieza\ny evidencia almacenada]
 Enviado --> [*]
