@@ -70,7 +70,7 @@ Pieza "0..1" *-down- "0..*" Evidencia : respalda la ubicación de <
 GuiaDespacho "0..1" *-down- "0..1" Evidencia : respalda el envío de <
 
 ' Agregación: agrupación física o documental temporal
-Torre "0..1" o-right- "0..*" Pieza : agrupa >
+Torre "0..1" o-right- "0..30" Pieza : agrupa >
 GuiaDespacho "0..*" o-left- "1..*" Pieza : incluye >
 
 ' Asociaciones simples
