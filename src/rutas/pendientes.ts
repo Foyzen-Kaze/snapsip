@@ -4,6 +4,7 @@ import {
   consultarPiezasPendientes,
   listarPartesPorProyecto,
   listarProyectosParaConsulta,
+  proyectoEstaSinPiezas,
 } from "../dominio/pendientes";
 
 export const routerPendientes = Router();
@@ -23,7 +24,11 @@ routerPendientes.get(
     const proyectos = listarProyectosParaConsulta();
     const proyectoId = aId(req.query.proyectoId);
     const parteCasaId = aId(req.query.parteCasaId);
-    const partes = proyectoId !== undefined ? listarPartesPorProyecto(proyectoId) : [];
+    const proyectoSinPiezas = proyectoEstaSinPiezas(
+      proyectos.find((proyecto) => proyecto.id === proyectoId)
+    );
+    const partes =
+      proyectoId !== undefined && !proyectoSinPiezas ? listarPartesPorProyecto(proyectoId) : [];
     const parteElegida = partes.find((parte) => parte.id === parteCasaId);
     const haySeleccion = parteElegida !== undefined;
     const piezas = haySeleccion ? consultarPiezasPendientes(proyectoId!, parteCasaId!) : [];
@@ -34,6 +39,7 @@ routerPendientes.get(
       partes,
       proyectoId: proyectoId ?? null,
       parteCasaId: parteCasaId ?? null,
+      proyectoSinPiezas,
       parteElegida: parteElegida ?? null,
       haySeleccion,
       piezas,

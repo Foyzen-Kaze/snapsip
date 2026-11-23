@@ -1,9 +1,13 @@
 import { obtenerBd } from "../db/conexion";
 
 // HU-06, CU-06, TO-BE Consultar piezas pendientes
+export const ESTADO_SIN_PIEZAS_CARGADAS = "Sin piezas cargadas";
+
 export interface ProyectoParaSelector {
   id: number;
   codigo: string;
+  cliente: string;
+  estado: string;
 }
 
 export interface ParteCasaParaSelector {
@@ -19,13 +23,23 @@ export interface PiezaPendiente {
 
 export function listarProyectosParaConsulta(): ProyectoParaSelector[] {
   return obtenerBd()
-    .prepare("SELECT id, codigo FROM proyectos ORDER BY id")
+    .prepare("SELECT id, codigo, cliente, estado FROM proyectos ORDER BY id")
     .all() as ProyectoParaSelector[];
 }
 
+// HU-06 CA6: el estado «Sin piezas cargadas» es un atributo de Proyecto (modelo de dominio), no de EST-01.
+export function proyectoEstaSinPiezas(
+  proyecto: ProyectoParaSelector | undefined
+): boolean {
+  return proyecto?.estado === ESTADO_SIN_PIEZAS_CARGADAS;
+}
+
 export function listarPartesPorProyecto(proyectoId: number): ParteCasaParaSelector[] {
+  // HU-06 CA4/CA5: solo partes con piezas cargadas, sin filtrar por estado de la pieza (CA2).
   return obtenerBd()
-    .prepare("SELECT id, proyecto_id, nombre FROM partes_casa WHERE proyecto_id = ? ORDER BY id")
+    .prepare(
+      "SELECT pc.id, pc.proyecto_id, pc.nombre FROM partes_casa pc WHERE pc.proyecto_id = ? AND EXISTS (SELECT 1 FROM piezas p WHERE p.parte_casa_id = pc.id AND p.proyecto_id = pc.proyecto_id) ORDER BY pc.id"
+    )
     .all(proyectoId) as ParteCasaParaSelector[];
 }
 

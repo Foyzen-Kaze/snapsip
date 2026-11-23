@@ -71,3 +71,4 @@
 |--------|-------------------|--------|-------|
 | `ajuste-hu-03-codigos-pieza` | HU-03 | Formato de códigos de pieza en la demo: letra A–Z y número 1–25 al azar, código completo único por proyecto (VAL-HU-03-2). Completado 2026-11-19, pendiente de archivo | 2026-11-18 |
 | `hu-06-consultar-piezas-pendientes` | HU-06 | Consulta de piezas «Pendiente» por Proyecto/ParteCasa con selector propio del Operario; «0 pendientes» solo para parte elegida | 2026-11-19 |
+| `ajuste-hu-06-selectores-proyecto-partes` | HU-06 | CA3-CA6: selector de proyecto por cliente/código, selector de partes con piezas y aviso de proyecto «Sin piezas cargadas» (artefactos en commit `e688df6`) | 2026-11-22 | En curso: ficha confirmada y propuesta OpenSpec creada; pendiente de revisión e implementación |

@@ -28,7 +28,7 @@
           <select id="proyectoId" name="proyectoId" required>
             <option value="">-- Seleccione un proyecto --</option>
             <% proyectos.forEach(function(proyecto) { %>
-              <option value="<%= proyecto.id %>" <%= proyectoId === proyecto.id ? 'selected' : '' %>><%= proyecto.codigo %></option>
+              <option value="<%= proyecto.id %>" <%= proyectoId === proyecto.id ? 'selected' : '' %>><%= proyecto.cliente %> (<%= proyecto.codigo %>)</option>
             <% }); %>
           </select>
         </div>
@@ -46,7 +46,11 @@
       <p><a href="/">Volver al inicio</a></p>
     </div>
 
-    <% if (!haySeleccion) { %>
+    <% if (proyectoSinPiezas) { %>
+      <div class="card">
+        <p class="warn">El proyecto no tiene partes de la casa con piezas cargadas.</p>
+      </div>
+    <% } else if (!haySeleccion) { %>
       <div class="card">
         <p class="warn">Seleccione un Proyecto y una Parte de la casa para consultar.</p>
       </div>
@@ -65,5 +69,18 @@
       </div>
     <% } %>
   </main>
+
+  <!-- HU-06, CU-06, CA4/CA5: llenar el selector de Parte al elegir Proyecto, sin pulsar «Consultar». -->
+  <script>
+    (function () {
+      var proyecto = document.getElementById('proyectoId');
+      var parte = document.getElementById('parteCasaId');
+      if (!proyecto || !parte) return;
+      proyecto.addEventListener('change', function () {
+        parte.value = '';
+        proyecto.form.submit();
+      });
+    })();
+  </script>
 </body>
 </html>
