@@ -32,8 +32,8 @@ Archivo fuente: [`./diagramas/est-01.puml`](./diagramas/est-01.puml)
 | Estado origen | Evento | Guarda | Acción | Estado destino |
 |---------------|--------|--------|--------|----------------|
 | Inicial | inyectar piezas desde plano/archivo | archivo válido | — | Pendiente |
-| Pendiente | asignar pieza a torre con evidencia | torre Abierta de la misma parte y evidencia almacenada | registrar evidencia, usuario, fecha y hora | Listo |
-| Listo | asignar pieza a torre con evidencia | otra torre Abierta de la misma parte, reemplazo confirmado y evidencia almacenada | invalidar evidencia anterior y guías Vigentes que incluyen la pieza | Listo |
+| Pendiente | asignar pieza a torre con evidencia | torre Abierta de la misma parte, capacidad máxima no alcanzada y evidencia almacenada | registrar evidencia, usuario, fecha y hora | Listo |
+| Listo | asignar pieza a torre con evidencia | otra torre Abierta de la misma parte, capacidad máxima no alcanzada, reemplazo confirmado y evidencia almacenada | invalidar evidencia anterior y guías Vigentes que incluyen la pieza | Listo |
 | Listo | desasignar pieza de una torre | — | invalidar evidencia y guías Vigentes que incluyen la pieza | Pendiente |
 | Listo | registrar envío con evidencia | guía Vigente que incluye la pieza y evidencia almacenada | — | Enviado |
 | Enviado | — (finalización) | — | — | Final |
@@ -63,8 +63,9 @@ El envío no crea un estado nuevo: al registrarse el envío de la guía que la i
 
 | Estado origen | Evento | Guarda | Acción | Estado destino |
 |---------------|--------|--------|--------|----------------|
-| Inicial | crear torre | universo de piezas inyectado | asignar numeración correlativa | Abierta |
+| Inicial | crear torre | universo de piezas inyectado | asignar numeración correlativa y capacidad | Abierta |
 | Abierta | cerrar torre manualmente | al menos una pieza asignada | — | Cerrada |
+| Abierta | cerrar torre automáticamente | piezas asignadas + 1 == capacidad máxima| cerrar torre automáticamente | cerrada|
 | Cerrada | reabrir torre | ninguna pieza Enviado | invalidar guías Vigentes que incluyen la torre | Abierta |
 | Abierta | eliminar torre vacía con código | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
 | Cerrada | eliminar torre vacía con código | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
