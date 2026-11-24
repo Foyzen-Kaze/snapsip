@@ -3,7 +3,7 @@
 <a id="hu-01"></a>
 
 ## HU-01 — Autenticación de usuarios
-Como Operario de Bodega o Encargado de Despacho, quiero autenticarme con mis credenciales, para acceder únicamente a los proyectos y funciones que corresponden a mi rol.
+Como Operario de Bodega, Encargado de Despacho o Supervisor de Proyecto, quiero autenticarme con mis credenciales, para acceder únicamente a los proyectos y funciones que corresponden a mi rol.
 **Actividad TO-BE asociada:** Autenticación de usuarios.
 **Criterios de aceptación:**
 * CA1: Dado que el usuario posee credenciales registradas en el sistema, cuando el usuario solicita el acceso con un identificador y una contraseña válidos, entonces el sistema concede el acceso y habilita las funciones correspondientes a su rol.
@@ -19,6 +19,7 @@ Como Encargado de Despacho, quiero registrar un nuevo proyecto asociado a un cli
 * CA1: Dado que el encargado de despacho necesita iniciar el control de un cliente nuevo, cuando solicita el registro de un proyecto con un cliente, un código y un metraje, entonces el sistema registra el proyecto en estado "Sin piezas cargadas" con cero partes y cero piezas.
 * CA2: Dado que existe un proyecto registrado con un código específico, cuando el encargado de despacho solicita el registro de otro proyecto con ese mismo código, entonces el sistema rechaza la solicitud e informa que el código está duplicado.
 * CA3: Dado que un proyecto se encuentra en estado "Sin piezas cargadas", cuando el operario de bodega solicita la creación de una torre en ese proyecto, entonces el sistema rechaza la solicitud e informa que primero debe completarse la carga del plano o archivo de piezas.
+* CA4: Dado que como encargado de despacho creo un nuevo proyecto asociado a un cliente, con su código especifico y metraje, este queda en estado "pendiente de aprobación".  
 
 <a id="hu-03"></a>
 
@@ -124,3 +125,10 @@ Como Operario de Bodega, quiero desasignar una pieza que fue asignada por error,
 **Criterios de aceptación:**
 * CA1: Dado que una pieza se encuentra en estado Listo dentro de una torre, cuando el operario de bodega solicita la desasignación de esa pieza, entonces el sistema devuelve la pieza a estado Pendiente sin torre asignada, invalida la evidencia de marca anterior conservándola en el historial e invalida las guías de despacho Vigentes y todavía no enviadas que incluyan esa pieza.
 * CA2: Dado que una pieza se encuentra en estado Enviado, cuando el operario de bodega solicita la desasignación de esa pieza, entonces el sistema rechaza la solicitud e informa que una pieza enviada no puede desasignarse.
+
+## HU-12 - Crear o Rechazar Proyecto
+Cómo Supervisor de Proyecto, quiero aprobar o rechazar un proyecto que se encuentre en estado "pendiente de aprobación". 
+**Actividad TO-BE asociada:** Crear Proyecto
+**Criterios de Aceptación**: 
+* CA1: Dado que un proyecto esta bien constituido por el encargado de despecho, y a cliente le parece correcto, permito que el sistema apruebe el proyecto.
+* CA2: Dado que un proyecto esta bien constituido, pero del que el cliente desconcuerda, permito que el sistema rechace el proyecto.

@@ -533,3 +533,22 @@ Característica: Desasignar pieza de una torre
     Y comunica que una pieza enviada no puede desasignarse
     Y conserva la pieza, su torre y sus evidencias sin modificaciones
 ```
+## HU-12 - Crear o Rechazar Proyecto
+Cómo Supervisor de Proyecto, quiero aprobar o rechazar un proyecto que se encuentre en estado "pendiente de aprobación"
+```gherkin
+Caracteristica: Aprobar o Rechazar un proyecto
+  # CA1
+  Escenario: Apruebo un Proyecto
+    Dado que un proyecto generado por el Encargado de Despacho
+    Y que este bien constituido
+    Cuando cómo Supervisor contacto al Cliente proponiendole el Proyecto y da visto bueno
+    Entonces permito que el sistema Apruebe la Creación del Proyecto
+    Y se comunica con el Encargado de Despacho, permitiendo que el proyecto avance.
+  # CA2
+  Escenario: Rechazo un Proyecto
+    Dado que un proyecto generado por el Encargo de Despecho
+    Y que este bien constituido
+    Cuando cómo Supervisor contacto al Cliente proponiendole el Proyecto y no da visto bueno
+    Entonces permito que el sistema Rechace la Creación del Proyecto
+    Y se comunica con el Encargado de Despacho, no permitiendo seguir con el proyecto.     
+```    
