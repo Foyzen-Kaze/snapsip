@@ -9,12 +9,12 @@ Como se la HU1 se modifica y se crea una nueva historia, el gherkin (criterios d
 # Sebastian Fredy:
 1) Modelo de dominio: lo que se va a cambiar como ahora proyecto debe poder aprobarse vamos a tener que modificar la clase proyecto al atributo estado ya cumple con mostrar los estados podriamos añadirle en estado uno que podria ser esperando Aprobacion
 2) Lo que no va a cambiar aunque haya un nuevo rol este no es un concepto de negocio asi que no se metera en el modelo de dominio
-3) Casos de uso: como se añade un nuevo rol supervisor de proyectos va a ser un usuario de nuestro sistema asi que entra en el diagrama de casos de uso como actor y se le añade un caso de uso  de lo que esta pidiendo el cambio de poder aprobar  o rechazar asi que habra un nuevo caso de uso para hacer esto que lo hara el rol supervisor de proyectos
+3) Casos de uso: como se añade un nuevo rol supervisor de proyectos va a ser un usuario de nuestro sistema asi que entra en el diagrama de casos de uso como actor y se le añade un caso de uso  de lo que esta pidiendo el cambio de poder aprobar  o rechazar un nuevo proyecto asi que habra un nuevo caso de uso para hacer esto que lo hara el rol supervisor de proyectos
 
 
 # David Nuñez: 
 1) Diagrama de secuencia: se cambia el diagramas de secuencia DSS-03 el nuevo usuario Supervisor de proyecto cambia el flujo del diagrama en DSS-03 se debe agregar el nuevo usuario al momento de autenticarse.
-
+2) Cambio en diagrama de estado: se cambia el diagrama de estado EST-03 al momento de generar la guia de despacho el proyecto necesariamente debe estar aprobado
 
 
 
