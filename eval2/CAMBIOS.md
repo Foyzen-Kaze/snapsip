@@ -8,8 +8,8 @@ El cliente de SnapSip tuvo un accidente en bodega: una torre muy alta se vino ab
 | Artefacto | Qué cambió (antes → después) | Por qué lo exige el cambio | Responsable |
 |-----------|------------------------------|----------------------------|-------------|
 | HU y Gherkin | | | Marengo |
-| Modelo de dominio |antes sin capacidad ahora con capacidadMax como atributo de la clase torre | lo exige porque ahora tenemos una capacidad limitada de pizas por torres y si ya esta lleno no se le meten piezas | Sebastián |
-| Casos de uso | antes cu-04 y cu-05 despues siguen los mismos cu-04 y cu05 s| se mantienen porque sigue usando mismos roles y mismo objetivo solo añade reglas y un dato que no afecta en este diagrama | Sebastián |
+| Modelo de dominio |se reviso todo el modelo de domio y se cambio una clase: torre | lo cambiamos porque ahora exige que las torres no tengan mas de 30 piezas estando ahora limitados por capacidadMax que puede valer desde 1 a 30 cumpliendo con el gerhink de hu-4 para limitar la capacidad maxima implementamos tambien un atributo derivados cupos que si cupos que es concecuencia de capacidadMax y de los paneles disponibles que quedan es un entero de los paneles que se le puede asignar a la torre en ese momento y va cambiando con el funcionamiento y cumpliendo tambien con hu-05 no dejando que las torres se le asigne una pieza cuando ya esta llena | Sebastián |
+| Casos de uso | se revisaron los casos de uso CU04 Y CU05| se mantienen porque sigue usando mismos roles y mismo objetivo solo añade reglas y un dato que no afecta en este diagrama por lo que lo establecido anteriormente es suficiente para seguir con el cambio solicitado | Sebastián |
 | Secuencia | diagrama de secuencia DSS-01 | porque afecta al flujo del sistema en la creación de torres | David |
 | Estado | diagramas de estado EST-01 y EST-02 | porque la nueva restricción exige un limite en las piezas que pueden ser admitidas en la torre afectando el flujo de la creación de torres y la asignación de piezas a estas | David |
 | Trazabilidad | | |Marengo |
