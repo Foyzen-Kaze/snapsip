@@ -27,10 +27,12 @@ Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
 | CU-09 | Registrar envío con evidencia | Encargado de Despacho | Servicio de almacenamiento de evidencias | [HU-09 Registrar envío con evidencia](./04-historias-usuario.md#hu-09) |
 | CU-10 | Eliminar torre vacía con código | Operario de Bodega | — | [HU-10 Eliminar torre vacía con código](./04-historias-usuario.md#hu-10) |
 | CU-11 | Desasignar pieza de una torre | Operario de Bodega | — | [HU-11 Desasignar pieza de una torre](./04-historias-usuario.md#hu-11) |
+| CU-12  | Crear o Rechazar Proyecto | Supervisor de proyectos |
+| - | HU-12 Crear o Rechazar Proyecto |
 
 ## Decisiones de modelado
 - **Un caso de uso por historia:** cada historia de [04-historias-usuario.md](./04-historias-usuario.md) corresponde a un único objetivo del actor, por lo que la numeración CU-xx coincide con la HU-xx de origen.
-- **Nombre del caso de uso:** cada caso de uso se escribe con un verbo en infinitivo que expresa el objetivo del actor, tomado del «quiero…» de su historia. En nueve casos ese verbo coincide con el título de la historia y con la tarea del [diagrama TO-BE](./02-rediseno-to-be.md). En CU-01 y CU-07 el título es un sustantivo («Autenticación de usuarios», «Cierre manual de torre»), por lo que el caso de uso usa el verbo de la historia: «quiero autenticarme» y «quiero cerrar manualmente una torre».
+- **Nombre del caso de uso:** cada caso de uso se escribe con un verbo en infinitivo que expresa el objetivo del actor, tomado del «quiero…» de su historia. En nueve casos ese verbo coincide con eleccion del título de la historia y con la tarea del [diagrama TO-BE](./02-rediseno-to-be.md). En CU-01 y CU-07 el título es un sustantivo («Autenticación de usuarios», «Cierre manual de torre»), por lo que el caso de uso usa el verbo de la historia: «quiero autenticarme» y «quiero cerrar manualmente una torre».
 - **Tareas del TO-BE sin caso de uso propio:** «Validar y registrar piezas» y «Validar completitud por Parte o Proyecto» son tareas de servicio que ejecuta el sistema dentro de CU-05 y CU-08. «Cargar camión» es una tarea manual, sin apoyo del sistema.
 - **Validación de completitud dentro de CU-08:** la ejecuta el sistema y no es un objetivo de un actor. CU-08 solo genera la guía si el alcance solicitado está completo (RP-08, RP-09).
 - **Adjuntar evidencia fotográfica sin caso de uso propio:** es un paso obligatorio de CU-05 y de CU-09, no un objetivo independiente. Por eso el Servicio de almacenamiento de evidencias se conecta directamente con esos dos casos de uso.

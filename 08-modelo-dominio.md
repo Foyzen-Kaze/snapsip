@@ -8,7 +8,7 @@ Archivo fuente: [`./diagramas/modelo-de-dominio.puml`](./diagramas/modelo-de-dom
 ## Descripción de las clases
 | Clase | Qué representa en el negocio | Atributos |
 |-------|------------------------------|-----------|
-| Proyecto | Casa encargada por un cliente, cuyo despacho de paneles SIP se controla. | codigo, cliente, metraje, estado (Sin piezas cargadas, En preparación, Proyecto completo) |
+| Proyecto | Casa encargada por un cliente, cuyo despacho de paneles SIP se controla. | codigo, cliente, metraje, estado (Sin piezas cargadas, En preparación, Proyecto completo,esperandoAprobacion) |
 | ParteCasa | Sección de la casa (por ejemplo, el techo) que organiza los paneles del plano. | nombre, /completa (derivado: tiene al menos una pieza y todas están Listo) |
 | Pieza | Panel SIP del universo de piezas del proyecto. | codigo, estado (Pendiente, Listo, Enviado) |
 | Torre | Pila física de paneles en la bodega, exclusiva de una parte de la casa. | codigo, numero (correlativo dentro del proyecto), estado (Abierta, Cerrada, Eliminada), fechaHoraEliminacion, eliminadaPor |
