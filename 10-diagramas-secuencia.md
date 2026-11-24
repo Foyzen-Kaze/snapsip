@@ -27,14 +27,15 @@ Archivo fuente: [`./diagramas/dss-01.puml`](./diagramas/dss-01.puml)
 Variantes representadas:
 
 - **`alt` de validación de la solicitud**, con cinco escenarios excluyentes:
-  - **[sin evidencia fotográfica]:** SnapSip rechaza la asignación y exige la fotografía (HU-05 CA2).
+  - **[torre Cerrada]:** SnapSip rechaza la asignación y sugiere registrar otra torre para esa parte (HU-04 CA4).
   - **[pieza Enviado]:** SnapSip rechaza la solicitud, porque una pieza enviada no puede reasignarse (HU-05 CA5).
   - **[torre de otra parte de la casa]:** SnapSip rechaza la asignación, porque cada torre pertenece a una sola parte de la casa (HU-04 CA3).
-  - **[torre Cerrada]:** SnapSip rechaza la asignación y sugiere registrar otra torre para esa parte (HU-04 CA4).
+  - **[sin evidencia fotográfica]:** SnapSip rechaza la asignación y exige la fotografía (HU-05 CA2).
   - **[torre Abierta de la misma parte y evidencia adjunta]:** es el escenario principal y continúa con el almacenamiento de la evidencia.
 - **`opt` [pieza Listo en otra torre]:** si la pieza ya estaba asignada, SnapSip solicita la confirmación del reemplazo antes de reasignarla (HU-05 CA3). Si el operario no confirma, la secuencia termina y la asignación anterior se conserva.
 - **`alt` del almacenamiento de la evidencia en el sistema externo:**
-  - **[evidencia almacenada]:** la pieza queda en estado Listo y se registran el usuario, la fecha y la hora de la asignación (HU-05 CA1).
+  - **[evidencia almacenada]:** la pieza queda en estado Listo y se registran el usuario, la fecha, la hora de la asignación y los cupos disponibles (HU-05 CA1).
+  - **`opt` [torre alcanzó su capacidad máxima]** Snapsip rechaza la solicitud y sugiere otra torre, informando que la torre actual se encuentra llena y cerrada (HU-05 CA7).
   - **[falla del servicio]:** SnapSip rechaza la asignación y la pieza no cambia de estado (HU-05 CA4). Así nunca queda una pieza Listo sin evidencia que la respalde.
 
 ---

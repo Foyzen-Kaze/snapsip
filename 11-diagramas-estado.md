@@ -65,7 +65,7 @@ El envío no crea un estado nuevo: al registrarse el envío de la guía que la i
 |---------------|--------|--------|--------|----------------|
 | Inicial | crear torre | universo de piezas inyectado | asignar numeración correlativa y capacidad | Abierta |
 | Abierta | cerrar torre manualmente | al menos una pieza asignada | — | Cerrada |
-| Abierta | cerrar torre automáticamente | piezas asignadas + 1 == capacidad máxima| cerrar torre automáticamente | cerrada|
+| Abierta | asignar pieza a torre con evidencia | piezas asignadas + 1 == capacidad máxima| cerrar torre automáticamente | cerrada|
 | Cerrada | reabrir torre | ninguna pieza Enviado | invalidar guías Vigentes que incluyen la torre | Abierta |
 | Abierta | eliminar torre vacía con código | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
 | Cerrada | eliminar torre vacía con código | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |

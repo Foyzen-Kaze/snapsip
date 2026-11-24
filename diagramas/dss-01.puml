@@ -21,16 +21,15 @@ participant "Servicio de almacenamiento\nde evidencias" as ALM <<sistema externo
 
 OP -> SS : asignar pieza a torre con evidencia(pieza, torre, evidencia fotográfica)
 
-alt Limite de piezas excedido
-  SS --> OP : rechazo: Se ha alcanzado el limite de piezas
+alt torre Cerrada
+  SS --> OP : rechazo: se sugiere registrar otra torre para la parte
 else sin evidencia fotográfica
   SS --> OP : rechazo: se exige evidencia fotográfica
 else pieza Enviado
   SS --> OP : rechazo: una pieza enviada no puede reasignarse
 else torre de otra parte de la casa
   SS --> OP : rechazo: la torre no corresponde a la parte de la pieza
-else torre Cerrada
-  SS --> OP : rechazo: se sugiere registrar otra torre para la parte
+
 else torre Abierta de la misma parte y evidencia adjunta
   opt pieza Listo en otra torre
     SS --> OP : solicitud de confirmación de reemplazo
@@ -39,7 +38,10 @@ else torre Abierta de la misma parte y evidencia adjunta
   SS -> ALM : almacenar evidencia(fotografía)
   alt evidencia almacenada
     ALM --> SS : referencia de evidencia
-    SS --> OP : pieza Listo, asignación registrada (usuario, fecha y hora)
+    SS --> OP : pieza Listo, asignación registrada (usuario, fecha, hora y cupos disponibles)
+opt torre alcanzó su capacidad máxima
+   SS --> OP : Torre cerrada automáticamente, sin cupos
+   end
   else falla del servicio
     ALM --> SS : error de almacenamiento
     SS --> OP : rechazo: asignación no registrada, la pieza no cambia de estado
