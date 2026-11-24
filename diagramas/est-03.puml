@@ -10,7 +10,7 @@ skinparam state {
   EndColor #343A40
 }
 
-[*] --> Vigente : generar guía de despacho\n[alcance completo y torres Cerradas]
+[*] --> Vigente : generar guía de despacho\n[alcance completo, torres Cerradas y Proyecto Aprobado]
 Vigente --> Invalidada : desasignar pieza de una torre\n[pieza incluida en la guía]
 Vigente --> Invalidada : asignar pieza a torre con evidencia\n[pieza incluida en la guía\ny reemplazo confirmado]
 Vigente --> Invalidada : reabrir torre\n[torre incluida en la guía]

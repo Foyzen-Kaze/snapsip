@@ -76,7 +76,7 @@ Variantes representadas:
 - Requisitos: RP-01, RP-14, RP-15a, RP-15b, RP-16
 - Sistemas externos que participan: Servicio de autenticación
 
-SnapSip delega la verificación de credenciales en un servicio de autenticación administrado, opción que RP-15b contempla. SnapSip conserva el control de acceso según el rol del usuario (RP-16).
+SnapSip delega la verificación de credenciales en un servicio de autenticación administrado, opción que RP-15b contempla. Participan los tres roles humanos del sistema: Operario de Bodega, Encargado de Despacho y Supervisor de proyectos. SnapSip conserva el control de acceso según el rol del usuario (RP-16).
 
 ![DSS-03](./diagramas/dss-03.png)
 

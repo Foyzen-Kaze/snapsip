@@ -88,7 +88,7 @@ Archivo fuente: [`./diagramas/est-03.puml`](./diagramas/est-03.puml)
 
 ### Estados
 
-- **Vigente:** la guía fue generada para un alcance completo con sus torres Cerradas y todavía no tiene envío registrado (HU-08 CA1 y CA3).
+- **Vigente:** la guía fue generada para un proyecto en estado Aprobado (validado por el Supervisor de proyectos), con un alcance completo y sus torres Cerradas, y todavía no tiene envío registrado (HU-08 CA1 y CA3).
 - **Invalidada:** después de su generación cambió una pieza o una torre incluida, por lo que la guía ya no representa lo preparado (RD-01). No admite envío ni recupera su vigencia; debe generarse una guía nueva (HU-09 CA3 y CA4).
 - **Enviada:** el envío fue registrado con la evidencia fotográfica del camión cargado (HU-09 CA1).
 
@@ -96,7 +96,7 @@ Archivo fuente: [`./diagramas/est-03.puml`](./diagramas/est-03.puml)
 
 | Estado origen | Evento | Guarda | Acción | Estado destino |
 |---------------|--------|--------|--------|----------------|
-| Inicial | generar guía de despacho | alcance completo y torres Cerradas | — | Vigente |
+| Inicial | generar guía de despacho | alcance completo, torres Cerradas y Proyecto Aprobado | — | Vigente |
 | Vigente | desasignar pieza de una torre | pieza incluida en la guía | — | Invalidada |
 | Vigente | asignar pieza a torre con evidencia | pieza incluida en la guía y reemplazo confirmado | — | Invalidada |
 | Vigente | reabrir torre | torre incluida en la guía | — | Invalidada |
@@ -104,4 +104,4 @@ Archivo fuente: [`./diagramas/est-03.puml`](./diagramas/est-03.puml)
 | Invalidada | — (finalización) | — | — | Final |
 | Enviada | — (finalización) | — | — | Final |
 
-«Alcance completo» significa que el alcance solicitado (una parte de la casa o el proyecto) contiene al menos una pieza y todas están en estado Listo (RP-08). Las tres transiciones de Vigente a Invalidada corresponden a HU-11 CA1 (desasignación), HU-05 CA3 (reasignación) y HU-07 CA3 (reapertura).
+«Alcance completo» significa que el alcance solicitado (una parte de la casa o el proyecto) contiene al menos una pieza y todas están en estado Listo (RP-08). Adicionalmente, se exige que el proyecto se encuentre en estado Aprobado por el Supervisor de proyectos como condición previa obligatoria para emitir la guía. Las tres transiciones de Vigente a Invalidada corresponden a HU-11 CA1 (desasignación), HU-05 CA3 (reasignación) y HU-07 CA3 (reapertura).

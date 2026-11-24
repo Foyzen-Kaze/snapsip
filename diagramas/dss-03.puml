@@ -14,7 +14,7 @@ skinparam sequence {
   GroupBorderColor #495057
 }
 
-actor "Usuario\n(Operario de Bodega o\nEncargado de Despacho)" as U
+actor "Usuario\n(Operario de Bodega,\nEncargado de Despacho\ny Supervisor de proyecto)" as U
 participant ":SnapSip" as SS
 participant "Servicio de autenticación" as AUT <<sistema externo>>
 
