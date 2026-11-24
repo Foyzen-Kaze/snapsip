@@ -67,6 +67,12 @@ Característica: Crear proyecto
     Entonces el sistema rechaza la solicitud
     Y comunica que primero deben inyectarse las piezas del proyecto desde el archivo
     Y no crea la torre
+  # CA4
+  Escenario: Espera de aprobación del supervisor
+    Dado que un proyecto se encuentra bien constituido
+    Cuando termine el proyecto
+    Entonces el sistema lo deja en estado pendiente
+    Y comunica directamente con el supervisor a la espera de aprobación
 ```
 
 ## HU-03 — Inyectar piezas desde plano/archivo
