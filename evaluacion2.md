@@ -16,5 +16,7 @@ Como se la HU1 se modifica y se crea una nueva historia, el gherkin (criterios d
 1) Diagrama de secuencia: se cambia el diagramas de secuencia DSS-03 el nuevo usuario Supervisor de proyecto cambia el flujo del diagrama en DSS-03 se debe agregar el nuevo usuario al momento de autenticarse.
 2) Cambio en diagrama de estado: se cambia el diagrama de estado EST-03 al momento de generar la guia de despacho el proyecto necesariamente debe estar aprobado
 
+No se añade un DSS para la aprobación del proyecto porque es una operación interna de SnapSip sin interacción con sistemas externos, manteniéndose el criterio de DSS-01 a DSS-03. El impacto en secuencia se limita a DSS-03 al incorporar al Supervisor de proyectos como actor autenticable.
+
 
 
