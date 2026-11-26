@@ -126,6 +126,8 @@ Como Operario de Bodega, quiero desasignar una pieza que fue asignada por error,
 * CA1: Dado que una pieza se encuentra en estado Listo dentro de una torre, cuando el operario de bodega solicita la desasignación de esa pieza, entonces el sistema devuelve la pieza a estado Pendiente sin torre asignada, invalida la evidencia de marca anterior conservándola en el historial e invalida las guías de despacho Vigentes y todavía no enviadas que incluyan esa pieza.
 * CA2: Dado que una pieza se encuentra en estado Enviado, cuando el operario de bodega solicita la desasignación de esa pieza, entonces el sistema rechaza la solicitud e informa que una pieza enviada no puede desasignarse.
 
+<a id="hu-12"></a>
+
 ## HU-12 - Crear o Rechazar Proyecto
 Cómo Supervisor de Proyecto, quiero aprobar o rechazar un proyecto que se encuentre en estado "pendiente de aprobación". 
 **Actividad TO-BE asociada:** Crear Proyecto
