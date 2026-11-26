@@ -14,7 +14,7 @@ Los diagramas de secuencia y de estado de cada fila son los que declaran ese req
 | Requisito (Entrega 1) | Historia | Caso de uso | Secuencia | Estado | Clases del dominio |
 |-----------------------|----------|-------------|-----------|--------|---------------------|
 | RP-01 | HU-01 | CU-01 | DSS-03 | — | — |
-| RP-02 | HU-02 | CU-02 | — | — | Proyecto |
+| RP-02 | HU-02 | CU-02 | — | — | Proyecto, ParteCasa (cantidadPrevista, decisión OBS-1 de 2026-11-26) |
 | RP-03 | HU-03 | CU-03 | — | EST-01 | Proyecto, ParteCasa, Pieza |
 | RP-04 | HU-04 | CU-04 | DSS-01 | EST-02 | Torre, ParteCasa, Proyecto |
 | RP-05 | HU-05 | CU-05 | DSS-01 | EST-01, EST-03 | Pieza, Torre, Evidencia, GuiaDespacho |
@@ -136,7 +136,7 @@ Pruebas adicionales que no corresponden a un escenario Gherkin, sino a reglas de
 ### Observaciones de la implementación
 
 - **HU-01 (adaptación en la demo):** por regla del taller no hay autenticación real. CA1 y CA2 se prueban con un selector de rol de demostración, por eso sus pruebas llevan «adaptación de CA1» y «CA2 adaptado en demo». El Servicio de autenticación de CU-01 y DSS-03 queda declarado como adaptador simulado.
-- **HU-03 (simulada por indicación del profesor, 2026-11-18):** el plano/archivo se sustituye por `GeneradorPlanoSimulado`. CA2 (formato inválido y filas incompletas) no se puede producir en la demo y queda como desviación documentada en `.cin324/validaciones/VAL-HU-03-1.md`. El texto de RP-03, HU-03 y su Gherkin no se modificó.
+- **HU-03 (simulada por indicación del profesor, 2026-11-18; ajustada por OBS-1 el 2026-11-26):** el plano/archivo se sustituye por `GeneradorPlanoSimulado`, que ahora recibe las partes creadas en HU-02 con su `cantidad_prevista` y solo genera códigos de pieza. CA2 (formato inválido y filas incompletas) no se puede producir en la demo y queda como desviación documentada en `.cin324/validaciones/VAL-HU-03-1.md`. El texto de RP-02, RP-03, HU-02, HU-03 y su Gherkin se actualizó con la decisión OBS-1 (opción 2, «Al crear proyecto»).
 - **HU-04 CA3 y CA4:** son variantes de rechazo de DSS-01 al asignar una pieza, como ya indica la observación sobre DSS-01. Por eso se implementan en `asignarPieza` y sus pruebas están en el archivo de HU-05, aunque conservan el prefijo `HU-04 · `.
 - **HU-05 CA6 (agregado el 2026-11-22):** «Consulta de las piezas de una torre» es una lectura de apoyo dentro de CU-05; no tiene actividad TO-BE, caso de uso ni DSS propios.
 - **HU-05 y RD-01:** la invalidación de guías Vigentes al reasignar una pieza se difiere a HU-08, porque GuiaDespacho aún no existe. El usuario, la fecha y la hora que exige RP-05 se guardan en Evidencia (`responsable`, `fecha_hora_captura`), como indica el modelo de dominio.

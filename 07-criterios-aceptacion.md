@@ -44,13 +44,15 @@ Característica: Crear proyecto
 
   # CA1
   Escenario: Creación de un proyecto con código único
-    Dado que el encargado de despacho dispone del cliente, el código y el metraje del proyecto
+    Dado que el encargado de despacho dispone del cliente, el código, el metraje del proyecto y las cantidades de Piso, Muros exteriores, Muros interiores, Entrepiso y Techo
     Y el código no pertenece a otro proyecto
+    Y las cantidades son enteros no negativos y el total está entre 1 y 100
     Cuando solicita crear el proyecto con esos datos
     Entonces el sistema registra el proyecto asociado al cliente
     Y conserva el código y el metraje indicados
     Y establece su estado en "Sin piezas cargadas"
-    Y el proyecto queda sin partes de la casa ni piezas registradas
+    Y crea las partes de la casa con cantidad positiva, registrando su cantidad prevista
+    Y el proyecto queda sin piezas registradas
 
   # CA2
   Escenario: Rechazo de un código de proyecto duplicado
@@ -62,12 +64,21 @@ Característica: Crear proyecto
 
   # CA3
   Escenario: Rechazo de la creación de una torre antes de inyectar las piezas
-    Dado que un proyecto se encuentra en estado "Sin piezas cargadas"
+    Dado que un proyecto se encuentra en estado "Sin piezas cargadas" con partes definidas y sin piezas
     Cuando el operario de bodega solicita crear una torre en ese proyecto
     Entonces el sistema rechaza la solicitud
     Y comunica que primero deben inyectarse las piezas del proyecto desde el archivo
     Y no crea la torre
+
   # CA4
+  Escenario: Rechazo por cantidades de partes inválidas
+    Dado que una cantidad de parte no es un entero no negativo o el total de las cinco cantidades está fuera de 1 a 100
+    Cuando el encargado de despacho solicita crear el proyecto
+    Entonces el sistema rechaza la solicitud
+    Y comunica que las cantidades de las partes deben ser enteros no negativos y el total entre 1 y 100
+    Y no registra el proyecto ni sus partes de la casa
+
+  # CA5
   Escenario: Espera de aprobación del supervisor
     Dado que un proyecto se encuentra bien constituido
     Cuando termine el proyecto
@@ -84,14 +95,22 @@ Característica: Inyectar piezas desde plano/archivo
 
   # CA1
   Escenario: Inyección de piezas desde un archivo válido
-    Dado que un proyecto se encuentra en estado "Sin piezas cargadas"
-    Y el archivo de piezas cumple la plantilla definida
-    Y contiene las piezas organizadas por parte de la casa
+    Dado que un proyecto se encuentra en estado "Sin piezas cargadas" y tiene las partes de la casa definidas al crearlo
+    Y el plano/archivo contiene las piezas organizadas por esas partes
     Cuando el encargado de despacho solicita inyectar las piezas desde ese archivo
-    Entonces el sistema registra todas las piezas contenidas en el archivo
-    Y asocia cada pieza a su parte de la casa dentro del proyecto
+    Entonces el sistema crea en una sola carga exactamente la cantidad prevista de piezas por parte
+    Y asocia cada pieza a su parte de la casa ya registrada dentro del proyecto
     Y establece cada pieza en estado "Pendiente" y sin torre asignada
     Y cambia el proyecto a estado "En preparación"
+    Y oculta el botón «Inyectar piezas desde plano/archivo»
+
+  # CA1
+  Escenario: Rechazo de un reintento de inyección
+    Dado que un proyecto ya fue inyectado y está en estado "En preparación"
+    Cuando el encargado de despacho solicita inyectar piezas de nuevo
+    Entonces el sistema rechaza la solicitud
+    Y comunica que el proyecto ya tiene piezas inyectadas y que no se modificaron datos
+    Y no modifica piezas ni partes de la casa
 
   # CA2
   Escenario: Rechazo de un archivo con formato inválido

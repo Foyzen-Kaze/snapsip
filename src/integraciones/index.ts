@@ -16,10 +16,11 @@ export const servicioAlmacenamientoEvidencias: ServicioAlmacenamientoEvidencias 
 export type {
   GeneradorPlano,
   ParteCasaSimulada,
+  ParteConCantidadSimulada,
   PiezaSimulada,
   UniversoPiezasSimulado,
 } from "./GeneradorPlano";
-export { GeneradorPlanoSimulado, NOMBRES_PARTES } from "./GeneradorPlanoSimulado";
+export { GeneradorPlanoSimulado } from "./GeneradorPlanoSimulado";
 export type {
   EvidenciaAlmacenada,
   ServicioAlmacenamientoEvidencias,

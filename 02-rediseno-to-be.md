@@ -38,8 +38,8 @@ Nota: El diagrama distingue tareas de usuario (icono de persona), tareas de serv
 | Actividad en el AS-IS | Actividad en el TO-BE | Qué cambia |
 |-------------------------|--------------------------|------------|
 | - | Autenticación de usuarios | (Nueva actividad) Cada usuario ingresa con sus credenciales y accede solo a las funciones de su rol. |
-| - | Crear proyecto | (Nueva actividad) El proyecto queda registrado en el sistema con su cliente, código y metraje, en lugar de existir solo en papel. |
-| - | Inyectar piezas desde plano/archivo | (Nueva actividad) El sistema inyecta el total de piezas desde un archivo, automatizando el registro inicial en estado "Pendiente". Así existe un listado contra el cual controlar lo que falta. |
+| - | Crear proyecto | (Nueva actividad) El proyecto queda registrado en el sistema con su cliente, código y metraje y con las cantidades previstas de Piso, Muros exteriores, Muros interiores, Entrepiso y Techo, en lugar de existir solo en papel. |
+| - | Inyectar piezas desde plano/archivo | (Nueva actividad) El sistema inyecta desde un archivo el total de piezas de las partes definidas al crear el proyecto, automatizando el registro inicial en estado "Pendiente". Así existe un listado contra el cual controlar lo que falta. |
 | Apilar torre verticalmente sobre otros proyectos o hacia el lado | Crear torre | La torre deja de ser solo una pila física: se crea en el sistema asociada a un proyecto y a una parte específica de la casa. |
 | Apilar torre verticalmente sobre otros proyectos o hacia el lado | Asignar pieza a torre con evidencia | Cada pieza que se apila queda registrada en su torre y se exige adjuntar evidencia fotográfica obligatoria. |
 | Buscar freneticamente las piezas faltantes en la bodega | Consultar piezas pendientes | En lugar de buscar a ciegas durante la carga, el sistema muestra en tiempo real únicamente las piezas que faltan por asignar. |

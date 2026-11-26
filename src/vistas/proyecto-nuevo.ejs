@@ -13,6 +13,8 @@
     input { width: 100%; max-width: 420px; padding: 8px; margin-top: 4px; }
     button { margin-top: 14px; padding: 8px 12px; }
     .error { color: #b91c1c; margin-top: 8px; }
+    fieldset { border: 1px solid #ddd; margin-top: 14px; }
+    legend { font-weight: 600; }
     a { color: #2563eb; }
   </style>
 </head>
@@ -30,6 +32,14 @@
         <input id="codigo" name="codigo" type="text" required value="<%= valores.codigo %>" />
         <label for="metraje">Metraje *</label>
         <input id="metraje" name="metraje" type="text" required value="<%= valores.metraje %>" />
+        <fieldset>
+          <legend>Partes de la casa (cantidades previstas de piezas)</legend>
+          <p><small>Ingrese un entero no negativo por parte; el total debe estar entre 1 y 100. Solo se registrarán las partes con cantidad positiva.</small></p>
+          <% partes.forEach(function(parte) { %>
+            <label for="<%= parte.campo %>"><%= parte.nombre %></label>
+            <input id="<%= parte.campo %>" name="<%= parte.campo %>" type="number" min="0" step="1" required value="<%= valores[parte.campo] %>" />
+          <% }); %>
+        </fieldset>
         <div>
           <button type="submit">Registrar proyecto</button>
         </div>

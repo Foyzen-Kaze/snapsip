@@ -12,6 +12,9 @@
     .ok { color: #065f46; }
     dl { display: grid; grid-template-columns: 180px 1fr; gap: 6px 12px; }
     dt { font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #f3f4f6; }
     a { color: #2563eb; }
   </style>
 </head>
@@ -26,9 +29,19 @@
         <dt>Código</dt><dd><%= proyecto.codigo %></dd>
         <dt>Metraje</dt><dd><%= proyecto.metraje %></dd>
         <dt>Estado</dt><dd><%= proyecto.estado %></dd>
-        <dt>Partes de la casa</dt><dd>0 (sin partes registradas)</dd>
+        <dt>Partes de la casa</dt><dd><%= partes.length %> (definidas al crear el proyecto)</dd>
         <dt>Piezas</dt><dd>0 (sin piezas registradas)</dd>
       </dl>
+      <% if (partes.length > 0) { %>
+        <table>
+          <thead><tr><th>Parte de la casa</th><th>Cantidad prevista de piezas</th></tr></thead>
+          <tbody>
+            <% partes.forEach(function(parte) { %>
+              <tr><td><%= parte.nombre %></td><td><%= parte.cantidad_prevista %></td></tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } %>
       <p><a href="/proyectos/nuevo">Crear otro proyecto</a> · <a href="/proyectos">Ver proyectos</a> · <a href="/">Volver al inicio</a></p>
     </div>
   </main>

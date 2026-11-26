@@ -9,7 +9,7 @@ Archivo fuente: [`./diagramas/modelo-de-dominio.puml`](./diagramas/modelo-de-dom
 | Clase | Qué representa en el negocio | Atributos |
 |-------|------------------------------|-----------|
 | Proyecto | Casa encargada por un cliente, cuyo despacho de paneles SIP se controla. | codigo, cliente, metraje, estado (Sin piezas cargadas, En preparación, Proyecto completo,esperandoAprobacion) |
-| ParteCasa | Sección de la casa (por ejemplo, el techo) que organiza los paneles del plano. | nombre, /completa (derivado: tiene al menos una pieza y todas están Listo) |
+| ParteCasa | Sección de la casa (por ejemplo, el techo) que organiza los paneles del plano. | nombre, cantidadPrevista (número de paneles esperados, definido al crear el proyecto), /completa (derivado: tiene al menos una pieza y todas están Listo) |
 | Pieza | Panel SIP del universo de piezas del proyecto. | codigo, estado (Pendiente, Listo, Enviado) |
 | Torre | Pila física de paneles en la bodega, exclusiva de una parte de la casa. | codigo, numero (correlativo dentro del proyecto), estado (Abierta, Cerrada, Eliminada), fechaHoraEliminacion, eliminadaPor |
 | GuiaDespacho | Documento de control de lo que se despacha para una parte de la casa o para el proyecto completo. | numero, alcance (Parte de la casa o Proyecto), estado (Vigente, Invalidada, Enviada), fechaHoraEmision, fechaHoraEnvio |
@@ -18,8 +18,8 @@ Archivo fuente: [`./diagramas/modelo-de-dominio.puml`](./diagramas/modelo-de-dom
 ## Asociaciones
 | Asociación | Clases | Multiplicidades | Justificación |
 |------------|--------|-----------------|----------------|
-| se divide en (composición) | Proyecto – ParteCasa | 1 a 0..* | Una parte de la casa solo existe dentro de su proyecto. El proyecto se crea sin partes y las recibe al inyectar las piezas desde plano/archivo (RP-02, RP-03). |
-| se compone de (composición) | ParteCasa – Pieza | 1 a 1..* | Cada panel se carga dentro de una parte de la casa y pertenece a ella toda su vida. Una parte existe porque el archivo de piezas le trae al menos un panel (RP-03). |
+| se divide en (composición) | Proyecto – ParteCasa | 1 a 1..* | Una parte de la casa solo existe dentro de su proyecto. El proyecto se crea con al menos una parte de la casa (Piso, Muros exteriores, Muros interiores, Entrepiso o Techo) con su cantidad prevista; HU-03 ya no crea partes (RP-02, decisión OBS-1 de 2026-11-26). |
+| se compone de (composición) | ParteCasa – Pieza | 1 a 1..* | Cada panel se carga dentro de una parte de la casa y pertenece a ella toda su vida. Toda parte definida al crear el proyecto recibe al menos un panel en la inyección, exactamente su cantidad prevista (RP-03). |
 | se almacena en | ParteCasa – Torre | 1 a 0..* | Cada torre pertenece a una única parte de la casa. Una parte puede ocupar varias torres, con numeración correlativa (RP-04, HU-04 CA2). |
 | agrupa (agregación) | Torre – Pieza | 0..1 a 0..* | Un panel está en una sola torre a la vez, y un panel Pendiente no está en ninguna. La torre puede estar vacía (RP-05, RP-11, RP-12). |
 | se despacha con | Proyecto – GuiaDespacho | 1 a 0..* | Toda guía identifica a su proyecto. Un proyecto puede tener varias guías: una por cada parte despachada o una nueva tras una invalidación (RP-09, RD-01). |

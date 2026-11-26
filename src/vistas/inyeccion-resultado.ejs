@@ -28,11 +28,12 @@
         <p>Proyecto <strong><%= universo.proyecto.codigo %></strong></p>
         <p>Se crearon <strong><%= universo.totalPartes %></strong> partes de la casa y <strong><%= universo.totalPiezas %></strong> piezas. Cada pieza quedó en estado «Pendiente» y sin torre asignada; el proyecto pasó a «En preparación».</p>
         <table>
-          <thead><tr><th>Parte de la casa</th><th>Piezas</th><th>Primera pieza</th><th>Última pieza</th></tr></thead>
+          <thead><tr><th>Parte de la casa</th><th>Cantidad prevista</th><th>Piezas creadas</th><th>Primera pieza</th><th>Última pieza</th></tr></thead>
           <tbody>
             <% universo.partes.forEach(function(parte) { %>
               <tr>
                 <td><%= parte.nombre %></td>
+                <td><%= parte.cantidad_prevista %></td>
                 <td><%= parte.piezas.length %></td>
                 <td><%= parte.piezas[0].codigo %></td>
                 <td><%= parte.piezas[parte.piezas.length - 1].codigo %></td>

@@ -7,6 +7,7 @@ export interface ParteCasa {
   id: number;
   proyecto_id: number;
   nombre: string;
+  cantidad_prevista: number;
 }
 
 export interface Pieza {
@@ -31,7 +32,7 @@ export type ResultadoInyeccion =
   | { ok: true; universo: UniversoPiezas }
   | {
       ok: false;
-      motivo: "NO_ENCONTRADO" | "ESTADO_INVALIDO" | "YA_INYECTADO";
+      motivo: "NO_ENCONTRADO" | "ESTADO_INVALIDO" | "YA_INYECTADO" | "SIN_PARTES";
       mensaje: string;
     };
 
@@ -41,14 +42,20 @@ function buscarProyecto(codigoProyecto: string): Proyecto | undefined {
     .get(codigoProyecto) as Proyecto | undefined;
 }
 
+function leerPartes(proyectoId: number): ParteCasa[] {
+  return obtenerBd()
+    .prepare(
+      "SELECT id, proyecto_id, nombre, cantidad_prevista FROM partes_casa WHERE proyecto_id = ? ORDER BY id"
+    )
+    .all(proyectoId) as ParteCasa[];
+}
+
 export function obtenerUniverso(codigoProyecto: string): UniversoPiezas | undefined {
   const db = obtenerBd();
   const proyecto = buscarProyecto(codigoProyecto);
   if (!proyecto) return undefined;
 
-  const partes = db
-    .prepare("SELECT id, proyecto_id, nombre FROM partes_casa WHERE proyecto_id = ? ORDER BY id")
-    .all(proyecto.id) as ParteCasa[];
+  const partes = leerPartes(proyecto.id);
   const piezas = db
     .prepare(
       "SELECT p.id, p.parte_casa_id, p.codigo, p.estado FROM piezas p JOIN partes_casa pc ON pc.id = p.parte_casa_id WHERE pc.proyecto_id = ? ORDER BY p.id"
@@ -102,18 +109,36 @@ export function inyectarPiezasDesdePlano(codigoProyecto: string): ResultadoInyec
     };
   }
 
-  const universoSimulado = generadorPlano.generar(proyecto.codigo);
+  // OBS-1: las partes se definieron al crear el proyecto (HU-02). HU-03 no crea
+  // partes nuevas: solo genera los códigos de las piezas de esas partes.
+  const partes = leerPartes(proyecto.id).filter((parte) => parte.cantidad_prevista > 0);
+  if (partes.length === 0) {
+    return {
+      ok: false,
+      motivo: "SIN_PARTES",
+      mensaje: "El proyecto no tiene partes de la casa con cantidad prevista; no se modificaron datos.",
+    };
+  }
+
+  const universoSimulado = generadorPlano.generar(
+    proyecto.codigo,
+    partes.map((parte) => ({
+      nombre: parte.nombre,
+      cantidad: parte.cantidad_prevista,
+    }))
+  );
+
+  const parteIdPorNombre = new Map(partes.map((parte) => [parte.nombre, parte.id]));
   db.exec("BEGIN");
   try {
-    const insertarParte = db.prepare(
-      "INSERT INTO partes_casa (proyecto_id, nombre) VALUES (?, ?)"
-    );
     const insertarPieza = db.prepare(
       "INSERT INTO piezas (proyecto_id, parte_casa_id, codigo, estado) VALUES (?, ?, ?, 'Pendiente')"
     );
     for (const parte of universoSimulado.partes) {
-      const info = insertarParte.run(proyecto.id, parte.nombre);
-      const parteId = Number(info.lastInsertRowid);
+      const parteId = parteIdPorNombre.get(parte.nombre);
+      if (parteId === undefined) {
+        throw new Error(`El plano simulado devolvió una parte no registrada: ${parte.nombre}`);
+      }
       for (const pieza of parte.piezas) {
         insertarPieza.run(proyecto.id, parteId, pieza.codigo);
       }

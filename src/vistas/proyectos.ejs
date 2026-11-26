@@ -38,7 +38,7 @@
                 <td><%= p.partes %></td>
                 <td><%= p.piezas %></td>
                 <td>
-                  <% if (rolActual === 'Encargado de Despacho' && p.estado === 'Sin piezas cargadas' && p.partes === 0 && p.piezas === 0) { %>
+                  <% if (rolActual === 'Encargado de Despacho' && p.estado === 'Sin piezas cargadas' && p.partes > 0 && p.piezas === 0) { %>
                     <form method="post" action="/proyectos/<%= encodeURIComponent(p.codigo) %>/inyectar-piezas">
                       <button type="submit">Inyectar piezas desde plano/archivo</button>
                     </form>

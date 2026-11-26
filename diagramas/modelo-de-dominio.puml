@@ -30,6 +30,7 @@ class Proyecto {
 
 class ParteCasa {
   nombre
+  cantidadPrevista
   /completa
 }
 
@@ -62,7 +63,7 @@ class Evidencia {
 }
 
 ' Composición: ciclo de vida dependiente
-Proyecto "1" *-down- "0..*" ParteCasa : se divide en >
+Proyecto "1" *-down- "1..*" ParteCasa : se divide en >
 ParteCasa "1" *-down- "1..*" Pieza : se compone de >
 Pieza "0..1" *-down- "0..*" Evidencia : respalda la ubicación de <
 GuiaDespacho "0..1" *-down- "0..1" Evidencia : respalda el envío de <

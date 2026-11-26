@@ -14,25 +14,65 @@ export interface ProyectoConConteo extends Proyecto {
   piezas: number;
 }
 
+// OBS-1 (2026-11-26, opción 2 «Al crear proyecto»): lista única de las cinco
+// partes de la casa. La usa el formulario, la validación y la creación de ParteCasa.
+export const PARTES_CASA = [
+  { campo: "piso", nombre: "Piso" },
+  { campo: "muros_exteriores", nombre: "Muros exteriores" },
+  { campo: "muros_interiores", nombre: "Muros interiores" },
+  { campo: "entrepiso", nombre: "Entrepiso" },
+  { campo: "techo", nombre: "Techo" },
+] as const;
+
+export type CampoParteCasa = (typeof PARTES_CASA)[number]["campo"];
+
 export interface DatosCrearProyecto {
-  codigo: string;
-  cliente: string;
-  metraje: string;
+  codigo: unknown;
+  cliente: unknown;
+  metraje: unknown;
+  piso?: unknown;
+  muros_exteriores?: unknown;
+  muros_interiores?: unknown;
+  entrepiso?: unknown;
+  techo?: unknown;
+}
+
+export interface ParteCasaResumen {
+  nombre: string;
+  cantidad_prevista: number;
 }
 
 export type ResultadoCrearProyecto =
   | { ok: true; proyecto: Proyecto }
-  | { ok: false; motivo: "DUPLICADO" | "OBLIGATORIOS"; mensaje: string };
+  | {
+      ok: false;
+      motivo: "DUPLICADO" | "OBLIGATORIOS" | "PARTES_INVALIDAS";
+      mensaje: string;
+    };
+
+const MENSAJE_PARTES_INVALIDAS =
+  "Las cantidades de las partes deben ser enteros no negativos y el total debe estar entre 1 y 100.";
 
 function normalizar(valor: unknown): string {
   return typeof valor === "string" ? valor.trim() : "";
 }
 
-export function crearProyecto(datos: {
-  codigo: unknown;
-  cliente: unknown;
-  metraje: unknown;
-}): ResultadoCrearProyecto {
+// Acepta el texto del formulario y los números; rechaza decimales, negativos y
+// cualquier otro valor no entero. Un campo ausente equivale a 0.
+function parsearCantidad(valor: unknown): number | undefined {
+  if (valor === undefined || valor === null || valor === "") return 0;
+  const texto =
+    typeof valor === "number"
+      ? String(valor)
+      : typeof valor === "string"
+        ? valor.trim()
+        : "";
+  if (!/^\d+$/.test(texto)) return undefined;
+  const numero = Number(texto);
+  return Number.isSafeInteger(numero) ? numero : undefined;
+}
+
+export function crearProyecto(datos: DatosCrearProyecto): ResultadoCrearProyecto {
   const codigo = normalizar(datos.codigo);
   const cliente = normalizar(datos.cliente);
   const metraje = normalizar(datos.metraje);
@@ -45,30 +85,68 @@ export function crearProyecto(datos: {
     };
   }
 
-  const db = obtenerBd();
-  const existente = db
-    .prepare("SELECT id, codigo, cliente, metraje, estado FROM proyectos WHERE codigo = ?")
-    .get(codigo) as Proyecto | undefined;
-  if (existente) {
-    // CA2: conserva el proyecto existente sin modificaciones
+  const cantidades = {} as Record<CampoParteCasa, number>;
+  const valores = datos as Record<string, unknown>;
+  for (const parte of PARTES_CASA) {
+    const cantidad = parsearCantidad(valores[parte.campo]);
+    if (cantidad === undefined) {
+      return {
+        ok: false,
+        motivo: "PARTES_INVALIDAS",
+        mensaje: MENSAJE_PARTES_INVALIDAS,
+      };
+    }
+    cantidades[parte.campo] = cantidad;
+  }
+  const total = PARTES_CASA.reduce((suma, parte) => suma + cantidades[parte.campo], 0);
+  if (total < 1 || total > 100) {
     return {
       ok: false,
-      motivo: "DUPLICADO",
-      mensaje: "El código está duplicado.",
+      motivo: "PARTES_INVALIDAS",
+      mensaje: MENSAJE_PARTES_INVALIDAS,
     };
   }
 
+  const db = obtenerBd();
+  db.exec("BEGIN");
   try {
+    const existente = db
+      .prepare("SELECT id, codigo, cliente, metraje, estado FROM proyectos WHERE codigo = ?")
+      .get(codigo) as Proyecto | undefined;
+    if (existente) {
+      // CA2: conserva el proyecto existente sin modificaciones
+      db.exec("ROLLBACK");
+      return {
+        ok: false,
+        motivo: "DUPLICADO",
+        mensaje: "El código está duplicado.",
+      };
+    }
+
     const info = db
       .prepare(
         "INSERT INTO proyectos (codigo, cliente, metraje, estado) VALUES (?, ?, ?, ?)"
       )
       .run(codigo, cliente, metraje, "Sin piezas cargadas");
+    const proyectoId = Number(info.lastInsertRowid);
+
+    // OBS-1: solo se crean las partes con cantidad positiva y se guarda su
+    // cantidad prevista. El proyecto nace sin piezas.
+    const insertarParte = db.prepare(
+      "INSERT INTO partes_casa (proyecto_id, nombre, cantidad_prevista) VALUES (?, ?, ?)"
+    );
+    for (const parte of PARTES_CASA) {
+      const cantidad = cantidades[parte.campo];
+      if (cantidad > 0) insertarParte.run(proyectoId, parte.nombre, cantidad);
+    }
+
     const proyecto = db
       .prepare("SELECT id, codigo, cliente, metraje, estado FROM proyectos WHERE id = ?")
-      .get(Number(info.lastInsertRowid)) as Proyecto;
+      .get(proyectoId) as Proyecto;
+    db.exec("COMMIT");
     return { ok: true, proyecto };
   } catch (e: any) {
+    db.exec("ROLLBACK");
     // Defensa por restricción UNIQUE en BD
     if (e && (e.code === "SQLITE_CONSTRAINT_UNIQUE" || String(e.message).includes("UNIQUE"))) {
       return {
@@ -79,6 +157,15 @@ export function crearProyecto(datos: {
     }
     throw e;
   }
+}
+
+export function listarPartesDeProyecto(codigo: string): ParteCasaResumen[] {
+  const db = obtenerBd();
+  return db
+    .prepare(
+      "SELECT nombre, cantidad_prevista FROM partes_casa WHERE proyecto_id = (SELECT id FROM proyectos WHERE codigo = ?) ORDER BY id"
+    )
+    .all(codigo) as ParteCasaResumen[];
 }
 
 function existeTabla(nombre: string): boolean {

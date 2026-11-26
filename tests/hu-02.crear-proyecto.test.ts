@@ -22,6 +22,19 @@ async function agenteEncargado(app: ReturnType<typeof crearApp>) {
   return agente;
 }
 
+// OBS-1: todas las puntas de creación envían las cinco cantidades previstas.
+const CANTIDADES_VALIDAS = {
+  piso: "2",
+  muros_exteriores: "3",
+  muros_interiores: "1",
+  entrepiso: "0",
+  techo: "4",
+};
+
+function filas(sql: string, ...args: unknown[]): any[] {
+  return obtenerBd().prepare(sql).all(...args) as any[];
+}
+
 describe("HU-02 · Crear proyecto", () => {
   beforeEach(() => {
     preparar();
@@ -33,8 +46,7 @@ describe("HU-02 · Crear proyecto", () => {
   });
 
   it("HU-02 · Creación de un proyecto con código único (CA1)", async () => {
-    // DADO que el encargado de despacho dispone del cliente, el código y el metraje del proyecto
-    // Y el código no pertenece a otro proyecto
+    // DADO que el encargado dispone del cliente, código, metraje y las cinco cantidades
     const app = preparar();
     const agente = await agenteEncargado(app);
 
@@ -43,18 +55,21 @@ describe("HU-02 · Crear proyecto", () => {
       cliente: "Cliente A",
       codigo: "CASA-001",
       metraje: "120",
+      ...CANTIDADES_VALIDAS,
     });
 
-    // ENTONCES el sistema registra el proyecto asociado al cliente
+    // ENTONCES el sistema registra el proyecto y crea las partes con cantidad positiva
     expect(res.status).toBe(201);
     expect(res.text).toContain("Cliente A");
     expect(res.text).toContain("CASA-001");
     expect(res.text).toContain("120");
-    // Y conserva el código y el metraje indicados / establece su estado en "Sin piezas cargadas"
     expect(res.text).toContain("Sin piezas cargadas");
-    // Y el proyecto queda sin partes de la casa ni piezas registradas
-    expect(res.text).toContain("sin partes registradas");
-    expect(res.text).toContain("sin piezas registradas");
+    expect(res.text).toContain("4 (definidas al crear el proyecto)");
+    expect(res.text).toContain("0 (sin piezas registradas)");
+    expect(res.text).toContain("<td>Piso</td>");
+    expect(res.text).toContain("<td>Muros exteriores</td>");
+    expect(res.text).toContain("<td>Techo</td>");
+    expect(res.text).not.toContain("<td>Entrepiso</td>");
 
     const fila = obtenerBd()
       .prepare("SELECT cliente, codigo, metraje, estado FROM proyectos WHERE codigo = ?")
@@ -63,70 +78,122 @@ describe("HU-02 · Crear proyecto", () => {
     expect(fila.cliente).toBe("Cliente A");
     expect(fila.metraje).toBe("120");
     expect(fila.estado).toBe("Sin piezas cargadas");
+
+    const partes = filas(
+      "SELECT nombre, cantidad_prevista FROM partes_casa WHERE proyecto_id = (SELECT id FROM proyectos WHERE codigo = ?) ORDER BY id",
+      "CASA-001"
+    );
+    expect(partes).toEqual([
+      { nombre: "Piso", cantidad_prevista: 2 },
+      { nombre: "Muros exteriores", cantidad_prevista: 3 },
+      { nombre: "Muros interiores", cantidad_prevista: 1 },
+      { nombre: "Techo", cantidad_prevista: 4 },
+    ]);
+    expect(
+      filas(
+        "SELECT p.id FROM piezas p JOIN partes_casa pc ON pc.id = p.parte_casa_id WHERE pc.proyecto_id = (SELECT id FROM proyectos WHERE codigo = ?)",
+        "CASA-001"
+      )
+    ).toHaveLength(0);
   });
 
   it("HU-02 · Rechazo de un código de proyecto duplicado (CA2)", async () => {
-    // DADO que existe un proyecto registrado con un determinado código
     const app = preparar();
     const agente = await agenteEncargado(app);
     await agente.post("/proyectos").type("form").send({
       cliente: "Cliente Original",
       codigo: "DUP-01",
       metraje: "100",
+      ...CANTIDADES_VALIDAS,
     });
 
-    // CUANDO el encargado de despacho solicita crear otro proyecto con ese mismo código
     const res = await agente.post("/proyectos").type("form").send({
       cliente: "Otro Cliente",
       codigo: "DUP-01",
       metraje: "200",
+      ...CANTIDADES_VALIDAS,
     });
 
-    // ENTONCES el sistema rechaza la solicitud y comunica que el código está duplicado
     expect(res.status).toBe(400);
     expect(res.text).toContain("código está duplicado");
-    // Y conserva el proyecto existente sin modificaciones
-    const filas = obtenerBd()
-      .prepare("SELECT cliente, codigo, metraje, estado FROM proyectos WHERE codigo = ?")
-      .all("DUP-01") as any[];
-    expect(filas.length).toBe(1);
-    expect(filas[0].cliente).toBe("Cliente Original");
-    expect(filas[0].metraje).toBe("100");
+    const filasProyecto = filas(
+      "SELECT cliente, codigo, metraje, estado FROM proyectos WHERE codigo = ?",
+      "DUP-01"
+    );
+    expect(filasProyecto).toHaveLength(1);
+    expect(filasProyecto[0].cliente).toBe("Cliente Original");
+    expect(filasProyecto[0].metraje).toBe("100");
+    // El rechazo no agrega partes ni piezas al proyecto existente.
+    expect(
+      filas(
+        "SELECT id FROM partes_casa WHERE proyecto_id = (SELECT id FROM proyectos WHERE codigo = ?)",
+        "DUP-01"
+      )
+    ).toHaveLength(4);
   });
 
   it("HU-02 · Rechazo de la creación de una torre antes de inyectar las piezas (CA3)", async () => {
-    // DADO que un proyecto se encuentra en estado "Sin piezas cargadas" (creado vía HU-02)
     const app = preparar();
     const agente = await agenteEncargado(app);
     await agente.post("/proyectos").type("form").send({
       cliente: "Cliente Torre",
       codigo: "TORRE-CA3",
       metraje: "80",
+      piso: "1",
+      muros_exteriores: "0",
+      muros_interiores: "0",
+      entrepiso: "0",
+      techo: "0",
     });
 
-    // CUANDO el operario de bodega solicita crear una torre en ese proyecto (interacción de CU-04/HU-04)
-    // ENTONCES (alcance HU-02): el proyecto permanece en estado "Sin piezas cargadas" y sin partes/piezas registradas,
-    // condición previa que HU-04 utilizará para rechazar la creación de torres e informar que primero deben inyectarse las piezas.
-    // La verificación de la operación de rechazo de torre se implementará en HU-04.
     const proyecto = obtenerBd()
       .prepare("SELECT codigo, estado FROM proyectos WHERE codigo = ?")
       .get("TORRE-CA3") as any;
     expect(proyecto).toBeTruthy();
     expect(proyecto.estado).toBe("Sin piezas cargadas");
 
-    // Sin partes de la casa ni piezas registradas para este proyecto (las tablas ya existen desde HU-03)
     const conteos = obtenerBd()
       .prepare(
         "SELECT (SELECT COUNT(*) FROM partes_casa WHERE proyecto_id = (SELECT id FROM proyectos WHERE codigo = ?)) AS partes, (SELECT COUNT(*) FROM piezas p JOIN partes_casa pc ON pc.id = p.parte_casa_id WHERE pc.proyecto_id = (SELECT id FROM proyectos WHERE codigo = ?)) AS piezas"
       )
       .get("TORRE-CA3", "TORRE-CA3") as any;
-    expect(conteos.partes).toBe(0);
+    expect(conteos.partes).toBe(1);
     expect(conteos.piezas).toBe(0);
 
-    // Evidencia adicional en UI: listado muestra 0 partes y 0 piezas
     const listado = await agente.get("/proyectos");
     expect(listado.status).toBe(200);
     expect(listado.text).toContain("TORRE-CA3");
     expect(listado.text).toContain("Sin piezas cargadas");
+  });
+
+  it("HU-02 · Rechazo por cantidades de partes inválidas (CA4)", async () => {
+    const casosInvalidos = [
+      { ...CANTIDADES_VALIDAS, piso: "-1" },
+      { ...CANTIDADES_VALIDAS, piso: "1.5" },
+      { ...CANTIDADES_VALIDAS, piso: "abc" },
+      { piso: "0", muros_exteriores: "0", muros_interiores: "0", entrepiso: "0", techo: "0" },
+      { piso: "50", muros_exteriores: "51", muros_interiores: "0", entrepiso: "0", techo: "0" },
+    ];
+
+    for (const [i, cantidades] of casosInvalidos.entries()) {
+      const app = preparar();
+      const agente = await agenteEncargado(app);
+      const codigo = `INVALIDA-${i}`;
+      const res = await agente.post("/proyectos").type("form").send({
+        cliente: "Cliente inválido",
+        codigo,
+        metraje: "100",
+        ...cantidades,
+      });
+
+      expect(res.status).toBe(400);
+      expect(res.text).toContain(
+        "Las cantidades de las partes deben ser enteros no negativos y el total debe estar entre 1 y 100."
+      );
+      expect(
+        obtenerBd().prepare("SELECT id FROM proyectos WHERE codigo = ?").get(codigo)
+      ).toBeUndefined();
+      expect(filas("SELECT id FROM partes_casa")).toHaveLength(0);
+    }
   });
 });
