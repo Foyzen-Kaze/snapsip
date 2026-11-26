@@ -199,22 +199,25 @@ describe("HU-06 · Consultar piezas pendientes", () => {
     expect(res.text).not.toContain(">Piso</option>");
   });
 
-  it("HU-06 · Proyecto sin piezas cargadas — CA6", async () => {
-    const agente = await agenteConRol(app, "Operario de Bodega");
-    const { proyectoId } = insertarUniverso(
-      "PEND-CA6",
-      "Cliente Sin Piezas",
-      "Sin piezas cargadas"
-    );
+  it.each(["Pendiente de aprobación", "Rechazado"])(
+    "HU-06 · Proyecto sin piezas en estado «%s» — CA6",
+    async (estado) => {
+      const agente = await agenteConRol(app, "Operario de Bodega");
+      const { proyectoId } = insertarUniverso(
+        `PEND-CA6-${estado.slice(0, 3).toUpperCase()}`,
+        "Cliente Sin Piezas",
+        estado
+      );
 
-    const res = await agente.get("/pendientes").query({ proyectoId: String(proyectoId) });
+      const res = await agente.get("/pendientes").query({ proyectoId: String(proyectoId) });
 
-    expect(res.status).toBe(200);
-    expect(res.text).toContain("El proyecto no tiene partes de la casa con piezas cargadas");
-    expect(opcionesDe(res.text, "parteCasaId")).toEqual(["-- Seleccione una parte --"]);
-    expect(res.text).not.toContain("Seleccione un Proyecto y una Parte");
-    expect(res.text).not.toContain("0 pendientes");
-  });
+      expect(res.status).toBe(200);
+      expect(res.text).toContain("El proyecto no tiene partes de la casa con piezas cargadas");
+      expect(opcionesDe(res.text, "parteCasaId")).toEqual(["-- Seleccione una parte --"]);
+      expect(res.text).not.toContain("Seleccione un Proyecto y una Parte");
+      expect(res.text).not.toContain("0 pendientes");
+    }
+  );
 
   it("HU-06 · El selector de Parte se repuebla al cambiar de Proyecto (verificación 2.4)", async () => {
     const agente = await agenteConRol(app, "Operario de Bodega");
@@ -285,21 +288,24 @@ describe("HU-06 · Consultar piezas pendientes", () => {
     expect(res.text).not.toContain("Piezas pendientes de");
   });
 
-  it("HU-06 · Proyecto sin piezas cargadas tras elegirlo — CA6", async () => {
-    const agente = await agenteConRol(app, "Operario de Bodega");
-    const { proyectoId } = insertarUniverso(
-      "PEND-AUTO-SIN",
-      "Cliente Auto Sin Piezas",
-      "Sin piezas cargadas"
-    );
+  it.each(["Pendiente de aprobación", "Rechazado"])(
+    "HU-06 · Proyecto sin piezas tras elegirlo en «%s» — CA6",
+    async (estado) => {
+      const agente = await agenteConRol(app, "Operario de Bodega");
+      const { proyectoId } = insertarUniverso(
+        `PEND-AUTO-SIN-${estado.slice(0, 3).toUpperCase()}`,
+        "Cliente Auto Sin Piezas",
+        estado
+      );
 
-    const res = await agente.get("/pendientes").query({ proyectoId: String(proyectoId) });
+      const res = await agente.get("/pendientes").query({ proyectoId: String(proyectoId) });
 
-    expect(res.status).toBe(200);
-    expect(res.text).toContain("addEventListener('change'");
-    expect(res.text).toContain("El proyecto no tiene partes de la casa con piezas cargadas");
-    expect(opcionesDe(res.text, "parteCasaId")).toEqual(["-- Seleccione una parte --"]);
-    expect(res.text).not.toContain("Seleccione un Proyecto y una Parte");
-    expect(res.text).not.toContain("0 pendientes");
-  });
+      expect(res.status).toBe(200);
+      expect(res.text).toContain("addEventListener('change'");
+      expect(res.text).toContain("El proyecto no tiene partes de la casa con piezas cargadas");
+      expect(opcionesDe(res.text, "parteCasaId")).toEqual(["-- Seleccione una parte --"]);
+      expect(res.text).not.toContain("Seleccione un Proyecto y una Parte");
+      expect(res.text).not.toContain("0 pendientes");
+    }
+  );
 });

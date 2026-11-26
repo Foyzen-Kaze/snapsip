@@ -112,8 +112,8 @@ Archivo fuente: [`./diagramas/est-03.puml`](./diagramas/est-03.puml)
 
 - Clase del dominio: [Proyecto](./08-modelo-dominio.md)
 - Diagramas de secuencia relacionados: ninguno. Aprobar y rechazar son operaciones internas sin sistemas externos, por lo que no tienen DSS propio; la inyección de piezas tampoco integra otro sistema. La aprobación por el Supervisor de Proyectos aparece como condición en [DSS-02](./10-diagramas-secuencia.md) y en la guarda de EST-03.
-- Casos de uso e historias de origen: [CU-02 Crear proyecto](./09-casos-de-uso.md) / [HU-02](./04-historias-usuario.md#hu-02), [CU-03 Inyectar piezas desde plano/archivo](./09-casos-de-uso.md) / [HU-03](./04-historias-usuario.md#hu-03), [CU-08 Generar guía de despacho](./09-casos-de-uso.md) / [HU-08](./04-historias-usuario.md#hu-08) y CU-12 (nombre pendiente de alinear, ver I-4) / [HU-12 Aprobar o rechazar proyecto](./04-historias-usuario.md#hu-12).
-- Requisitos: RP-02, RP-03, RP-08, RP-09. La aprobación y el rechazo todavía no tienen un requisito funcional propio (ver I-6).
+- Casos de uso e historias de origen: [CU-02 Crear proyecto](./09-casos-de-uso.md) / [HU-02](./04-historias-usuario.md#hu-02), [CU-03 Inyectar piezas desde plano/archivo](./09-casos-de-uso.md) / [HU-03](./04-historias-usuario.md#hu-03), [CU-08 Generar guía de despacho](./09-casos-de-uso.md) / [HU-08](./04-historias-usuario.md#hu-08) y CU-12 Aprobar o Rechazar Proyecto / [HU-12 Aprobar o rechazar proyecto](./04-historias-usuario.md#hu-12).
+- Requisitos: RP-02, RP-03, RP-08, RP-09 y RP-17 (aprobación y rechazo, HU-12).
 
 ![EST-04](./diagramas/est-04.png)
 
@@ -144,4 +144,4 @@ No se representan como transiciones los rechazos que conservan el estado: inyect
 
 **Aprobación frente a estado actual:** «Aprobado» es el estado inmediatamente posterior a la aprobación, pero la aprobación misma queda registrada como una condición del proyecto. Por eso, cuando la inyección lleva el proyecto a «En preparación» o la completitud lo lleva a «Proyecto completo», el proyecto sigue estando aprobado y puede generarse la guía (EST-03). La guarda de EST-03 no exige que el estado actual sea «Aprobado».
 
-**Pendiente de otros artefactos:** el [modelo de dominio](./08-modelo-dominio.md) todavía enumera «Sin piezas cargadas» y `esperandoAprobacion` y no reconoce «Aprobado» ni «Rechazado» (I-2 e I-5), y la [trazabilidad](./12-trazabilidad.md) sigue afirmando que Proyecto no tiene diagrama de estado (I-7). EST-04 usa los nombres de estado vigentes en las historias y en el Gherkin.
+**Artefactos alineados:** el [modelo de dominio](./08-modelo-dominio.md), los requisitos y la [trazabilidad](./12-trazabilidad.md) usan los mismos valores que EST-04. La aprobación no se guarda en un atributo separado: los estados «Aprobado», «En preparación» y «Proyecto completo» implican que el proyecto fue aprobado por el Supervisor de Proyectos (HU-12).

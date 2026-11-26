@@ -55,11 +55,11 @@ El sistema SHALL ofrecer en el selector de Parte de la casa únicamente las `Par
 - **ENTONCES** el sistema ofrece únicamente «Muros interiores», «Techo» y «Entrepiso»
 - **Y** no ofrece «Muros exteriores» ni «Piso»
 
-### Requirement: Aviso de Proyecto sin piezas cargadas
-El sistema SHALL informar que el `Proyecto` no tiene partes de la casa con piezas cargadas cuando el `Proyecto` elegido tenga el atributo `estado` «Sin piezas cargadas», definido en el modelo de dominio.
+### Requirement: Aviso de Proyecto sin piezas
+El sistema SHALL informar que el `Proyecto` no tiene partes de la casa con piezas cargadas cuando el `Proyecto` elegido tenga el atributo `estado` «Pendiente de aprobación» o «Rechazado», definido en el modelo de dominio y en EST-04.
 
-#### Scenario: Proyecto sin piezas cargadas
-- **DADO** que el proyecto elegido está en estado «Sin piezas cargadas»
+#### Scenario: Proyecto sin piezas
+- **DADO** que el proyecto elegido está en estado «Pendiente de aprobación» o «Rechazado»
 - **CUANDO** el operario de bodega selecciona ese proyecto
 - **ENTONCES** el sistema informa que el proyecto no tiene partes de la casa con piezas cargadas
 
@@ -78,8 +78,8 @@ El sistema SHALL poblar automáticamente el selector de Parte de la casa con las
 - **ENTONCES** el sistema descarta la `ParteCasa` elegida antes
 - **Y** ofrece únicamente las `ParteCasa` del nuevo `Proyecto` que tienen `Pieza` cargada
 
-#### Scenario: Proyecto sin piezas cargadas tras elegirlo
-- **DADO** que el operario selecciona un `Proyecto` en estado «Sin piezas cargadas»
+#### Scenario: Proyecto sin piezas tras elegirlo
+- **DADO** que el operario selecciona un `Proyecto` en estado «Pendiente de aprobación» o «Rechazado»
 - **CUANDO** el sistema actualiza el selector de Parte automáticamente
 - **ENTONCES** el selector de Parte queda sin opciones
 - **Y** el sistema informa que el proyecto no tiene partes de la casa con piezas cargadas

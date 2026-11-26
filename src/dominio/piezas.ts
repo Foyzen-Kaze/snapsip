@@ -1,6 +1,6 @@
 import { obtenerBd } from "../db/conexion";
 import { generadorPlano } from "../integraciones";
-import { Proyecto } from "./proyectos";
+import { ESTADOS_PROYECTO, Proyecto } from "./proyectos";
 
 // HU-03, CU-03, TO-BE Inyectar piezas desde plano/archivo, RP-03, EST-01
 export interface ParteCasa {
@@ -101,11 +101,12 @@ export function inyectarPiezasDesdePlano(codigoProyecto: string): ResultadoInyec
       mensaje: "El proyecto ya tiene piezas inyectadas; no se modificaron datos.",
     };
   }
-  if (proyecto.estado !== "Sin piezas cargadas") {
+  // HU-03 CA1/CA4: solo un proyecto aprobado por el Supervisor admite inyección.
+  if (proyecto.estado !== ESTADOS_PROYECTO.APROBADO) {
     return {
       ok: false,
       motivo: "ESTADO_INVALIDO",
-      mensaje: `El proyecto está en estado '${proyecto.estado}'; se requiere 'Sin piezas cargadas'.`,
+      mensaje: `El proyecto está en estado '${proyecto.estado}'; se requiere '${ESTADOS_PROYECTO.APROBADO}'.`,
     };
   }
 
@@ -143,7 +144,7 @@ export function inyectarPiezasDesdePlano(codigoProyecto: string): ResultadoInyec
         insertarPieza.run(proyecto.id, parteId, pieza.codigo);
       }
     }
-    // HU-03 CA1, EST-01: Proyecto «Sin piezas cargadas» → «En preparación».
+    // HU-03 CA1, EST-01: Proyecto «Aprobado» → «En preparación».
     db.prepare("UPDATE proyectos SET estado = 'En preparación' WHERE id = ?").run(proyecto.id);
     db.exec("COMMIT");
   } catch (e) {

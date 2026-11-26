@@ -1,7 +1,11 @@
 import { obtenerBd } from "../db/conexion";
+import { ESTADOS_PROYECTO } from "./proyectos";
 
 // HU-04, CU-04, TO-BE Crear torre, RP-04, EST-02
-export const ESTADOS_PROYECTO_CON_PIEZAS = ["En preparación", "Proyecto completo"];
+export const ESTADOS_PROYECTO_CON_PIEZAS = [
+  ESTADOS_PROYECTO.EN_PREPARACION,
+  ESTADOS_PROYECTO.COMPLETO,
+];
 export const MENSAJE_PROYECTO_SIN_PIEZAS =
   "primero deben inyectarse las piezas del proyecto desde el archivo";
 export const MENSAJE_PARTE_AJENA =

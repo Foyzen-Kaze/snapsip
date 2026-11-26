@@ -32,7 +32,9 @@ function fila(sql: string, ...args: unknown[]): any {
   return obtenerBd().prepare(sql).get(...args) as any;
 }
 
-// 3.1 Datos de ejemplo; el estado «Enviado» se inserta directamente (HU-09 no implementada).
+// 3.1 Datos de ejemplo con estados vigentes de EST-04: «En preparación» implica
+// aprobación previa (HU-12). No se usa ningún estado anterior al ciclo de aprobación.
+// El estado «Enviado» se inserta directamente (HU-09 no implementada).
 function insertarUniverso(codigo: string) {
   const db = obtenerBd();
   const proyectoId = Number(
@@ -89,6 +91,14 @@ describe("HU-05 · Asignar pieza a torre con evidencia", () => {
     delete process.env[VARIABLE_FALLO_EVIDENCIA];
     cerrarBd();
     if (fs.existsSync(rutaBdPrueba)) fs.unlinkSync(rutaBdPrueba);
+  });
+
+  it("HU-05 · El proyecto de ejemplo usa un estado vigente que implica aprobación", () => {
+    const universo = insertarUniverso("ESTADO-VIGENTE");
+    const proyecto = fila("SELECT estado FROM proyectos WHERE id = ?", universo.proyectoId);
+
+    expect(["Aprobado", "En preparación", "Proyecto completo"]).toContain(proyecto.estado);
+    expect(proyecto.estado).toBe("En preparación");
   });
 
   it("HU-05 · Listado de piezas pendientes y torres del proyecto con código, parte y estado", async () => {

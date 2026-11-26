@@ -10,6 +10,7 @@ export function ejecutarSeed(): void {
   try {
     insertar.run("Operario de Bodega", "Operario de Bodega (demo)");
     insertar.run("Encargado de Despacho", "Encargado de Despacho (demo)");
+    insertar.run("Supervisor de Proyectos", "Supervisor de Proyectos (demo)");
     db.exec("COMMIT");
   } catch (e) {
     db.exec("ROLLBACK");

@@ -11,12 +11,12 @@
 ## Decisión acordada
 1. **No se cambia el texto** de RP-03 (`03-requisitos.md`), de HU-03 (`04-historias-usuario.md`) ni de sus escenarios Gherkin (`07-criterios-aceptacion.md`). La indicación del profesor queda registrada como **supuesto**, con fecha 2026-11-18, en `.cin324/proyecto.md` → «Supuestos acordados».
 2. **HU-03 CA2** (formato inválido / filas incompletas) **no se representa en la demo**. Queda como **desviación documentada**, igual que CA2 de HU-01.
-3. **La inyección no ocurre al crear el proyecto y HU-02 no se toca.** El proyecto sigue naciendo en «Sin piezas cargadas» (`04-historias-usuario.md:21`, `openspec/specs/crear-proyecto/spec.md`, `tests/hu-02.crear-proyecto.test.ts`).
+3. **La inyección no ocurre al crear el proyecto y HU-02 no se toca.** El proyecto nace sin piezas: originalmente en «Sin piezas cargadas» y, desde la decisión del 2026-11-26, en «Pendiente de aprobación» con las partes definidas (`04-historias-usuario.md:19`, `openspec/specs/crear-proyecto/spec.md`, `tests/hu-02.crear-proyecto.test.ts`).
 
 ## Cómo se simula HU-03 en la demo
 - Botón **«Inyectar piezas desde plano/archivo»** en el proyecto.
   - Visible solo para el **Encargado de Despacho**.
-  - Visible solo si el proyecto está en **«Sin piezas cargadas»**.
+  - Visible solo si el proyecto está en **«Aprobado»** (antes «Sin piezas cargadas»; ajuste del 2026-11-26).
   - Si otro rol lo intenta, se **rechaza sin modificar datos** (HU-01 CA3).
 - Al presionarlo el sistema genera al azar:
   - entre **1 y 5 partes de la casa**;

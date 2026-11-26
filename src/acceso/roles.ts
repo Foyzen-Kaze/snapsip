@@ -2,6 +2,7 @@
 export const ROLES_DEMO = [
   "Operario de Bodega",
   "Encargado de Despacho",
+  "Supervisor de Proyectos",
 ] as const;
 
 export type RolDemo = (typeof ROLES_DEMO)[number];
@@ -11,6 +12,9 @@ export function esRolValido(rol: string | undefined | null): rol is RolDemo {
 }
 
 export function funcionesPorRol(rol: RolDemo): string[] {
+  if (rol === "Supervisor de Proyectos") {
+    return ["Aprobar o rechazar proyecto (HU-12)"];
+  }
   if (rol === "Encargado de Despacho") {
     return [
       "Crear proyecto (HU-02)",

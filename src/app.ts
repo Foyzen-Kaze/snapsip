@@ -7,6 +7,7 @@ import { routerProyectos } from "./rutas/proyectos";
 import { routerPendientes } from "./rutas/pendientes";
 import { routerTorres } from "./rutas/torres";
 import { routerAsignaciones } from "./rutas/asignaciones";
+import { routerAprobaciones } from "./rutas/aprobaciones";
 
 // HU-01, CU-01, TO-BE Autenticación de usuarios: app web con selector de rol de demostración
 // HU-02, CU-02, TO-BE Crear proyecto: registro de proyectos (Encargado de Despacho)
@@ -29,6 +30,8 @@ export function crearApp() {
   app.use(routerTorres);
   // HU-05, CU-05, TO-BE Asignar pieza a torre con evidencia
   app.use(routerAsignaciones);
+  // HU-12, CU-12, TO-BE Crear proyecto: aprobación/rechazo por el Supervisor
+  app.use(routerAprobaciones);
 
   return app;
 }

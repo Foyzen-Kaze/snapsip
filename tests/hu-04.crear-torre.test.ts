@@ -104,24 +104,29 @@ describe("HU-04 · Crear torre", () => {
     expect(filas("SELECT * FROM piezas WHERE estado <> 'Pendiente'")).toHaveLength(0);
   });
 
-  it("HU-02 · Rechazo de la creación de una torre antes de inyectar las piezas", async () => {
-    const agente = await agenteConRol(app, "Operario de Bodega");
-    const sinPiezas = insertarUniverso(
-      "TORRE-SIN",
-      "Cliente Sin Piezas",
-      "Sin piezas cargadas"
-    );
+  it.each(["Pendiente de aprobación", "Aprobado", "Rechazado"])(
+    "HU-02 / HU-04 · Rechazo de la creación de una torre antes de inyectar las piezas («%s»)",
+    async (estado) => {
+      const agente = await agenteConRol(app, "Operario de Bodega");
+      const sinPiezas = insertarUniverso(
+        `TORRE-SIN-${estado.slice(0, 3).toUpperCase()}`,
+        "Cliente Sin Piezas",
+        estado
+      );
 
-    const res = await agente.post("/torres").type("form").send({
-      proyectoId: String(sinPiezas.proyectoId),
-      parteCasaId: "1",
-    });
+      const res = await agente.post("/torres").type("form").send({
+        proyectoId: String(sinPiezas.proyectoId),
+        parteCasaId: "1",
+      });
 
-    expect(res.status).toBe(400);
-    expect(res.text).toContain("primero deben inyectarse las piezas del proyecto desde el archivo");
-    expect(filas("SELECT * FROM torres")).toHaveLength(0);
-    expect(filas("SELECT * FROM proyectos WHERE codigo = ?", "TORRE-SIN")).toHaveLength(1);
-  });
+      expect(res.status).toBe(400);
+      expect(res.text).toContain("primero deben inyectarse las piezas del proyecto desde el archivo");
+      expect(filas("SELECT * FROM torres")).toHaveLength(0);
+      expect(
+        fila("SELECT estado FROM proyectos WHERE id = ?", sinPiezas.proyectoId).estado
+      ).toBe(estado);
+    }
+  );
 
   it("HU-04 · Creación de una segunda torre para la misma parte", async () => {
     const agente = await agenteConRol(app, "Operario de Bodega");

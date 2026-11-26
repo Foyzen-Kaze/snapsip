@@ -1,5 +1,15 @@
 import { obtenerBd } from "../db/conexion";
 
+// HU-12 / EST-04: estados canónicos del ciclo de vida de Proyecto.
+export const ESTADOS_PROYECTO = {
+  PENDIENTE: "Pendiente de aprobación",
+  APROBADO: "Aprobado",
+  RECHAZADO: "Rechazado",
+  EN_PREPARACION: "En preparación",
+  COMPLETO: "Proyecto completo",
+} as const;
+export type EstadoProyecto = (typeof ESTADOS_PROYECTO)[keyof typeof ESTADOS_PROYECTO];
+
 // HU-02, CU-02, TO-BE Crear proyecto, RP-02
 export interface Proyecto {
   id: number;
@@ -127,7 +137,7 @@ export function crearProyecto(datos: DatosCrearProyecto): ResultadoCrearProyecto
       .prepare(
         "INSERT INTO proyectos (codigo, cliente, metraje, estado) VALUES (?, ?, ?, ?)"
       )
-      .run(codigo, cliente, metraje, "Sin piezas cargadas");
+      .run(codigo, cliente, metraje, ESTADOS_PROYECTO.PENDIENTE);
     const proyectoId = Number(info.lastInsertRowid);
 
     // OBS-1: solo se crean las partes con cantidad positiva y se guarda su
@@ -209,4 +219,63 @@ export function obtenerProyectoPorCodigo(codigo: string): Proyecto | undefined {
   return db
     .prepare("SELECT id, codigo, cliente, metraje, estado FROM proyectos WHERE codigo = ?")
     .get(codigo) as Proyecto | undefined;
+}
+
+// HU-12 / CU-12 / RP-17: transiciones EST-04 desde «Pendiente de aprobación».
+export type ResultadoDecisionProyecto =
+  | { ok: true; proyecto: Proyecto }
+  | {
+      ok: false;
+      motivo: "NO_ENCONTRADO" | "ESTADO_INVALIDO";
+      mensaje: string;
+    };
+
+function decidirProyecto(
+  id: unknown,
+  estadoDestino: EstadoProyecto,
+  accion: string
+): ResultadoDecisionProyecto {
+  const texto = typeof id === "string" ? id.trim() : String(id ?? "");
+  const proyectoId = /^\d+$/.test(texto) ? Number(texto) : undefined;
+  if (proyectoId === undefined) {
+    return {
+      ok: false,
+      motivo: "NO_ENCONTRADO",
+      mensaje: "No existe el proyecto solicitado; no se modificaron datos.",
+    };
+  }
+
+  const db = obtenerBd();
+  const proyecto = db
+    .prepare("SELECT id, codigo, cliente, metraje, estado FROM proyectos WHERE id = ?")
+    .get(proyectoId) as Proyecto | undefined;
+  if (!proyecto) {
+    return {
+      ok: false,
+      motivo: "NO_ENCONTRADO",
+      mensaje: "No existe el proyecto solicitado; no se modificaron datos.",
+    };
+  }
+  // CA3: cualquier otro estado se conserva sin modificar datos.
+  if (proyecto.estado !== ESTADOS_PROYECTO.PENDIENTE) {
+    return {
+      ok: false,
+      motivo: "ESTADO_INVALIDO",
+      mensaje: `El proyecto está en estado «${proyecto.estado}»; solo se puede ${accion} desde «${ESTADOS_PROYECTO.PENDIENTE}». No se modificaron datos.`,
+    };
+  }
+
+  db.prepare("UPDATE proyectos SET estado = ? WHERE id = ?").run(estadoDestino, proyectoId);
+  const actualizado = db
+    .prepare("SELECT id, codigo, cliente, metraje, estado FROM proyectos WHERE id = ?")
+    .get(proyectoId) as Proyecto;
+  return { ok: true, proyecto: actualizado };
+}
+
+export function aprobarProyecto(id: unknown): ResultadoDecisionProyecto {
+  return decidirProyecto(id, ESTADOS_PROYECTO.APROBADO, "aprobar");
+}
+
+export function rechazarProyecto(id: unknown): ResultadoDecisionProyecto {
+  return decidirProyecto(id, ESTADOS_PROYECTO.RECHAZADO, "rechazar");
 }

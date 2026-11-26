@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= titulo %></title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    header { background: #1f2937; color: #fff; padding: 12px 16px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #f3f4f6; }
+    form { display: inline; margin-right: 6px; }
+    button { padding: 6px 10px; }
+    a { color: #2563eb; }
+    .ok { color: #065f46; }
+    .warn { color: #92400e; }
+  </style>
+</head>
+<body>
+  <header><strong>SnapSip</strong> — HU-12: Aprobar o rechazar proyectos</header>
+  <main>
+    <div class="card">
+      <h1><%= titulo %></h1>
+      <p>Rol actual: <strong><%= rolActual %></strong>. <a href="/">Inicio</a></p>
+      <% if (typeof mensaje !== 'undefined' && mensaje) { %>
+        <p class="ok"><%= mensaje %></p>
+      <% } %>
+      <% if (typeof error !== 'undefined' && error) { %>
+        <p class="warn"><%= error %></p>
+      <% } %>
+      <% if (proyectos.length === 0) { %>
+        <p>No hay proyectos registrados.</p>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr><th>Código</th><th>Cliente</th><th>Estado</th><th>Decisión</th></tr>
+          </thead>
+          <tbody>
+            <% proyectos.forEach(function(p) { %>
+              <tr>
+                <td><%= p.codigo %></td>
+                <td><%= p.cliente %></td>
+                <td><%= p.estado %></td>
+                <td>
+                  <% if (p.estado === 'Pendiente de aprobación') { %>
+                    <form method="post" action="/aprobaciones/<%= p.id %>/aprobar">
+                      <button type="submit">Aprobar</button>
+                    </form>
+                    <form method="post" action="/aprobaciones/<%= p.id %>/rechazar">
+                      <button type="submit">Rechazar</button>
+                    </form>
+                  <% } else { %>
+                    <small>Sin acción disponible.</small>
+                  <% } %>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </main>
+</body>
+</html>

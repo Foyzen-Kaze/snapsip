@@ -5,7 +5,7 @@ Esta matriz enlaza cada requisito de la [Entrega 1](./03-requisitos.md) con su [
 Identificadores de los diagramas:
 
 - **Secuencia:** DSS-01 Asignar pieza a torre con evidencia · DSS-02 Generar guía de despacho y registrar envío con evidencia · DSS-03 Autenticarse
-- **Estado:** EST-01 Pieza · EST-02 Torre · EST-03 GuiaDespacho
+- **Estado:** EST-01 Pieza · EST-02 Torre · EST-03 GuiaDespacho · EST-04 Proyecto
 
 Los diagramas de secuencia y de estado de cada fila son los que declaran ese requisito en su campo «Requisitos» de [10-diagramas-secuencia.md](./10-diagramas-secuencia.md) y [11-diagramas-estado.md](./11-diagramas-estado.md).
 
@@ -14,8 +14,8 @@ Los diagramas de secuencia y de estado de cada fila son los que declaran ese req
 | Requisito (Entrega 1) | Historia | Caso de uso | Secuencia | Estado | Clases del dominio |
 |-----------------------|----------|-------------|-----------|--------|---------------------|
 | RP-01 | HU-01 | CU-01 | DSS-03 | — | — |
-| RP-02 | HU-02 | CU-02 | — | — | Proyecto, ParteCasa (cantidadPrevista, decisión OBS-1 de 2026-11-26) |
-| RP-03 | HU-03 | CU-03 | — | EST-01 | Proyecto, ParteCasa, Pieza |
+| RP-02 | HU-02 | CU-02 | — | EST-04 | Proyecto, ParteCasa (cantidadPrevista, decisión OBS-1 de 2026-11-26) |
+| RP-03 | HU-03 | CU-03 | — | EST-01, EST-04 | Proyecto, ParteCasa, Pieza |
 | RP-04 | HU-04 | CU-04 | DSS-01 | EST-02 | Torre, ParteCasa, Proyecto |
 | RP-05 | HU-05 | CU-05 | DSS-01 | EST-01, EST-03 | Pieza, Torre, Evidencia, GuiaDespacho |
 | RP-06 | HU-06 | CU-06 | — | — | Pieza, ParteCasa |
@@ -27,9 +27,10 @@ Los diagramas de secuencia y de estado de cada fila son los que declaran ese req
 | RP-12 | HU-11 | CU-11 | DSS-02 | EST-01, EST-03 | Pieza, Torre, Evidencia, GuiaDespacho |
 | RP-13 | HU-05 | CU-05 | DSS-01 | — | Pieza, Torre, Evidencia |
 | RP-14 | HU-01, HU-06, HU-08 | CU-01, CU-06, CU-08 | DSS-02, DSS-03 | — | — |
-| RP-15a | HU-01 a HU-11 | CU-01 a CU-11 | DSS-01, DSS-02, DSS-03 | — | — |
+| RP-15a | HU-01 a HU-12 | CU-01 a CU-12 | DSS-01, DSS-02, DSS-03 | — | — |
 | RP-15b | HU-01 | CU-01 | DSS-03 | — | — |
-| RP-16 | HU-01 a HU-11 | CU-01 a CU-11 | DSS-03 | — | — |
+| RP-16 | HU-01 a HU-12 | CU-01 a CU-12 | DSS-03 | — | — |
+| RP-17 | HU-12 | CU-12 | — | EST-04 | Proyecto |
 | RD-01 | HU-05, HU-07, HU-08, HU-09, HU-11 | CU-05, CU-07, CU-08, CU-09, CU-11 | DSS-02 | EST-01, EST-02, EST-03 | GuiaDespacho, Pieza, Torre |
 
 ## Correspondencia con el TO-BE de la Entrega 1
@@ -49,6 +50,7 @@ La actividad TO-BE es el campo «Actividad TO-BE asociada» de cada historia en 
 | HU-09 | Registrar envío con evidencia | CU-09 Registrar envío con evidencia |
 | HU-10 | Eliminar torre vacía con código | CU-10 Eliminar torre vacía con código |
 | HU-11 | Desasignar pieza de una torre | CU-11 Desasignar pieza de una torre |
+| HU-12 | Crear proyecto | CU-12 Aprobar o Rechazar Proyecto |
 
 Tareas del TO-BE sin historia ni caso de uso propio:
 
@@ -114,7 +116,7 @@ Pruebas adicionales que no corresponden a un escenario Gherkin, sino a reglas de
 
 | Clase del dominio | Tabla (migración) | Atributos ↔ columnas | Restricciones derivadas de las multiplicidades y reglas | Historia |
 |-------------------|-------------------|----------------------|----------------------------------------------------------|----------|
-| Proyecto | `proyectos` (002) | `codigo`, `cliente`, `metraje`, `estado` | `codigo` único; `estado` inicial «Sin piezas cargadas» | HU-02 |
+| Proyecto | `proyectos` (002; ajuste de estado en 007) | `codigo`, `cliente`, `metraje`, `estado` | `codigo` único; `estado` inicial «Pendiente de aprobación»; aprobación/rechazo en EST-04 | HU-02, HU-12 |
 | ParteCasa | `partes_casa` (003) | `nombre` (el atributo derivado `/completa` no se persiste) | Pertenece a un Proyecto (`proyecto_id`); `nombre` único dentro del proyecto | HU-03 |
 | Pieza | `piezas` (003; `torre_id` en 005) | `codigo`, `estado` | Pertenece a una ParteCasa (`parte_casa_id`); `codigo` único dentro del proyecto; `estado` inicial «Pendiente»; a lo más una Torre (`torre_id` nulo = sin torre asignada) | HU-03, HU-05 |
 | Torre | `torres` (004) | `codigo`, `numero`, `estado`, `fechaHoraEliminacion` ↔ `fecha_hora_eliminacion`, `eliminadaPor` ↔ `eliminada_por` | Asociada a una ParteCasa (`parte_casa_id`); `numero` y `codigo` únicos dentro del proyecto; `estado` inicial «Abierta» | HU-04 |
@@ -156,11 +158,11 @@ Pruebas adicionales que no corresponden a un escenario Gherkin, sino a reglas de
 - **Invalidación de la guía (RD-01):** RD-01 cubre tres causas: desasignar una pieza incluida (RP-12), reasignarla a otra torre (RP-05) y reabrir una torre incluida (RP-07). Por eso RD-01 se traza a HU-05, HU-07 y HU-11, además de HU-08 y HU-09, que generan la guía y rechazan su envío. Aparece en EST-03, con transiciones de Vigente a Invalidada por los eventos `desasignar pieza de una torre`, `asignar pieza a torre con evidencia` (reasignación confirmada) y `reabrir torre`; en EST-01 (evidencia anterior sin vigencia) y en EST-02 (`reabrir torre`). Por eso RP-05 y RP-07 se trazan a EST-03 y a la clase GuiaDespacho.
 - **RP-10 en EST-02:** al registrar el envío con evidencia, las torres Cerradas incluidas en la guía terminan su ciclo de vida (transición de Cerrada al estado final). Por eso RP-10 se traza a EST-02 y a la clase Torre.
 - **Estado `Eliminada` de Torre (EST-02):** corresponde a la eliminación lógica de RP-11. La torre conserva su registro, con `fechaHoraEliminacion` y `eliminadaPor` según el modelo de dominio, y deja de ofrecerse para asignaciones. Por eso RP-11 se traza a EST-02 y a la clase Torre.
-- **Requisitos sin diagrama de estado (RP-01, RP-02, RP-06, RP-08, RP-13, RP-14, RP-15a, RP-15b, RP-16):** ni la autenticación ni la consulta de piezas pendientes cambian el estado de un objeto del dominio, y los requisitos no funcionales no definen eventos. RP-02 y RP-08 afectan el estado de Proyecto y la completitud de ParteCasa, que el modelo de dominio describe como el atributo `estado` de Proyecto (Sin piezas cargadas, En preparación, Proyecto completo) y el atributo derivado `/completa` de ParteCasa. Esos estados no cuentan con un diagrama de estado propio: se fijan en HU-02 CA1, HU-03 CA1 y HU-08 CA1, CA3 y CA6.
+- **Requisitos sin diagrama de estado (RP-01, RP-06, RP-08, RP-13, RP-14, RP-15a, RP-15b, RP-16):** ni la autenticación ni la consulta de piezas pendientes cambian el estado de un objeto del dominio, y los requisitos no funcionales no definen eventos. RP-02, RP-03 y RP-17 afectan el estado de `Proyecto`, que sí tiene diagrama propio (EST-04). RP-08 afecta la completitud de ParteCasa, descrita como el atributo derivado `/completa`; sus criterios se fijan en HU-08 CA1, CA3 y CA6.
 - **Requisitos sin clases del dominio (RP-01, RP-14, RP-15a, RP-15b, RP-16):** se refieren al acceso de los usuarios y a atributos de calidad (disponibilidad y seguridad), no a conceptos de información del negocio. Los actores Operario de Bodega y Encargado de Despacho no se modelan como clases. Quién realiza cada acción se registra como dato: `responsable` en Evidencia y `eliminadaPor` en Torre.
 - **Validación de completitud (RP-08) sin caso de uso propio:** «Validar completitud por Parte o Proyecto» es una tarea de servicio del TO-BE que ejecuta el sistema, no un actor, por lo que se trata dentro de HU-08 y CU-08. Sus criterios están en HU-08 (CA1, CA2, CA3 y CA7), y la reevaluación que exige RP-08 es HU-08 CA6. Por eso RP-08 y RP-09 se trazan a HU-08 y CU-08. La guía se genera por parte de la casa o por proyecto completo, nunca por una torre suelta, y la completitud se exige solo sobre el alcance solicitado (HU-08 CA5).
 - **Evidencia fotográfica sin caso de uso propio:** adjuntar la evidencia es un paso obligatorio de CU-05 (HU-05 CA2) y de CU-09 (HU-09 CA2), no un objetivo independiente del actor. Por eso RP-05, RP-10 y RP-13 se trazan a la clase Evidencia sin un caso de uso adicional.
-- **Requisitos transversales (RP-15a y RP-16):** aplican a todas las historias y casos de uso, según su definición en la Entrega 1. RP-15a aparece en los tres DSS porque credenciales, datos de proyecto y evidencias viajan cifrados. RP-16 se traza a DSS-03 porque SnapSip conserva el control de acceso según el rol del usuario autenticado.
+- **Requisitos transversales (RP-15a y RP-16):** aplican a todas las historias y casos de uso (HU-01 a HU-12 y CU-01 a CU-12), según su definición en la Entrega 1; RP-16 incluye al Supervisor de Proyectos para la aprobación de HU-12. RP-15a aparece en los tres DSS porque credenciales, datos de proyecto y evidencias viajan cifrados. RP-16 se traza a DSS-03 porque SnapSip conserva el control de acceso según el rol del usuario autenticado.
 - **Sistemas externos:** el Servicio de autenticación proviene de RP-15b, que prevé autenticación administrada, e interviene en CU-01. El Servicio de almacenamiento de evidencias proviene de RP-15a, que menciona el canal de almacenamiento de evidencias, e interviene en CU-05 y CU-09. RP-14 cuenta como indisponibilidad las fallas de ambos proveedores, y por eso DSS-01 y DSS-02 incluyen la variante [falla del servicio].
 - **Diferencias con la Entrega 1 detectadas y resueltas:**
   - HU-05 CA3 permitía reasignar una pieza ya asignada, pero RP-05 solo mencionaba piezas Pendiente. Se amplió RP-05 con la reasignación confirmada y el rechazo de piezas Enviado. DSS-01 y EST-01 la incluyen dentro de CU-05, sin un caso de uso aparte.

@@ -17,7 +17,7 @@ Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
 ## Casos de uso y su origen
 | ID | Caso de uso (objetivo del actor) | Actor principal | Sistema externo | Historia de origen |
 |----|-----------------------------------|-----------------|-----------------|---------------------|
-| CU-01 | Autenticarse | Operario de Bodega / Encargado de Despacho | Servicio de autenticación | [HU-01 Autenticación de usuarios](./04-historias-usuario.md#hu-01) |
+| CU-01 | Autenticarse | Operario de Bodega / Encargado de Despacho / Supervisor de Proyectos | Servicio de autenticación | [HU-01 Autenticación de usuarios](./04-historias-usuario.md#hu-01) |
 | CU-02 | Crear proyecto | Encargado de Despacho | — | [HU-02 Crear proyecto](./04-historias-usuario.md#hu-02) |
 | CU-03 | Inyectar piezas desde plano/archivo | Encargado de Despacho | — | [HU-03 Inyectar piezas desde plano/archivo](./04-historias-usuario.md#hu-03) |
 | CU-04 | Crear torre | Operario de Bodega | — | [HU-04 Crear torre](./04-historias-usuario.md#hu-04) |

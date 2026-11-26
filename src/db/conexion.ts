@@ -51,15 +51,26 @@ export function aplicarMigraciones(base: DatabaseSync): void {
   );
   for (const nombre of archivos) {
     if (aplicada.get(nombre)) continue;
+    // Las migraciones pueden reconstruir tablas padre. PRAGMA foreign_keys no se
+    // puede cambiar dentro de una transacción, y DROP TABLE con claves foráneas
+    // activas dispara ON DELETE CASCADE sobre las filas hijas (HU-12, migración 007).
+    // Se desactiva antes de BEGIN y se reactiva tras COMMIT, validando integridad.
+    base.exec("PRAGMA foreign_keys = OFF");
     const sql = fs.readFileSync(path.join(dirMigraciones, nombre), "utf8");
     base.exec("BEGIN");
     try {
       base.exec(sql);
       insertar.run(nombre);
+      const problemas = base.prepare("PRAGMA foreign_key_check").all();
+      if (problemas.length > 0) {
+        throw new Error(`La migración ${nombre} dejó referencias de clave foránea inválidas.`);
+      }
       base.exec("COMMIT");
     } catch (e) {
       base.exec("ROLLBACK");
       throw e;
+    } finally {
+      base.exec("PRAGMA foreign_keys = ON");
     }
   }
 }

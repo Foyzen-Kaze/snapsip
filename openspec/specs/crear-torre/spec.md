@@ -17,7 +17,7 @@ El sistema SHALL registrar una `Torre` asociada únicamente al `Proyecto` y a la
 - **Y** muestra el código generado `TOR-<codigo del Proyecto>-<numero>`
 
 #### Scenario: Rechazo de un proyecto sin universo de piezas cargado
-- **DADO** que un proyecto está en estado «Sin piezas cargadas»
+- **DADO** que un proyecto está en estado «Pendiente de aprobación», «Aprobado» o «Rechazado»
 - **CUANDO** el operario de bodega solicita crear una torre en ese proyecto
 - **ENTONCES** el sistema rechaza la solicitud con el mensaje «primero deben inyectarse las piezas del proyecto desde el archivo» (HU-02 CA3, `07-criterios-aceptacion.md:68`)
 - **Y** no crea la torre

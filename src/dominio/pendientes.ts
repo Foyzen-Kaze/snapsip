@@ -1,7 +1,13 @@
 import { obtenerBd } from "../db/conexion";
 
 // HU-06, CU-06, TO-BE Consultar piezas pendientes
-export const ESTADO_SIN_PIEZAS_CARGADAS = "Sin piezas cargadas";
+import { ESTADOS_PROYECTO } from "./proyectos";
+
+// HU-06 CA6: el aviso se dispara por ausencia de piezas, no por un estado propio.
+export const ESTADOS_PROYECTO_SIN_PIEZAS = [
+  ESTADOS_PROYECTO.PENDIENTE,
+  ESTADOS_PROYECTO.RECHAZADO,
+] as const;
 
 export interface ProyectoParaSelector {
   id: number;
@@ -27,11 +33,11 @@ export function listarProyectosParaConsulta(): ProyectoParaSelector[] {
     .all() as ProyectoParaSelector[];
 }
 
-// HU-06 CA6: el estado «Sin piezas cargadas» es un atributo de Proyecto (modelo de dominio), no de EST-01.
+// HU-06 CA6: el atributo estado pertenece a Proyecto (modelo de dominio), no a EST-01.
 export function proyectoEstaSinPiezas(
   proyecto: ProyectoParaSelector | undefined
 ): boolean {
-  return proyecto?.estado === ESTADO_SIN_PIEZAS_CARGADAS;
+  return !!proyecto && (ESTADOS_PROYECTO_SIN_PIEZAS as readonly string[]).includes(proyecto.estado);
 }
 
 export function listarPartesPorProyecto(proyectoId: number): ParteCasaParaSelector[] {

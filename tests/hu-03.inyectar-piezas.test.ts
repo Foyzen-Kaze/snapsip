@@ -7,6 +7,7 @@ import { crearApp } from "../src/app";
 import { reiniciarBdParaPruebas, cerrarBd, obtenerBd } from "../src/db/conexion";
 import { ejecutarSeed } from "../src/db/seed";
 import { generadorPlano, GeneradorPlanoSimulado } from "../src/integraciones";
+import { aprobarProyecto } from "../src/dominio/proyectos";
 
 const rutaBdPrueba = path.join(os.tmpdir(), `snapsip-hu03-test-${process.pid}.db`);
 const generarOriginal = generadorPlano.generar;
@@ -51,6 +52,10 @@ async function crearProyecto(
     ...cantidades,
   });
   expect(res.status).toBe(201);
+  // HU-03 solo inyecta en proyectos aprobados por el Supervisor (HU-12).
+  const proyecto = fila("SELECT id FROM proyectos WHERE codigo = ?", codigo);
+  const decision = aprobarProyecto(proyecto.id);
+  expect(decision.ok).toBe(true);
 }
 
 function filas(sql: string, ...args: unknown[]): any[] {
@@ -240,8 +245,45 @@ describe("HU-03 · Inyectar piezas desde plano/archivo", () => {
     expect(filas("SELECT * FROM piezas")).toHaveLength(0);
     expect(filas("SELECT id, nombre, cantidad_prevista FROM partes_casa")).toHaveLength(partesAntes);
     expect(fila("SELECT estado FROM proyectos WHERE codigo = ?", "ROL-01").estado).toBe(
-      "Sin piezas cargadas"
+      "Aprobado"
     );
+  });
+
+  it("HU-03 · CA4: rechazo sin cambios desde «Pendiente de aprobación» y «Rechazado»", async () => {
+    const app = preparar();
+    const agente = await agenteEncargado(app);
+    await agente.post("/proyectos").type("form").send({
+      cliente: "Cliente No Aprobado",
+      codigo: "NO-APROBADO",
+      metraje: "80",
+      ...CANTIDADES_VALIDAS,
+    });
+    const pendienteId = fila("SELECT id FROM proyectos WHERE codigo = ?", "NO-APROBADO").id;
+    await agente.post("/proyectos").type("form").send({
+      cliente: "Cliente Rechazado",
+      codigo: "RECHAZADO-HU03",
+      metraje: "80",
+      ...CANTIDADES_VALIDAS,
+    });
+    const rechazadoId = fila("SELECT id FROM proyectos WHERE codigo = ?", "RECHAZADO-HU03").id;
+    obtenerBd()
+      .prepare("UPDATE proyectos SET estado = 'Rechazado' WHERE id = ?")
+      .run(rechazadoId);
+
+    const listado = await agente.get("/proyectos");
+    expect(listado.text).not.toContain("/proyectos/NO-APROBADO/inyectar-piezas");
+    expect(listado.text).not.toContain("/proyectos/RECHAZADO-HU03/inyectar-piezas");
+
+    for (const codigo of ["NO-APROBADO", "RECHAZADO-HU03"]) {
+      const res = await agente.post(`/proyectos/${codigo}/inyectar-piezas`).type("form");
+      expect(res.status).toBe(400);
+      expect(res.text).toContain("se requiere &#39;Aprobado&#39;");
+      expect(filas("SELECT * FROM piezas")).toHaveLength(0);
+    }
+    expect(fila("SELECT estado FROM proyectos WHERE id = ?", pendienteId).estado).toBe(
+      "Pendiente de aprobación"
+    );
+    expect(fila("SELECT estado FROM proyectos WHERE id = ?", rechazadoId).estado).toBe("Rechazado");
   });
 
   it("HU-03 · Proyecto sin opción de inyección después de cargar las piezas", async () => {
@@ -282,7 +324,7 @@ describe("HU-03 · Inyectar piezas desde plano/archivo", () => {
     expect(filas("SELECT * FROM piezas")).toHaveLength(0);
     expect(filas("SELECT * FROM partes_casa")).toHaveLength(4);
     expect(fila("SELECT estado FROM proyectos WHERE codigo = ?", "CA2-ARCHIVO").estado).toBe(
-      "Sin piezas cargadas"
+      "Aprobado"
     );
   });
 

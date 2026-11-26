@@ -51,6 +51,31 @@ describe("HU-01 · Autenticación de usuarios (acceso por rol de demostración)"
     expect(res.text).not.toContain("Crear torre (HU-04, pendiente)");
   });
 
+  it("HU-01 · El rol Supervisor de Proyectos aparece en el selector y habilita HU-12", async () => {
+    const app = preparar();
+    const agente = request.agent(app);
+    const inicio = await agente.get("/");
+
+    // DADO que la aplicación ofrece el rol Supervisor de Proyectos en el selector
+    expect(inicio.text).toContain('value="Supervisor de Proyectos"');
+
+    // CUANDO selecciona ese rol de demostración
+    const res = await agente
+      .post("/acceso/rol")
+      .type("form")
+      .send({ rol: "Supervisor de Proyectos" })
+      .redirects(1);
+
+    // ENTONCES se concede el acceso con su función de aprobación y un enlace propio
+    expect(res.status).toBe(200);
+    expect(res.text).toContain("Acceso concedido");
+    expect(res.text).toContain("Supervisor de Proyectos");
+    expect(res.text).toContain("Aprobar o rechazar proyecto (HU-12)");
+    expect(res.text).toContain('href="/aprobaciones"');
+    expect(res.text).not.toContain("Crear proyecto (HU-02)");
+    expect(res.text).not.toContain("Inyectar piezas desde plano/archivo (HU-03)");
+  });
+
   it("HU-01 · No se concede acceso sin rol de demostración establecido (CA2 adaptado en demo)", async () => {
     // DADO que el usuario no ha establecido un rol de demostración
     const app = preparar();

@@ -63,7 +63,7 @@ describe("HU-02 · Crear proyecto", () => {
     expect(res.text).toContain("Cliente A");
     expect(res.text).toContain("CASA-001");
     expect(res.text).toContain("120");
-    expect(res.text).toContain("Sin piezas cargadas");
+    expect(res.text).toContain("Pendiente de aprobación");
     expect(res.text).toContain("4 (definidas al crear el proyecto)");
     expect(res.text).toContain("0 (sin piezas registradas)");
     expect(res.text).toContain("<td>Piso</td>");
@@ -77,7 +77,7 @@ describe("HU-02 · Crear proyecto", () => {
     expect(fila).toBeTruthy();
     expect(fila.cliente).toBe("Cliente A");
     expect(fila.metraje).toBe("120");
-    expect(fila.estado).toBe("Sin piezas cargadas");
+    expect(fila.estado).toBe("Pendiente de aprobación");
 
     const partes = filas(
       "SELECT nombre, cantidad_prevista FROM partes_casa WHERE proyecto_id = (SELECT id FROM proyectos WHERE codigo = ?) ORDER BY id",
@@ -150,7 +150,7 @@ describe("HU-02 · Crear proyecto", () => {
       .prepare("SELECT codigo, estado FROM proyectos WHERE codigo = ?")
       .get("TORRE-CA3") as any;
     expect(proyecto).toBeTruthy();
-    expect(proyecto.estado).toBe("Sin piezas cargadas");
+    expect(proyecto.estado).toBe("Pendiente de aprobación");
 
     const conteos = obtenerBd()
       .prepare(
@@ -163,7 +163,7 @@ describe("HU-02 · Crear proyecto", () => {
     const listado = await agente.get("/proyectos");
     expect(listado.status).toBe(200);
     expect(listado.text).toContain("TORRE-CA3");
-    expect(listado.text).toContain("Sin piezas cargadas");
+    expect(listado.text).toContain("Pendiente de aprobación");
   });
 
   it("HU-02 · Rechazo por cantidades de partes inválidas (CA4)", async () => {
