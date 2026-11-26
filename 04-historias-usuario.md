@@ -16,11 +16,11 @@ Como Operario de Bodega, Encargado de Despacho o Supervisor de Proyecto, quiero 
 Como Encargado de Despacho, quiero registrar un nuevo proyecto asociado a un cliente, para iniciar el control de todas las piezas que se esperan producir para esa casa.
 **Actividad TO-BE asociada:** Crear proyecto.
 **Criterios de aceptación:**
-* CA1: Dado que el encargado de despacho necesita iniciar el control de un cliente nuevo, cuando solicita el registro de un proyecto con un cliente, un código, un metraje y las cantidades de Piso, Muros exteriores, Muros interiores, Entrepiso y Techo, entonces el sistema registra el proyecto en estado "Sin piezas cargadas", crea las partes con cantidad positiva y su cantidad prevista, y deja cero piezas.
+* CA1: Dado que el encargado de despacho necesita iniciar el control de un cliente nuevo, cuando solicita el registro de un proyecto con un cliente, un código, un metraje y las cantidades de Piso, Muros exteriores, Muros interiores, Entrepiso y Techo, entonces el sistema registra el proyecto en estado "Pendiente de aprobación", crea las partes con cantidad positiva y su cantidad prevista, y deja cero piezas.
 * CA2: Dado que existe un proyecto registrado con un código específico, cuando el encargado de despacho solicita el registro de otro proyecto con ese mismo código, entonces el sistema rechaza la solicitud e informa que el código está duplicado.
-* CA3: Dado que un proyecto se encuentra en estado "Sin piezas cargadas" con partes definidas y sin piezas, cuando el operario de bodega solicita la creación de una torre en ese proyecto, entonces el sistema rechaza la solicitud e informa que primero debe completarse la carga del plano o archivo de piezas.
+* CA3: Dado que un proyecto se encuentra en estado "Pendiente de aprobación", "Aprobado" o "Rechazado" con partes definidas y sin piezas cargadas, cuando el operario de bodega solicita la creación de una torre en ese proyecto, entonces el sistema rechaza la solicitud e informa que primero debe completarse la carga del plano o archivo de piezas.
 * CA4: Dado que el encargado de despacho indica cantidades que no son enteros no negativos o cuyo total está fuera de 1 a 100, cuando solicita registrar el proyecto, entonces el sistema rechaza la solicitud, comunica que las cantidades deben ser enteros no negativos y el total entre 1 y 100, y no registra el proyecto ni sus partes.
-* CA5: Dado que como encargado de despacho creo un nuevo proyecto asociado a un cliente, con su código especifico y metraje, este queda en estado "pendiente de aprobación".
+* CA5: Dado que existen proyectos registrados en el sistema, cuando un usuario autenticado consulta los proyectos, entonces el sistema muestra cada proyecto junto con su estado actual.
 
 <a id="hu-03"></a>
 
@@ -28,8 +28,10 @@ Como Encargado de Despacho, quiero registrar un nuevo proyecto asociado a un cli
 Como Encargado de Despacho, quiero registrar el universo completo de piezas de un proyecto a partir del plano o archivo de piezas, para que el sistema las registre automáticamente en estado Pendiente, organizadas por parte de la casa.
 **Actividad TO-BE asociada:** Inyectar piezas desde plano/archivo.
 **Criterios de aceptación:**
-* CA1: Dado un proyecto en estado "Sin piezas cargadas" con las partes de la casa definidas al crearlo, cuando el encargado de despacho solicita inyectar piezas desde el plano/archivo, entonces el sistema crea en una sola carga exactamente la cantidad prevista de piezas por parte, en estado Pendiente sin torre asignada, cambia el proyecto a estado "En preparación", oculta el botón y rechaza reintentos sin modificar datos.
-* CA2: Dado un proyecto en estado "Sin piezas cargadas", cuando el encargado de despacho solicita el registro de un archivo con formato inválido o con filas incompletas, entonces el sistema rechaza la carga completa, señala las filas con error y no registra piezas parciales.
+* CA1: Dado un proyecto en estado "Aprobado" con las partes de la casa definidas al crearlo, cuando el encargado de despacho solicita inyectar piezas desde el plano/archivo, entonces el sistema crea en una sola carga exactamente la cantidad prevista de piezas por parte, en estado Pendiente sin torre asignada, cambia el proyecto a estado "En preparación" y oculta el botón de inyección.
+* CA2: Dado un proyecto en estado "Aprobado", cuando el encargado de despacho solicita el registro de un archivo con formato inválido o con filas incompletas, entonces el sistema rechaza la carga completa, señala el error o las filas incompletas, no registra piezas parciales y mantiene el proyecto en estado "Aprobado".
+* CA3: Dado un proyecto que ya fue inyectado y se encuentra en estado "En preparación", cuando el encargado de despacho solicita inyectar piezas nuevamente, entonces el sistema rechaza la solicitud, informa que el proyecto ya tiene piezas inyectadas y no modifica piezas ni partes de la casa.
+* CA4: Dado un proyecto en estado "Pendiente de aprobación" o "Rechazado", cuando el encargado de despacho solicita inyectar piezas desde el plano/archivo, entonces el sistema rechaza la solicitud, informa que el proyecto debe estar en estado "Aprobado" y no registra piezas ni cambia su estado.
 
 <a id="hu-04"></a>
 
@@ -66,7 +68,7 @@ Como Operario de Bodega, quiero consultar las piezas pendientes de una parte de 
 * CA3: Dado que existen proyectos registrados, cuando el operario de bodega abre la consulta de piezas pendientes, entonces el sistema ofrece cada proyecto identificado por su cliente y su código.
 * CA4: Dado que el proyecto elegido tiene piezas cargadas en una parte de la casa, cuando el operario de bodega selecciona ese proyecto, entonces el sistema ofrece esa parte de la casa para consultar (por ejemplo, Techo, Muros exteriores, Muros interiores, Piso o Entrepiso).
 * CA5: Dado que el proyecto elegido tiene piezas cargadas solo en algunas partes de la casa, cuando el operario de bodega selecciona ese proyecto, entonces el sistema ofrece únicamente esas partes y no ofrece las que no tienen piezas cargadas.
-* CA6: Dado que el proyecto elegido está en estado "Sin piezas cargadas", cuando el operario de bodega selecciona ese proyecto, entonces el sistema informa que el proyecto no tiene partes de la casa con piezas cargadas.
+* CA6: Dado que el proyecto elegido está en estado "Pendiente de aprobación", "Aprobado" o "Rechazado" y no tiene piezas cargadas, cuando el operario de bodega selecciona ese proyecto, entonces el sistema informa que el proyecto no tiene partes de la casa con piezas cargadas.
 
 <a id="hu-07"></a>
 
@@ -129,9 +131,11 @@ Como Operario de Bodega, quiero desasignar una pieza que fue asignada por error,
 
 <a id="hu-12"></a>
 
-## HU-12 - Crear o Rechazar Proyecto
-Cómo Supervisor de Proyecto, quiero aprobar o rechazar un proyecto que se encuentre en estado "pendiente de aprobación". 
-**Actividad TO-BE asociada:** Crear Proyecto
-**Criterios de Aceptación**: 
-* CA1: Dado que un proyecto esta bien constituido por el encargado de despecho, y a cliente le parece correcto, permito que el sistema apruebe el proyecto.
-* CA2: Dado que un proyecto esta bien constituido, pero del que el cliente desconcuerda, permito que el sistema rechace el proyecto.
+## HU-12 — Aprobar o rechazar proyecto
+Como Supervisor de Proyecto, quiero aprobar o rechazar un proyecto que se encuentre en estado "Pendiente de aprobación", para controlar qué proyectos están autorizados a pasar a la carga de piezas.
+**Actividad TO-BE asociada:** Aprobar o rechazar proyecto.
+**Criterios de aceptación:**
+* CA1: Dado que un proyecto se encuentra en estado "Pendiente de aprobación", cuando el supervisor de proyecto solicita aprobarlo, entonces el sistema cambia el proyecto a estado "Aprobado" y lo habilita para la inyección de piezas.
+* CA2: Dado que un proyecto se encuentra en estado "Pendiente de aprobación", cuando el supervisor de proyecto solicita rechazarlo, entonces el sistema cambia el proyecto a estado "Rechazado" y no permite inyectar piezas en él.
+* CA3: Dado que un proyecto no se encuentra en estado "Pendiente de aprobación", cuando el supervisor de proyecto solicita aprobarlo o rechazarlo, entonces el sistema rechaza la solicitud y mantiene el estado actual del proyecto.
+* CA4: Dado que un usuario autenticado tiene un rol distinto a Supervisor de Proyecto, cuando solicita aprobar o rechazar un proyecto, entonces el sistema rechaza la solicitud y mantiene el estado actual del proyecto.

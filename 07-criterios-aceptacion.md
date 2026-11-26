@@ -1,12 +1,12 @@
 # Criterios de aceptación (Gherkin)
 
-Los escenarios siguen la numeración de [04-historias-usuario.md](./04-historias-usuario.md) (HU-01 a HU-11). Cada «Característica» lleva el título de su historia, y cada paso «Cuando» usa el verbo de su [caso de uso](./09-casos-de-uso.md). Los escenarios usan los términos del [modelo de dominio](./08-modelo-dominio.md) y los estados de los [diagramas de estado](./11-diagramas-estado.md).
+Los escenarios siguen la numeración de [04-historias-usuario.md](./04-historias-usuario.md) (HU-01 a HU-12). Cada «Característica» lleva el título de su historia, y cada paso «Cuando» usa el verbo de su [caso de uso](./09-casos-de-uso.md). Los escenarios usan los términos del [modelo de dominio](./08-modelo-dominio.md) y los estados de los [diagramas de estado](./11-diagramas-estado.md).
 
-Cada escenario lleva un comentario (`# CA…`) con el criterio de aceptación de la historia que especifica. Todos los criterios de las once historias tienen al menos un escenario. Un escenario marcado como «derivado» proviene directamente de un requisito de [03-requisitos.md](./03-requisitos.md).
+Cada escenario lleva un comentario (`# CA…`) con el criterio de aceptación de la historia que especifica. Todos los criterios de las doce historias tienen al menos un escenario. Un escenario marcado como «derivado» proviene directamente de un requisito de [03-requisitos.md](./03-requisitos.md).
 
 ## HU-01 — Autenticación de usuarios
 
-Historia: Como Operario de Bodega o Encargado de Despacho, quiero autenticarme con mis credenciales, para acceder únicamente a los proyectos y funciones que corresponden a mi rol.
+Historia: Como Operario de Bodega, Encargado de Despacho o Supervisor de Proyecto, quiero autenticarme con mis credenciales, para acceder únicamente a los proyectos y funciones que corresponden a mi rol.
 
 ```gherkin
 Característica: Autenticación de usuarios
@@ -50,7 +50,7 @@ Característica: Crear proyecto
     Cuando solicita crear el proyecto con esos datos
     Entonces el sistema registra el proyecto asociado al cliente
     Y conserva el código y el metraje indicados
-    Y establece su estado en "Sin piezas cargadas"
+    Y establece su estado en "Pendiente de aprobación"
     Y crea las partes de la casa con cantidad positiva, registrando su cantidad prevista
     Y el proyecto queda sin piezas registradas
 
@@ -64,7 +64,7 @@ Característica: Crear proyecto
 
   # CA3
   Escenario: Rechazo de la creación de una torre antes de inyectar las piezas
-    Dado que un proyecto se encuentra en estado "Sin piezas cargadas" con partes definidas y sin piezas
+    Dado que un proyecto se encuentra en estado "Pendiente de aprobación", "Aprobado" o "Rechazado" sin piezas cargadas
     Cuando el operario de bodega solicita crear una torre en ese proyecto
     Entonces el sistema rechaza la solicitud
     Y comunica que primero deben inyectarse las piezas del proyecto desde el archivo
@@ -79,11 +79,10 @@ Característica: Crear proyecto
     Y no registra el proyecto ni sus partes de la casa
 
   # CA5
-  Escenario: Espera de aprobación del supervisor
-    Dado que un proyecto se encuentra bien constituido
-    Cuando termine el proyecto
-    Entonces el sistema lo deja en estado pendiente
-    Y comunica directamente con el supervisor a la espera de aprobación
+  Escenario: Visualización del estado de los proyectos
+    Dado que existen proyectos registrados en el sistema
+    Cuando un usuario autenticado consulta el listado de proyectos
+    Entonces el sistema presenta cada proyecto junto con su estado actual
 ```
 
 ## HU-03 — Inyectar piezas desde plano/archivo
@@ -95,7 +94,7 @@ Característica: Inyectar piezas desde plano/archivo
 
   # CA1
   Escenario: Inyección de piezas desde un archivo válido
-    Dado que un proyecto se encuentra en estado "Sin piezas cargadas" y tiene las partes de la casa definidas al crearlo
+    Dado que un proyecto se encuentra en estado "Aprobado" y tiene las partes de la casa definidas al crearlo
     Y el plano/archivo contiene las piezas organizadas por esas partes
     Cuando el encargado de despacho solicita inyectar las piezas desde ese archivo
     Entonces el sistema crea en una sola carga exactamente la cantidad prevista de piezas por parte
@@ -104,7 +103,17 @@ Característica: Inyectar piezas desde plano/archivo
     Y cambia el proyecto a estado "En preparación"
     Y oculta el botón «Inyectar piezas desde plano/archivo»
 
-  # CA1
+  # CA2
+  Escenario: Rechazo de un archivo con formato inválido o filas incompletas
+    Dado que un proyecto se encuentra en estado "Aprobado"
+    Y el archivo de piezas no cumple la plantilla definida o contiene filas sin datos obligatorios
+    Cuando el encargado de despacho solicita inyectar las piezas desde ese archivo
+    Entonces el sistema rechaza la carga completa
+    Y señala el error de formato o las filas incompletas
+    Y no registra piezas parciales
+    Y mantiene el proyecto en estado "Aprobado"
+
+  # CA3
   Escenario: Rechazo de un reintento de inyección
     Dado que un proyecto ya fue inyectado y está en estado "En preparación"
     Cuando el encargado de despacho solicita inyectar piezas de nuevo
@@ -112,26 +121,14 @@ Característica: Inyectar piezas desde plano/archivo
     Y comunica que el proyecto ya tiene piezas inyectadas y que no se modificaron datos
     Y no modifica piezas ni partes de la casa
 
-  # CA2
-  Escenario: Rechazo de un archivo con formato inválido
-    Dado que un proyecto se encuentra en estado "Sin piezas cargadas"
-    Cuando el encargado de despacho solicita inyectar las piezas desde un archivo que no cumple la plantilla definida
-    Entonces el sistema rechaza la carga completa
-    Y comunica que el formato no es válido
-    Y no registra partes de la casa ni piezas
-    Y mantiene el proyecto en estado "Sin piezas cargadas"
-
-  # CA2
-  Escenario: Rechazo de un archivo con filas incompletas
-    Dado que un proyecto se encuentra en estado "Sin piezas cargadas"
-    Y el archivo de piezas contiene filas sin datos obligatorios
-    Cuando el encargado de despacho solicita inyectar las piezas desde ese archivo
-    Entonces el sistema rechaza la carga completa
-    Y señala las filas con error
-    Y no registra piezas parciales
-    Y mantiene el proyecto en estado "Sin piezas cargadas"
+  # CA4
+  Escenario: Rechazo de inyección en un proyecto no aprobado
+    Dado que un proyecto se encuentra en estado "Pendiente de aprobación" o "Rechazado"
+    Cuando el encargado de despacho solicita inyectar las piezas desde el plano/archivo
+    Entonces el sistema rechaza la solicitud
+    Y comunica que el proyecto debe estar en estado "Aprobado"
+    Y no registra piezas ni cambia el estado del proyecto
 ```
-
 ## HU-04 — Crear torre
 
 Historia: Como Operario de Bodega, quiero registrar una torre asociada a un proyecto y a una parte de la casa, para documentar una agrupación física de piezas existente, exclusiva de ese cliente y esa parte.
@@ -304,7 +301,7 @@ Característica: Consultar piezas pendientes
 
   # CA6
   Escenario: Proyecto sin piezas cargadas
-    Dado que el proyecto elegido está en estado "Sin piezas cargadas"
+    Dado que el proyecto elegido está en estado "Pendiente de aprobación", "Aprobado" o "Rechazado" y no tiene piezas cargadas
     Cuando el operario de bodega selecciona ese proyecto
     Entonces el sistema informa que el proyecto no tiene partes de la casa con piezas cargadas
 ```
@@ -558,22 +555,39 @@ Característica: Desasignar pieza de una torre
     Y comunica que una pieza enviada no puede desasignarse
     Y conserva la pieza, su torre y sus evidencias sin modificaciones
 ```
-## HU-12 - Crear o Rechazar Proyecto
-Cómo Supervisor de Proyecto, quiero aprobar o rechazar un proyecto que se encuentre en estado "pendiente de aprobación"
+## HU-12 — Aprobar o rechazar proyecto
+
+Historia: Como Supervisor de Proyecto, quiero aprobar o rechazar un proyecto que se encuentre en estado "Pendiente de aprobación", para controlar qué proyectos están autorizados a pasar a la carga de piezas.
+
 ```gherkin
-Caracteristica: Aprobar o Rechazar un proyecto
+Característica: Aprobar o rechazar proyecto
+
   # CA1
-  Escenario: Apruebo un Proyecto
-    Dado que un proyecto generado por el Encargado de Despacho
-    Y que este bien constituido
-    Cuando cómo Supervisor contacto al Cliente proponiendole el Proyecto y da visto bueno
-    Entonces permito que el sistema Apruebe la Creación del Proyecto
-    Y se comunica con el Encargado de Despacho, permitiendo que el proyecto avance.
+  Escenario: Aprobación de un proyecto pendiente
+    Dado que un proyecto se encuentra en estado "Pendiente de aprobación"
+    Cuando el supervisor de proyecto solicita aprobar el proyecto
+    Entonces el sistema cambia el proyecto a estado "Aprobado"
+    Y habilita el proyecto para la inyección de piezas
+
   # CA2
-  Escenario: Rechazo un Proyecto
-    Dado que un proyecto generado por el Encargo de Despecho
-    Y que este bien constituido
-    Cuando cómo Supervisor contacto al Cliente proponiendole el Proyecto y no da visto bueno
-    Entonces permito que el sistema Rechace la Creación del Proyecto
-    Y se comunica con el Encargado de Despacho, no permitiendo seguir con el proyecto.     
-```    
+  Escenario: Rechazo de un proyecto pendiente
+    Dado que un proyecto se encuentra en estado "Pendiente de aprobación"
+    Cuando el supervisor de proyecto solicita rechazar el proyecto
+    Entonces el sistema cambia el proyecto a estado "Rechazado"
+    Y no permite inyectar piezas en el proyecto
+
+  # CA3
+  Escenario: Rechazo de aprobación o rechazo sobre un proyecto que no está pendiente
+    Dado que un proyecto se encuentra en estado "Aprobado", "Rechazado" o "En preparación"
+    Cuando el supervisor de proyecto solicita aprobar o rechazar el proyecto
+    Entonces el sistema rechaza la solicitud
+    Y mantiene el estado actual del proyecto sin modificaciones
+
+  # CA4
+  Escenario: Rechazo de aprobación o rechazo por un rol no autorizado
+    Dado que un proyecto se encuentra en estado "Pendiente de aprobación"
+    Y el usuario autenticado posee un rol distinto a Supervisor de Proyecto
+    Cuando solicita aprobar o rechazar el proyecto
+    Entonces el sistema rechaza la solicitud
+    Y mantiene el proyecto en estado "Pendiente de aprobación"
+```  
