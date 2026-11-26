@@ -7,6 +7,7 @@
 | Encargado de Despacho | Humano | Crea los proyectos, inyecta las piezas desde el archivo, genera las guías de despacho y registra la salida de los camiones. |
 | Servicio de autenticación | Sistema externo | Proveedor administrado que verifica las credenciales (identificador y contraseña) de los usuarios (RP-15b). |
 | Servicio de almacenamiento de evidencias | Sistema externo | Repositorio en la nube que recibe y guarda las fotografías que respaldan la asignación de una pieza y el envío de un camión (RP-15a). |
+| Supervisor de proyectos | Humano | aprueba proyectos o los rechaza |
 
 ## Diagrama de casos de uso
 ![Casos de uso](./diagramas/casos-de-uso.png)
@@ -27,7 +28,7 @@ Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
 | CU-09 | Registrar envío con evidencia | Encargado de Despacho | Servicio de almacenamiento de evidencias | [HU-09 Registrar envío con evidencia](./04-historias-usuario.md#hu-09) |
 | CU-10 | Eliminar torre vacía con código | Operario de Bodega | — | [HU-10 Eliminar torre vacía con código](./04-historias-usuario.md#hu-10) |
 | CU-11 | Desasignar pieza de una torre | Operario de Bodega | — | [HU-11 Desasignar pieza de una torre](./04-historias-usuario.md#hu-11) |
-| CU-12 | Crear o Rechazar Proyecto | Supervisor de Proyectos | — | [HU-12 Crear o Rechazar Proyecto](04-historias-usuario.md#hu-12) |
+| CU-12 | Aprobar o Rechazar Proyecto | Supervisor de Proyectos | — | [HU-12 Aprobar o Rechazar Proyecto](04-historias-usuario.md#hu-12) |
 
 ## Decisiones de modelado
 - **Un caso de uso por historia:** cada historia de [04-historias-usuario.md](./04-historias-usuario.md) corresponde a un único objetivo del actor, por lo que la numeración CU-xx coincide con la HU-xx de origen.

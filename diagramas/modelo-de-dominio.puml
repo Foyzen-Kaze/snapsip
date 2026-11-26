@@ -26,7 +26,6 @@ class Proyecto {
   cliente
   metraje
   estado
-  esperandoAprobacion
 }
 
 class ParteCasa {

@@ -8,7 +8,7 @@ Archivo fuente: [`./diagramas/modelo-de-dominio.puml`](./diagramas/modelo-de-dom
 ## Descripción de las clases
 | Clase | Qué representa en el negocio | Atributos |
 |-------|------------------------------|-----------|
-| Proyecto | Casa encargada por un cliente, cuyo despacho de paneles SIP se controla. | codigo, cliente, metraje, estado (Sin piezas cargadas, En preparación, Proyecto completo,esperandoAprobacion) |
+| Proyecto | Casa encargada por un cliente, cuyo despacho de paneles SIP se controla. | codigo, cliente, metraje, estado (Sin piezas cargadas, En preparación, Proyecto completo,pendiente,aprobado,rechazado) |
 | ParteCasa | Sección de la casa (por ejemplo, el techo) que organiza los paneles del plano. | nombre, cantidadPrevista (número de paneles esperados, definido al crear el proyecto), /completa (derivado: tiene al menos una pieza y todas están Listo) |
 | Pieza | Panel SIP del universo de piezas del proyecto. | codigo, estado (Pendiente, Listo, Enviado) |
 | Torre | Pila física de paneles en la bodega, exclusiva de una parte de la casa. | codigo, numero (correlativo dentro del proyecto), estado (Abierta, Cerrada, Eliminada), fechaHoraEliminacion, eliminadaPor |
@@ -28,7 +28,7 @@ Archivo fuente: [`./diagramas/modelo-de-dominio.puml`](./diagramas/modelo-de-dom
 | respalda el envío de (composición) | Evidencia – GuiaDespacho | 0..1 a 0..1 | No hay envío sin la fotografía del camión cargado. La guía no tiene evidencia hasta que se registra el envío, y tiene a lo más una porque una guía no se envía dos veces (RP-10). |
 
 ## Decisiones de modelado
-- **Roles:** Operario de Bodega y Encargado de Despacho son los actores que operan el sistema, no conceptos de información del negocio, por lo que no se modelan como clases. Quién realiza cada acción queda registrado como dato: `responsable` en Evidencia y `eliminadaPor` en Torre (RP-05, RP-10, RP-11).
+- **Roles:** Operario de Bodega y Encargado de Despacho y superviso del proyecto son los actores que operan el sistema, no conceptos de información del negocio, por lo que no se modelan como clases. Quién realiza cada acción queda registrado como dato: `responsable` en Evidencia y `eliminadaPor` en Torre (RP-05, RP-10, RP-11).
 - **Composición:** se usa cuando la parte no existe sin el todo y pertenece a un solo todo durante su vida: la parte de la casa dentro de su proyecto, el panel dentro de su parte, y la fotografía dentro del panel o de la guía que respalda. Si se elimina el todo, sus partes también desaparecen.
 - **Agregación:** se usa en las agrupaciones temporales en que el panel sobrevive al agrupador. La torre agrupa paneles físicamente, pero el panel existe antes de entrar a ella, puede salir (desasignar) y pasar a otra (reasignar). La guía agrupa paneles documentalmente; si se invalida, los paneles siguen existiendo y se incluyen en una guía nueva.
 - **Cliente como atributo:** el cliente es un dato del proyecto (RP-02) y no tiene un ciclo de vida propio en SnapSip, por lo que se modela como el atributo `cliente` de Proyecto.
