@@ -7,6 +7,7 @@ actor "Operario de Bodega" as OB
 actor "Encargado de Despacho" as ED
 actor "Servicio de autenticación" as SA <<sistema externo>>
 actor "Servicio de almacenamiento\nde evidencias" as SAE <<sistema externo>>
+actor "Supervisor de Proyectos" as SB
 
 rectangle "Sistema SnapSip" {
   usecase "CU-01 Autenticarse" as CU01
@@ -20,6 +21,7 @@ rectangle "Sistema SnapSip" {
   usecase "CU-09 Registrar envío\ncon evidencia" as CU09
   usecase "CU-10 Eliminar torre vacía\ncon código" as CU10
   usecase "CU-11 Desasignar pieza\nde una torre" as CU11
+  usecase "CU-12 crear o rechazar proyecto" as CU12
 }
 
 OB -- CU01
@@ -29,6 +31,7 @@ OB -- CU06
 OB -- CU07
 OB -- CU10
 OB -- CU11
+SB -- CU12
 
 ED -- CU01
 ED -- CU02
@@ -39,4 +42,7 @@ ED -- CU09
 CU01 -- SA
 CU05 -- SAE
 CU09 -- SAE
+
+CU02 .> CU12 : <<include>>
+
 @enduml
