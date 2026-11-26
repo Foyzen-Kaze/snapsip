@@ -7,6 +7,7 @@
 | Encargado de Despacho | Humano | Crea los proyectos, inyecta las piezas desde el archivo, genera las guías de despacho y registra la salida de los camiones. |
 | Servicio de autenticación | Sistema externo | Proveedor administrado que verifica las credenciales (identificador y contraseña) de los usuarios (RP-15b). |
 | Servicio de almacenamiento de evidencias | Sistema externo | Repositorio en la nube que recibe y guarda las fotografías que respaldan la asignación de una pieza y el envío de un camión (RP-15a). |
+| Supervisor de proyectos | Humano | aprueba proyectos o los rechaza |
 
 ## Diagrama de casos de uso
 ![Casos de uso](./diagramas/casos-de-uso.png)
