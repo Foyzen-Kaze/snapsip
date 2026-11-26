@@ -133,7 +133,7 @@ Como Operario de Bodega, quiero desasignar una pieza que fue asignada por error,
 
 ## HU-12 — Aprobar o rechazar proyecto
 Como Supervisor de Proyecto, quiero aprobar o rechazar un proyecto que se encuentre en estado "Pendiente de aprobación", para controlar qué proyectos están autorizados a pasar a la carga de piezas.
-**Actividad TO-BE asociada:** Aprobar o rechazar proyecto.
+**Actividad TO-BE asociada:** Crear proyecto.
 **Criterios de aceptación:**
 * CA1: Dado que un proyecto se encuentra en estado "Pendiente de aprobación", cuando el supervisor de proyecto solicita aprobarlo, entonces el sistema cambia el proyecto a estado "Aprobado" y lo habilita para la inyección de piezas.
 * CA2: Dado que un proyecto se encuentra en estado "Pendiente de aprobación", cuando el supervisor de proyecto solicita rechazarlo, entonces el sistema cambia el proyecto a estado "Rechazado" y no permite inyectar piezas en él.
