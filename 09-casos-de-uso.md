@@ -27,8 +27,7 @@ Archivo fuente: [`./diagramas/casos-de-uso.puml`](./diagramas/casos-de-uso.puml)
 | CU-09 | Registrar envío con evidencia | Encargado de Despacho | Servicio de almacenamiento de evidencias | [HU-09 Registrar envío con evidencia](./04-historias-usuario.md#hu-09) |
 | CU-10 | Eliminar torre vacía con código | Operario de Bodega | — | [HU-10 Eliminar torre vacía con código](./04-historias-usuario.md#hu-10) |
 | CU-11 | Desasignar pieza de una torre | Operario de Bodega | — | [HU-11 Desasignar pieza de una torre](./04-historias-usuario.md#hu-11) |
-| CU-12  | Crear o Rechazar Proyecto | Supervisor de proyectos |
-| - | HU-12 Crear o Rechazar Proyecto |
+| CU-12  | Crear o Rechazar Proyecto | Supervisor de proyectos || - | HU-12 Crear o Rechazar Proyecto |
 
 ## Decisiones de modelado
 - **Un caso de uso por historia:** cada historia de [04-historias-usuario.md](./04-historias-usuario.md) corresponde a un único objetivo del actor, por lo que la numeración CU-xx coincide con la HU-xx de origen.
