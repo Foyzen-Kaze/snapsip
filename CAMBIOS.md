@@ -5,7 +5,33 @@ cuando se crea un proyecto queda pendiente de aprobacion y el supervisor decide 
 
 **Historia de usuario y criterios de aceptacion**
 
-- Se unificó el nombre del rol «Supervisor de Proyectos» en HU-01 y HU-12 y en sus criterios de aceptación. [Historias de usuario](./04-historias-usuario.md) · [Criterios de aceptación](./07-criterios-aceptacion.md)
+1. Historias de usuario (04-historias-usuario.md)
+Responsable: Diego Marengo
+
+- HU-01: Se agrego el rol Supervisor de Proyecto junto a Operario de Bodega y Encargado de Despacho.
+- HU-02:
+  - CA1: Se cambio el estado inicial de Sin piezas cargadas a Pendiente de aprobacion y se agregaron las cantidades previstas por parte de la casa (Piso / Muros exteriores / Muros interiores / Entrepiso / Techo).
+  - CA3: Se actualizo el rechazo al crear torres para proyectos en Pendiente de aprobacion o Aprobado o Rechazado con partes definidas y sin piezas cargadas.
+  - CA4: Se dejo la validacion de cantidades de partes (enteros no negativos y total entre 1 y 100).
+  - CA5: Se dejo el criterio para mostrar cada proyecto con su estado actual.
+- HU-03:
+  - CA1 y CA2: Se cambio Sin piezas cargadas por Aprobado como requisito para inyectar piezas y se dejo que si el archivo es invalido o tiene filas incompletas el proyecto sigue en Aprobado.
+  - CA3: Se separo en otro criterio el rechazo al reintentar inyectar piezas cuando el proyecto ya esta En preparacion.
+  - CA4: Se agrego el rechazo de inyeccion cuando el proyecto esta en Pendiente de aprobacion o Rechazado.
+- HU-06:
+  - CA6: Se cambio Sin piezas cargadas por Pendiente de aprobacion o Aprobado o Rechazado para proyectos sin piezas cargadas.
+- HU-12:
+  - Se reescribio entera como Aprobar o rechazar proyecto para el rol Supervisor de Proyecto ligada a la actividad TO-BE Crear proyecto porque no se toco el diagrama TO-BE base.
+  - Quedo con 4 criterios: CA1 (aprobar pasa a Aprobado) / CA2 (rechazar pasa a Rechazado) / CA3 (rechazo si el proyecto no esta en Pendiente de aprobacion) y CA4 (rechazo si lo pide un rol distinto a Supervisor de Proyecto).
+
+2. Criterios de aceptacion Gherkin (07-criterios-aceptacion.md)
+Responsable: Diego Marengo
+
+- Se actualizo el encabezado del archivo con las 12 historias (HU-01 a HU-12).
+- HU-01 / HU-02 y HU-06: Se ajusto el rol y los estados con los cambios de 04-historias-usuario.md y se saco el estado Sin piezas cargadas.
+- HU-03: Se dejo 1 a 1 con 04-historias-usuario.md (4 escenarios para CA1 a CA4). Se cambio Sin piezas cargadas por Aprobado. Se junto formato invalido y filas incompletas en CA2. Se separo el reintento en CA3 y se agrego el rechazo en Pendiente de aprobacion o Rechazado en CA4. Se arreglo el cierre del bloque Gherkin.
+- HU-12: Se sacaron los pasos fuera del sistema (como contactar al cliente) y se hicieron 4 escenarios verificables (CA1 a CA4) que cubren aprobacion / rechazo / intento en proyecto no pendiente e intento por rol no autorizado.
+
 
 **Modelo De dominio**
 Se añadio nuevos valores al atributo estado:
