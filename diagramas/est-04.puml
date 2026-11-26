@@ -1,0 +1,27 @@
+@startuml est-04
+title EST-04 — Ciclo de vida de Proyecto
+hide empty description
+skinparam shadowing false
+skinparam state {
+  BackgroundColor #F8F9FA
+  BorderColor #343A40
+  ArrowColor #495057
+  StartColor #343A40
+  EndColor #343A40
+}
+
+state "Pendiente de aprobación" as PendienteAprobacion
+state "Aprobado" as Aprobado
+state "Rechazado" as Rechazado
+state "En preparación" as EnPreparacion
+state "Proyecto completo" as ProyectoCompleto
+
+[*] --> PendienteAprobacion : crear proyecto\n[datos válidos y código único]\n/ crear partes con cantidad\nprevista y cero piezas
+PendienteAprobacion --> Aprobado : aprobar proyecto\n[rol Supervisor de Proyectos]
+PendienteAprobacion --> Rechazado : rechazar proyecto\n[rol Supervisor de Proyectos]
+Aprobado --> EnPreparacion : inyectar piezas desde plano/archivo\n[archivo válido]\n/ crear piezas Pendiente\ny ocultar botón de inyección
+Aprobado --> Aprobado : inyectar piezas desde plano/archivo\n[archivo inválido o filas incompletas]\n/ rechazar sin registrar piezas parciales
+EnPreparacion --> ProyectoCompleto : generar guía de despacho\n[alcance proyecto y todas\nlas piezas Listo]\n/ marcar Proyecto completo
+ProyectoCompleto --> EnPreparacion : desasignar pieza de una torre\n[una pieza vuelve a Pendiente]
+Rechazado --> [*]
+@enduml

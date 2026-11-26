@@ -19,9 +19,11 @@ participant ":SnapSip" as SS
 participant "Servicio de almacenamiento\nde evidencias" as ALM <<sistema externo>>
 
 ED -> SS : generar guía de despacho(proyecto, alcance)
-alt alcance incompleto o con torres Abiertas
+alt proyecto no aprobado por el Supervisor (Pendiente de aprobación o Rechazado)
+  SS --> ED : rechazo: el proyecto debe haber sido aprobado por el Supervisor
+else alcance incompleto o con torres Abiertas
   SS --> ED : rechazo: impedimentos (piezas faltantes, torres sin cerrar)
-else alcance completo y torres Cerradas
+else alcance completo, torres Cerradas y proyecto aprobado por el Supervisor
   SS --> ED : guía de despacho Vigente en PDF (proyecto, alcance, piezas, torres)
   note over ED, SS : Cargar camión (tarea manual del TO-BE)
   ED -> SS : registrar envío con evidencia(guía de despacho, evidencia fotográfica)

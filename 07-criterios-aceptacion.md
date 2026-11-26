@@ -6,7 +6,7 @@ Cada escenario lleva un comentario (`# CA…`) con el criterio de aceptación de
 
 ## HU-01 — Autenticación de usuarios
 
-Historia: Como Operario de Bodega, Encargado de Despacho o Supervisor de Proyecto, quiero autenticarme con mis credenciales, para acceder únicamente a los proyectos y funciones que corresponden a mi rol.
+Historia: Como Operario de Bodega, Encargado de Despacho o Supervisor de Proyectos, quiero autenticarme con mis credenciales, para acceder únicamente a los proyectos y funciones que corresponden a mi rol.
 
 ```gherkin
 Característica: Autenticación de usuarios
@@ -557,7 +557,7 @@ Característica: Desasignar pieza de una torre
 ```
 ## HU-12 — Aprobar o rechazar proyecto
 
-Historia: Como Supervisor de Proyecto, quiero aprobar o rechazar un proyecto que se encuentre en estado "Pendiente de aprobación", para controlar qué proyectos están autorizados a pasar a la carga de piezas.
+Historia: Como Supervisor de Proyectos, quiero aprobar o rechazar un proyecto que se encuentre en estado "Pendiente de aprobación", para controlar qué proyectos están autorizados a pasar a la carga de piezas.
 
 ```gherkin
 Característica: Aprobar o rechazar proyecto
@@ -586,7 +586,7 @@ Característica: Aprobar o rechazar proyecto
   # CA4
   Escenario: Rechazo de aprobación o rechazo por un rol no autorizado
     Dado que un proyecto se encuentra en estado "Pendiente de aprobación"
-    Y el usuario autenticado posee un rol distinto a Supervisor de Proyecto
+    Y el usuario autenticado posee un rol distinto a Supervisor de Proyectos
     Cuando solicita aprobar o rechazar el proyecto
     Entonces el sistema rechaza la solicitud
     Y mantiene el proyecto en estado "Pendiente de aprobación"

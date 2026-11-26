@@ -3,7 +3,7 @@
 <a id="hu-01"></a>
 
 ## HU-01 — Autenticación de usuarios
-Como Operario de Bodega, Encargado de Despacho o Supervisor de Proyecto, quiero autenticarme con mis credenciales, para acceder únicamente a los proyectos y funciones que corresponden a mi rol.
+Como Operario de Bodega, Encargado de Despacho o Supervisor de Proyectos, quiero autenticarme con mis credenciales, para acceder únicamente a los proyectos y funciones que corresponden a mi rol.
 **Actividad TO-BE asociada:** Autenticación de usuarios.
 **Criterios de aceptación:**
 * CA1: Dado que el usuario posee credenciales registradas en el sistema, cuando el usuario solicita el acceso con un identificador y una contraseña válidos, entonces el sistema concede el acceso y habilita las funciones correspondientes a su rol.
@@ -132,10 +132,10 @@ Como Operario de Bodega, quiero desasignar una pieza que fue asignada por error,
 <a id="hu-12"></a>
 
 ## HU-12 — Aprobar o rechazar proyecto
-Como Supervisor de Proyecto, quiero aprobar o rechazar un proyecto que se encuentre en estado "Pendiente de aprobación", para controlar qué proyectos están autorizados a pasar a la carga de piezas.
+Como Supervisor de Proyectos, quiero aprobar o rechazar un proyecto que se encuentre en estado "Pendiente de aprobación", para controlar qué proyectos están autorizados a pasar a la carga de piezas.
 **Actividad TO-BE asociada:** Crear proyecto.
 **Criterios de aceptación:**
 * CA1: Dado que un proyecto se encuentra en estado "Pendiente de aprobación", cuando el supervisor de proyecto solicita aprobarlo, entonces el sistema cambia el proyecto a estado "Aprobado" y lo habilita para la inyección de piezas.
 * CA2: Dado que un proyecto se encuentra en estado "Pendiente de aprobación", cuando el supervisor de proyecto solicita rechazarlo, entonces el sistema cambia el proyecto a estado "Rechazado" y no permite inyectar piezas en él.
 * CA3: Dado que un proyecto no se encuentra en estado "Pendiente de aprobación", cuando el supervisor de proyecto solicita aprobarlo o rechazarlo, entonces el sistema rechaza la solicitud y mantiene el estado actual del proyecto.
-* CA4: Dado que un usuario autenticado tiene un rol distinto a Supervisor de Proyecto, cuando solicita aprobar o rechazar un proyecto, entonces el sistema rechaza la solicitud y mantiene el estado actual del proyecto.
+* CA4: Dado que un usuario autenticado tiene un rol distinto a Supervisor de Proyectos, cuando solicita aprobar o rechazar un proyecto, entonces el sistema rechaza la solicitud y mantiene el estado actual del proyecto.

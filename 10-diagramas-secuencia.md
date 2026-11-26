@@ -55,8 +55,9 @@ Archivo fuente: [`./diagramas/dss-02.puml`](./diagramas/dss-02.puml)
 Variantes representadas:
 
 - **`alt` de la generación de la guía:**
+  - **[proyecto no aprobado por el Supervisor: Pendiente de aprobación o Rechazado]:** SnapSip rechaza la generación e informa que el proyecto debe haber sido aprobado por el Supervisor de Proyectos. Es la guarda que EST-03 exige para emitir la guía (ver I-8: HU-08 CA1/CA3 y RP-09 todavía no la mencionan).
   - **[alcance incompleto o con torres Abiertas]:** SnapSip rechaza la generación e informa los impedimentos (HU-08 CA2 y CA4; RP-09). Un alcance sin piezas o con piezas ya enviadas tampoco está completo y recibe el mismo rechazo (HU-08 CA7 y CA8).
-  - **[alcance completo y torres Cerradas]:** SnapSip entrega la guía de despacho en PDF, en estado Vigente, con el proyecto, el alcance, las piezas y las torres (HU-08 CA1, CA3 y CA5).
+  - **[alcance completo, torres Cerradas y proyecto aprobado por el Supervisor]:** SnapSip entrega la guía de despacho en PDF, en estado Vigente, con el proyecto, el alcance, las piezas y las torres (HU-08 CA1, CA3 y CA5). La aprobación se conserva aunque el estado actual del proyecto ya sea «En preparación» o «Proyecto completo» (EST-04).
 - **Nota «Cargar camión»:** corresponde a la tarea manual «Cargar camión» del [diagrama TO-BE](./02-rediseno-to-be.md), que ocurre fuera del sistema entre la generación de la guía y el registro del envío. Durante ese tiempo la guía puede quedar Invalidada.
 - **`alt` del registro del envío**, con cuatro escenarios excluyentes:
   - **[guía Invalidada (RD-01)]:** SnapSip rechaza el registro y exige generar una guía nueva (HU-09 CA3 y CA4). Es el efecto de desasignar o reasignar una pieza incluida en la guía, o de reabrir una torre incluida (RD-01).
@@ -76,7 +77,7 @@ Variantes representadas:
 - Requisitos: RP-01, RP-14, RP-15a, RP-15b, RP-16
 - Sistemas externos que participan: Servicio de autenticación
 
-SnapSip delega la verificación de credenciales en un servicio de autenticación administrado, opción que RP-15b contempla. Participan los tres roles humanos del sistema: Operario de Bodega, Encargado de Despacho y Supervisor de proyectos. SnapSip conserva el control de acceso según el rol del usuario (RP-16).
+SnapSip delega la verificación de credenciales en un servicio de autenticación administrado, opción que RP-15b contempla. Participan los tres roles humanos del sistema: Operario de Bodega, Encargado de Despacho y Supervisor de Proyectos. El diagrama cubre solo la autenticación: la autorización de las operaciones protegidas se aplica después, según el rol del usuario (RP-16; HU-01 CA3 y HU-12 CA4), y no forma parte de este flujo. Aprobar o rechazar un proyecto es una operación interna sin sistemas externos, por lo que no tiene un DSS propio.
 
 ![DSS-03](./diagramas/dss-03.png)
 
@@ -87,6 +88,7 @@ Variantes representadas:
 - **`alt` de la verificación de credenciales:**
   - **[credenciales válidas]:** el servicio confirma la identidad y SnapSip concede el acceso a las funciones del rol del usuario (HU-01 CA1).
   - **[credenciales inválidas]:** el servicio rechaza las credenciales y SnapSip informa que son inválidas (HU-01 CA2).
+- **Fuera del alcance del diagrama:** la resolución de `autenticarse` solo verifica credenciales. El rechazo por rol no autorizado (HU-01 CA3 y HU-12 CA4) ocurre cuando se solicita una operación protegida, no durante la autenticación, por lo que no se modela como una rama alternativa de este `alt`.
 
 ---
 
@@ -105,7 +107,10 @@ Los demás eventos de los diagramas de estado pertenecen a casos de uso que no s
 
 | Evento en diagrama de estado | Caso de uso | Diagrama de estado |
 |---|---|---|
-| inyectar piezas desde plano/archivo | [CU-03 Inyectar piezas desde plano/archivo](./09-casos-de-uso.md) | EST-01 |
+| crear proyecto | [CU-02 Crear proyecto](./09-casos-de-uso.md) | EST-04 (Proyecto) |
+| inyectar piezas desde plano/archivo | [CU-03 Inyectar piezas desde plano/archivo](./09-casos-de-uso.md) | EST-01 (Pieza), EST-04 (Proyecto) |
+| aprobar proyecto | [CU-12](./09-casos-de-uso.md) / [HU-12](./04-historias-usuario.md#hu-12) | EST-04 (Proyecto) |
+| rechazar proyecto | [CU-12](./09-casos-de-uso.md) / [HU-12](./04-historias-usuario.md#hu-12) | EST-04 (Proyecto) |
 | crear torre | [CU-04 Crear torre](./09-casos-de-uso.md) | EST-02 |
 | cerrar torre manualmente | [CU-07 Cerrar torre manualmente](./09-casos-de-uso.md) | EST-02 |
 | reabrir torre | [CU-07 Cerrar torre manualmente](./09-casos-de-uso.md) (variante de HU-07 CA3) | EST-02, EST-03 |
