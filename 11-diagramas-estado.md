@@ -32,8 +32,8 @@ Archivo fuente: [`./diagramas/est-01.puml`](./diagramas/est-01.puml)
 | Estado origen | Evento | Guarda | Acción | Estado destino |
 |---------------|--------|--------|--------|----------------|
 | Inicial | inyectar piezas desde plano/archivo | archivo válido | — | Pendiente |
-| Pendiente | asignar pieza a torre con evidencia | torre Abierta de la misma parte, capacidad máxima no alcanzada y evidencia almacenada | registrar evidencia, usuario, fecha y hora | Listo |
-| Listo | asignar pieza a torre con evidencia | otra torre Abierta de la misma parte, capacidad máxima no alcanzada, reemplazo confirmado y evidencia almacenada | invalidar evidencia anterior y guías Vigentes que incluyen la pieza | Listo |
+| Pendiente | asignar pieza a torre con evidencia | torre Abierta de la misma parte y evidencia almacenada | registrar evidencia, usuario, fecha y hora | Listo |
+| Listo | asignar pieza a torre con evidencia | otra torre Abierta de la misma parte, reemplazo confirmado y evidencia almacenada | invalidar evidencia anterior y guías Vigentes que incluyen la pieza | Listo |
 | Listo | desasignar pieza de una torre | — | invalidar evidencia y guías Vigentes que incluyen la pieza | Pendiente |
 | Listo | registrar envío con evidencia | guía Vigente que incluye la pieza y evidencia almacenada | — | Enviado |
 | Enviado | — (finalización) | — | — | Final |
@@ -63,9 +63,8 @@ El envío no crea un estado nuevo: al registrarse el envío de la guía que la i
 
 | Estado origen | Evento | Guarda | Acción | Estado destino |
 |---------------|--------|--------|--------|----------------|
-| Inicial | crear torre | universo de piezas inyectado y capacidad máxima 1-30 | asignar numeración correlativa y capacidad | Abierta |
+| Inicial | crear torre | universo de piezas inyectado | asignar numeración correlativa | Abierta |
 | Abierta | cerrar torre manualmente | al menos una pieza asignada | — | Cerrada |
-| Abierta | asignar pieza a torre con evidencia | piezas asignadas + 1 == capacidad máxima| cerrar torre automáticamente | Cerrada|
 | Cerrada | reabrir torre | ninguna pieza Enviado | invalidar guías Vigentes que incluyen la torre | Abierta |
 | Abierta | eliminar torre vacía con código | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
 | Cerrada | eliminar torre vacía con código | torre vacía y código coincide | registrar usuario, fecha y hora | Eliminada |
@@ -89,7 +88,7 @@ Archivo fuente: [`./diagramas/est-03.puml`](./diagramas/est-03.puml)
 
 ### Estados
 
-- **Vigente:** la guía fue generada para un alcance completo con sus torres Cerradas y todavía no tiene envío registrado (HU-08 CA1 y CA3).
+- **Vigente:** la guía fue generada para un proyecto en estado Aprobado (validado por el Supervisor de proyectos), con un alcance completo y sus torres Cerradas, y todavía no tiene envío registrado (HU-08 CA1 y CA3).
 - **Invalidada:** después de su generación cambió una pieza o una torre incluida, por lo que la guía ya no representa lo preparado (RD-01). No admite envío ni recupera su vigencia; debe generarse una guía nueva (HU-09 CA3 y CA4).
 - **Enviada:** el envío fue registrado con la evidencia fotográfica del camión cargado (HU-09 CA1).
 
@@ -97,10 +96,12 @@ Archivo fuente: [`./diagramas/est-03.puml`](./diagramas/est-03.puml)
 
 | Estado origen | Evento | Guarda | Acción | Estado destino |
 |---------------|--------|--------|--------|----------------|
-| Inicial | generar guía de despacho | alcance completo y torres Cerradas | — | Vigente |
+| Inicial | generar guía de despacho | alcance completo, torres Cerradas y Proyecto Aprobado | — | Vigente |
 | Vigente | desasignar pieza de una torre | pieza incluida en la guía | — | Invalidada |
 | Vigente | asignar pieza a torre con evidencia | pieza incluida en la guía y reemplazo confirmado | — | Invalidada |
 | Vigente | reabrir torre | torre incluida en la guía | — | Invalidada |
 | Vigente | registrar envío con evidencia | evidencia almacenada | cambiar piezas a Enviado y registrar usuario, fecha y hora | Enviada |
 | Invalidada | — (finalización) | — | — | Final |
 | Enviada | — (finalización) | — | — | Final |
+
+«Alcance completo» significa que el alcance solicitado (una parte de la casa o el proyecto) contiene al menos una pieza y todas están en estado Listo (RP-08). Adicionalmente, se exige que el proyecto se encuentre en estado Aprobado por el Supervisor de proyectos como condición previa obligatoria para emitir la guía. Las tres transiciones de Vigente a Invalidada corresponden a HU-11 CA1 (desasignación), HU-05 CA3 (reasignación) y HU-07 CA3 (reapertura).
